@@ -63,9 +63,9 @@ class BucketAdapter(
                         builder.bucketTitleSize
                     )
                     mBinding.textViewFilesCount.applyTextStyle(
-                        mContext.getColorCode(builder.bucketTitleColor),
-                        builder.bucketTitleFont,
-                        builder.bucketTitleSize
+                        mContext.getColorCode(builder.bucketSubTitleColor),
+                        builder.bucketSubTitleFont,
+                        builder.bucketSubTitleSize
                     )
                     mBinding.textViewSelectedCount.applyTextStyle(
                         mContext.getColorCode(builder.selectedCountColor),

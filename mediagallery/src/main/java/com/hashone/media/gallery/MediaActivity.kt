@@ -443,7 +443,8 @@ class MediaActivity : BaseActivity() {
             else
                 putExtra(KEY_MEDIA_PATH, images[0].path)
         })
-        finish()
+        if (builder.shouldClose)
+            finish()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -561,7 +562,8 @@ class MediaActivity : BaseActivity() {
                                                 )
                                                 putExtra(KEY_MEDIA_PATH, videoFilePath)
                                             })
-                                            finish()
+                                            if (builder.shouldClose)
+                                                finish()
                                         }
                                     }
                                 } else {
@@ -585,7 +587,8 @@ class MediaActivity : BaseActivity() {
                                                 )
                                                 putExtra(KEY_MEDIA_PATH, savedFile.absolutePath)
                                             })
-                                            finish()
+                                            if (builder.shouldClose)
+                                                finish()
                                         }
                                     }
                                 }

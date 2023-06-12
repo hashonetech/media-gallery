@@ -83,6 +83,7 @@ class MainActivity : BaseActivity() {
                     allowCamera = true,
                     allowGooglePhotos = true,
                     allowAllMedia = true,
+                    shouldClose = false,
                     mediaGridCount = 4
                 ) {
                     //TODO: Screen
