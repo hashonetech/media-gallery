@@ -1,0 +1,20 @@
+<resources>
+    <string name="label_back">Back</string>
+    <string name="google_photos_not_installed">Google Photos is not installed</string>
+    <string name="google_photos_disable">Google Photos is Disable</string>
+    <string name="label_enable">Enable</string>
+    <string name="label_photos">Photos</string>
+    <string name="google_photos">Google Photos</string>
+    <string name="photos_taking_long_time">It is taking bit long.</string>
+    <string name="photos_taking_more_time">Looks like you have too many photos!</string>
+    <string name="loading_photos">Loading photos.</string>
+
+    <string name="allow_camera_permission">You need to allow access to camera permission.</string>
+    <string name="label_grant">Grant</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_camera">Camera</string>
+
+    <string name="label_all">All</string>
+    <string name="label_gallery">Gallery</string>
+    <string name="label_done">Done</string>
+</resources>
