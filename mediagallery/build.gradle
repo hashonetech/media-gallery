@@ -49,11 +49,9 @@ android {
 }
 
 dependencies {
-
     api 'androidx.core:core-ktx:1.10.1'
     api 'androidx.appcompat:appcompat:1.6.1'
     api 'com.google.android.material:material:1.9.0'
-
     api 'com.github.hashonetech:commons:v1.0.18'
 }
 
