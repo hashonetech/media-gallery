@@ -11,7 +11,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	}
   
 	dependencies {
-	        implementation 'com.github.hashonetech:media-gallery:v1.0.0'
+	        implementation 'com.github.hashonetech:media-gallery:v1.0.1'
 	}
 
 In AndroidManifest.xml
