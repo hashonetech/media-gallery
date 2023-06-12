@@ -17,7 +17,6 @@ open class MediaGallery constructor(val builder: Builder) : Serializable {
             allowCamera: Boolean,
             allowGooglePhotos: Boolean,
             allowAllMedia: Boolean,
-            shouldClose: Boolean,
 //            enableCropMode: Boolean = false,
             mediaGridCount: Int = 3,
             block: Builder.() -> Unit
@@ -28,7 +27,6 @@ open class MediaGallery constructor(val builder: Builder) : Serializable {
             allowCamera,
             allowGooglePhotos,
             allowAllMedia,
-            shouldClose,
 //            enableCropMode,
             mediaGridCount
         ).apply(block).build()
@@ -44,7 +42,6 @@ open class MediaGallery constructor(val builder: Builder) : Serializable {
         val allowCamera: Boolean = false,
         val allowGooglePhotos: Boolean = true,
         val allowAllMedia: Boolean = false,
-        val shouldClose: Boolean = false,
 //        val enableCropMode: Boolean = false,
         val mediaGridCount: Int = 3
     ) : Serializable {
