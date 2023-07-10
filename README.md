@@ -58,7 +58,6 @@ In AndroidManifest.xml
                 MediaGallery.open(activity = mActivity, MediaGallery.build(
                     mediaType = MediaType.IMAGE,
                     mediaCount = 1,
-                    allowMultiMedia = false,
                     allowCamera = true,
                     allowGooglePhotos = true,
                     allowAllMedia = true,
@@ -89,7 +88,7 @@ In AndroidManifest.xml
                     bucketSubTitleFont = com.hashone.commons.R.font.roboto_regular
                     bucketSubTitleSize = 14F
                     selectedCountBackgroundColor = com.hashone.commons.R.color.pure_black
-                    selectedCountColor = com.hashone.commons.R.color.pure_black
+                    selectedCountColor = com.hashone.commons.R.color.white
                     selectedCountFont = com.hashone.commons.R.font.roboto_regular
                     selectedCountSize = 14F
                     //TODO: Action button
