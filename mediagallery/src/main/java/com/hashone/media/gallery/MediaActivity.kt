@@ -344,17 +344,22 @@ class MediaActivity : BaseActivity() {
         fun createCopyAndReturnRealPath(context: Context, uri: Uri?): String? {
             val contentResolver = context.contentResolver ?: return null
 
-            val fileName =
+            var fileName =
                 if (uri!!.toString().startsWith("file:", ignoreCase = true)) {
                     val splitString = uri.encodedPath!!.split("/")
                     splitString[splitString.size - 1]
                 } else {
                     uri.toFilePath(activity = mActivity)
                 }
+            fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
             // Create file path inside app's data dir
             val filePath =
                 (context.applicationInfo.dataDir.toString() + File.separator + fileName)
+
             val file = File(filePath)
+            if (!file.exists()) {
+                file.createNewFile()
+            }
             try {
                 val inputStream = contentResolver.openInputStream(uri) ?: return null
                 val outputStream: OutputStream = FileOutputStream(file)
@@ -441,7 +446,8 @@ class MediaActivity : BaseActivity() {
             if (images.size > 1)
                 putExtra(KEY_MEDIA_PATHS, images)
             else
-                putExtra(KEY_MEDIA_PATH, images[0].path)
+                putExtra(KEY_MEDIA_PATH, images)
+//                putExtra(KEY_MEDIA_PATH, images[0].path)
         })
         finish()
     }
@@ -535,21 +541,29 @@ class MediaActivity : BaseActivity() {
     private fun openCamera() {
         if (checkCameraPermission(REQUEST_CODE_CAMERA)) {
             if (checkCameraHardware()) {
-                mActivityLauncher.launch(Intent(
-                    when (builder.mediaType) {
-                        MediaType.IMAGE -> MediaStore.ACTION_IMAGE_CAPTURE
-                        MediaType.VIDEO -> MediaStore.ACTION_VIDEO_CAPTURE
-                        else -> MediaStore.ACTION_IMAGE_CAPTURE
-                    }
-                ),
+
+                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+                val chooserIntent =
+                    Intent.createChooser(takePictureIntent, "Capture Image or Video")
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takeVideoIntent))
+
+                mActivityLauncher.launch(chooserIntent,
                     onActivityResult = object :
                         BetterActivityResult.OnActivityResult<ActivityResult> {
-                        override fun onActivityResult(activityResult: ActivityResult) {
-                            if (activityResult.resultCode == Activity.RESULT_OK) {
-                                if (builder.mediaType == MediaType.VIDEO) {
-                                    val videoUri = activityResult.data?.data
+                        override fun onActivityResult(result: ActivityResult) {
+                            if (result.resultCode == Activity.RESULT_OK) {
+                                if (result.data?.data != null) {
+                                    val videoUri = result.data?.data
                                     videoUri?.let {
                                         val videoFilePath = it.toFilePath(mActivity)
+                                        val imageItem = MediaItem().apply {
+                                            path = videoFilePath
+                                        }
+                                        val arrayList = ArrayList<MediaItem>().apply {
+                                            add(imageItem)
+                                        }
+
                                         MediaScannerConnection.scanFile(
                                             mActivity,
                                             arrayOf(videoFilePath), null
@@ -557,23 +571,28 @@ class MediaActivity : BaseActivity() {
                                             setResult(Activity.RESULT_OK, Intent().apply {
                                                 putExtra(
                                                     KEY_MEDIA_PATHS,
-                                                    arrayListOf(videoFilePath)
+                                                    arrayList
                                                 )
-                                                putExtra(KEY_MEDIA_PATH, videoFilePath)
+                                                putExtra(KEY_MEDIA_PATH, arrayList)
                                             })
                                             finish()
                                         }
                                     }
                                 } else {
                                     val bitmap =
-                                        activityResult.data?.extras?.parcelable<Bitmap>("data")
+                                        result.data?.extras?.parcelable<Bitmap>("data")
                                     bitmap?.let {
                                         val savedFile = bitmap.saveToFile(
                                             fileName = "Camera_${System.currentTimeMillis()}.$EXTENSION_PNG",
                                             saveDir = getInternalCameraDir(mActivity),
                                             compressFormat = EXTENSION_PNG
                                         )
-
+                                        val imageItem = MediaItem().apply {
+                                            path = savedFile.absolutePath
+                                        }
+                                        val arrayList = ArrayList<MediaItem>().apply {
+                                            add(imageItem)
+                                        }
                                         MediaScannerConnection.scanFile(
                                             mActivity,
                                             arrayOf(savedFile.absolutePath), null
@@ -581,9 +600,9 @@ class MediaActivity : BaseActivity() {
                                             setResult(Activity.RESULT_OK, Intent().apply {
                                                 putExtra(
                                                     KEY_MEDIA_PATHS,
-                                                    arrayListOf(savedFile.absolutePath)
+                                                    arrayList
                                                 )
-                                                putExtra(KEY_MEDIA_PATH, savedFile.absolutePath)
+                                                putExtra(KEY_MEDIA_PATH, arrayList)
                                             })
                                             finish()
                                         }

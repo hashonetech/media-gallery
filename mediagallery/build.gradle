@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.hashone'
-version = '1.0.3'
+version = '1.0.4'
 
 android {
     namespace 'com.hashone.media.gallery'
@@ -50,7 +50,7 @@ android {
 
 dependencies {
     api 'androidx.core:core-ktx:1.10.1'
-    api 'androidx.appcompat:appcompat:1.6.1'
+    api 'androidx.appcompat:appcompat:1.7.0-alpha02'
     api 'com.google.android.material:material:1.9.0'
     api 'com.github.hashonetech:commons:v1.0.18'
 }
@@ -63,7 +63,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.hashone'
                 artifactId = 'media-gallery'
-                version = '1.0.3'
+                version = '1.0.4'
             }
         }
     }

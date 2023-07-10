@@ -79,11 +79,10 @@ class MainActivity : BaseActivity() {
                         else -> MediaType.IMAGE_VIDEO
                     },
                     mediaCount = mediaCount,
-                    allowMultiMedia = mediaCount > 1,
                     allowCamera = true,
                     allowGooglePhotos = true,
                     allowAllMedia = true,
-                    mediaGridCount = 4
+                    mediaGridCount = 3
                 ) {
                     //TODO: Screen
                     isFullScreen = false
@@ -110,7 +109,7 @@ class MainActivity : BaseActivity() {
                     bucketSubTitleFont = com.hashone.commons.R.font.roboto_regular
                     bucketSubTitleSize = 14F
                     selectedCountBackgroundColor = com.hashone.commons.R.color.pure_black
-                    selectedCountColor = com.hashone.commons.R.color.pure_black
+                    selectedCountColor = com.hashone.commons.R.color.white
                     selectedCountFont = com.hashone.commons.R.font.roboto_regular
                     selectedCountSize = 14F
                     //TODO: Action button
@@ -126,12 +125,15 @@ class MainActivity : BaseActivity() {
                         if (activityResult.resultCode == Activity.RESULT_OK) {
                             activityResult.data?.let { intent ->
                                 if (intent.hasExtra(KEY_MEDIA_PATH)) {
-                                    val filePath = intent.getStringExtra(KEY_MEDIA_PATH)
-                                    Toast.makeText(
-                                        mActivity,
-                                        "Selected: $filePath",
-                                        Toast.LENGTH_LONG
-                                    ).show()
+                                    val selectedMedia: ArrayList<MediaItem>? =
+                                        intent.serializable(KEY_MEDIA_PATH)
+                                    selectedMedia?.let {
+                                        Toast.makeText(
+                                            mActivity,
+                                            "Selected: ${it[0].path}",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
                                 } else {
                                     val selectedMedia: ArrayList<MediaItem>? =
                                         intent.serializable(KEY_MEDIA_PATHS)

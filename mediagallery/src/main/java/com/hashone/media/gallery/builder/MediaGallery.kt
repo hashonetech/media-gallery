@@ -13,7 +13,6 @@ open class MediaGallery constructor(val builder: Builder) : Serializable {
         inline fun build(
             mediaType: MediaType,
             mediaCount: Int = 1,
-            allowMultiMedia: Boolean,
             allowCamera: Boolean,
             allowGooglePhotos: Boolean,
             allowAllMedia: Boolean,
@@ -23,7 +22,7 @@ open class MediaGallery constructor(val builder: Builder) : Serializable {
         ) = Builder(
             mediaType,
             mediaCount,
-            allowMultiMedia,
+            allowMultiMedia = mediaCount > 1,
             allowCamera,
             allowGooglePhotos,
             allowAllMedia,

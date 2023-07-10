@@ -2,6 +2,7 @@ package com.hashone.media.gallery.model
 
 import android.content.ContentResolver
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import com.hashone.commons.extensions.getLocaleString
@@ -14,6 +15,7 @@ fun fetchMediaBucketsAsync(
     mediaType: MediaType,
     allowAllMedia: Boolean
 ): ArrayList<MediaBucketData> {
+    val bucketIdList = ArrayList<Long>()
     val bucketList = ArrayList<MediaBucketData>()
     context.contentResolver.query(
         MediaStore.Files.getContentUri("external"),
@@ -34,6 +36,7 @@ fun fetchMediaBucketsAsync(
                     else -> "${MediaStore.Files.FileColumns.MEDIA_TYPE} = ? OR ${MediaStore.Files.FileColumns.MEDIA_TYPE} = ?"
                 } + " AND ${MediaStore.Files.FileColumns.SIZE} > 0"
             )
+
             putStringArray(
                 ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
                 when (mediaType) {
@@ -53,10 +56,12 @@ fun fetchMediaBucketsAsync(
                     }
                 }
             )
-            putString(
-                ContentResolver.QUERY_ARG_SQL_GROUP_BY,
-                MediaStore.Files.FileColumns.BUCKET_ID
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                putString(
+                    ContentResolver.QUERY_ARG_SQL_GROUP_BY,
+                    MediaStore.Files.FileColumns.BUCKET_ID
+                )
+            }
             putString(
                 ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
                 "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
@@ -76,23 +81,26 @@ fun fetchMediaBucketsAsync(
                     val bucketDisplayName = it.getString(bucketDisplayNameIndex)
                     val bucketMediaTypeName = it.getInt(bucketMediaTypeIndex)
 
-                    val mediaList = fetchMediaAsync(
-                        context,
-                        if (bucketMediaTypeName == 1) MediaType.IMAGE else MediaType.VIDEO,
-                        bucketId
-                    )
 
-                    (context as MediaActivity).mMediaPref.storeMediaToPref(bucketId, mediaList)
-
-                    bucketList.add(
-                        MediaBucketData(
-                            bucketId,
-                            bucketDisplayName,
-                            mediaList[0].path,
-                            mediaList.size,
-                            mediaType = if (bucketMediaTypeName == 1) MediaType.IMAGE else MediaType.VIDEO
+                    if (!bucketIdList.contains(bucketId)) {
+                        bucketIdList.add(bucketId)
+                        val mediaList = fetchMediaAsync(
+                            context,
+                            mediaType,//if (bucketMediaTypeName == 1) MediaType.IMAGE else MediaType.VIDEO, // image video checking
+                            bucketId
                         )
-                    )
+
+                        (context as MediaActivity).mMediaPref.storeMediaToPref(bucketId, mediaList)
+                        bucketList.add(
+                            MediaBucketData(
+                                bucketId,
+                                bucketDisplayName,
+                                mediaList[0].path,
+                                mediaList.size,
+                                mediaType = mediaType //if (bucketMediaTypeName == 1) MediaType.IMAGE else MediaType.VIDEO
+                            )
+                        )
+                    }
                 } while (it.moveToNext())
             }
         }

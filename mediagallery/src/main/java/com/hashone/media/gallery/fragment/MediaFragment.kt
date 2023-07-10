@@ -67,8 +67,8 @@ class MediaFragment : Fragment() {
         mActivity = requireActivity()
         builder = (mActivity as MediaActivity).builder
 
-        mBinding.layoutContentLoading.visibility = View.VISIBLE
-        mHandlerLoadingWait.postDelayed(mRunnableLoadingWait, 3 * 1000L)
+        //mBinding.layoutContentLoading.visibility = View.VISIBLE
+        //mHandlerLoadingWait.postDelayed(mRunnableLoadingWait, 3 * 1000L)
 
         initViews()
     }
@@ -82,7 +82,13 @@ class MediaFragment : Fragment() {
             }
             (mActivity as MediaActivity).updateTitle(mFolderName)
             (mActivity as MediaActivity).updateGooglePhotosUI(false)
-            LoadMediaTask().execute()
+
+            val mediaPref = (mActivity as MediaActivity).mMediaPref.getMediaByBucketId(mBucketId)
+            mMediaList.addAll(mediaPref)
+            setAdapter()
+            if (mMediaList.isEmpty()){
+                LoadMediaTask().execute()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -91,6 +97,8 @@ class MediaFragment : Fragment() {
     private inner class LoadMediaTask : CoroutineAsyncTask<Void, Void, Void>() {
         override fun onPreExecute() {
             super.onPreExecute()
+            mBinding.layoutContentLoading.visibility = View.VISIBLE
+            mHandlerLoadingWait.postDelayed(mRunnableLoadingWait, 3 * 1000L)
             mMediaList.clear()
         }
 
