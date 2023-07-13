@@ -16,17 +16,17 @@ open class MediaGallery constructor(val builder: Builder) : Serializable {
             allowCamera: Boolean,
             allowGooglePhotos: Boolean,
             allowAllMedia: Boolean,
-//            enableCropMode: Boolean = false,
+            enableCropMode: Boolean = false,
             mediaGridCount: Int = 3,
             block: Builder.() -> Unit
         ) = Builder(
             mediaType,
-            mediaCount,
-            allowMultiMedia = mediaCount > 1,
+            mediaCount = if (!enableCropMode) mediaCount else 1,
+            allowMultiMedia = if (!enableCropMode) mediaCount > 1 else false,
             allowCamera,
             allowGooglePhotos,
             allowAllMedia,
-//            enableCropMode,
+            enableCropMode,
             mediaGridCount
         ).apply(block).build()
 
@@ -41,7 +41,7 @@ open class MediaGallery constructor(val builder: Builder) : Serializable {
         val allowCamera: Boolean = false,
         val allowGooglePhotos: Boolean = true,
         val allowAllMedia: Boolean = false,
-//        val enableCropMode: Boolean = false,
+        val enableCropMode: Boolean = false,
         val mediaGridCount: Int = 3
     ) : Serializable {
         //TODO: Screen
@@ -67,6 +67,7 @@ open class MediaGallery constructor(val builder: Builder) : Serializable {
             com.hashone.media.gallery.R.drawable.ic_google_photos_media_gallery
 
         //TODO: Bucket Contents
+        var backgroundColor: Int = R.color.white
         var bucketTitleColor: Int = R.color.pure_black
         var bucketTitleFont: Int = R.font.roboto_medium
         var bucketTitleSize: Float = 16F
@@ -78,13 +79,25 @@ open class MediaGallery constructor(val builder: Builder) : Serializable {
         var selectedCountFont: Int = R.font.roboto_regular
         var selectedCountSize: Float = 14F
 
+        //TODO: Media Content
+        var selectedCountBackground: Int = -1
+
         //TODO: Action button
         var buttonBackgroundColor: Int = R.color.black
+        var buttonBackgroundSelectorColor: Int = -1
         var buttonRadius: Float = 30F
         var buttonText: String = ""
         var buttonTextColor: Int = R.color.white
         var buttonTextFont: Int = R.font.outfit_bold
         var buttonTextSize: Float = 16F
+
+        //TODO: crop module
+        var appPackageName: String = ""
+        var cropClassName: String = ""
+        var projectDirectoryPath: String = ""
+
+        //TODO: gallery module close or not after image select
+        var isForceClose: Boolean = true
 
         fun build() = MediaGallery(this)
     }

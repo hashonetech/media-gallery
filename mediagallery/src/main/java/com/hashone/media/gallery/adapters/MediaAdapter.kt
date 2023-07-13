@@ -20,6 +20,7 @@ import com.hashone.commons.extensions.getScreenWidth
 import com.hashone.commons.extensions.onClick
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.R
+import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.callback.OnSelectionChangeListener
 import com.hashone.media.gallery.databinding.GalleryItemImageBinding
 import com.hashone.media.gallery.enums.MediaType
@@ -30,6 +31,7 @@ import com.hashone.media.gallery.utils.KEY_BUCKET_ID
 class MediaAdapter(
     var mContext: Context,
     private var mImagesList: ArrayList<MediaItem>,
+    var builder: MediaGallery.Builder,
     private var mIsMultipleMode: Boolean = false,
     var mMaxSize: Int = 1,
     var mOnItemClickListener: AdapterView.OnItemClickListener?,
@@ -57,6 +59,8 @@ class MediaAdapter(
                                 val selectedIndex = (mContext as MediaActivity).selectedIndex(this)
                                 if (selectedIndex != -1) {
                                     mBinding.textViewImageCount.text = "${selectedIndex + 1}"
+                                    if (builder.selectedCountBackground != -1)
+                                        mBinding.textViewImageCount.setBackgroundResource(builder.selectedCountBackground)
                                     mBinding.textViewImageCount.isVisible = true
                                     setupItemForeground(mBinding.imageViewImageItem, true)
                                 } else {
@@ -107,6 +111,8 @@ class MediaAdapter(
                     setupItemForeground(mBinding.imageViewImageItem, isSelected)
                     mBinding.textViewImageCount.isVisible = isSelected && mIsMultipleMode
                     if (mBinding.textViewImageCount.isVisible) {
+                        if (builder.selectedCountBackground != -1)
+                            mBinding.textViewImageCount.setBackgroundResource(builder.selectedCountBackground)
                         mBinding.textViewImageCount.text = "${selectedIndex + 1}"
                     }
 

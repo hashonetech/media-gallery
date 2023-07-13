@@ -152,6 +152,7 @@ class MediaFragment : Fragment() {
                     val imageAdapter = MediaAdapter(
                         mActivity,
                         mMediaList,
+                        builder = builder,
                         mIsMultipleMode = it.builder.allowMultiMedia,
                         mMaxSize = builder.mediaCount,
                         mOnItemClickListener = { _, _, _, _ -> },
