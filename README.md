@@ -11,7 +11,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	}
   
 	dependencies {
-	        implementation 'com.github.hashonetech:media-gallery:v1.0.4'
+	        implementation 'com.github.hashonetech:media-gallery:Tag'
 	}
 
 In AndroidManifest.xml
@@ -56,11 +56,16 @@ In AndroidManifest.xml
 	if (checkPermissions()) {
             mActivityLauncher.launch(
                 MediaGallery.open(activity = mActivity, MediaGallery.build(
-                    mediaType = MediaType.IMAGE,
-                    mediaCount = 1,
+                    mediaType = when (requestCode) {
+                        REQUEST_CODE_IMAGE -> MediaType.IMAGE
+                        REQUEST_CODE_VIDEO -> MediaType.VIDEO
+                        else -> MediaType.IMAGE_VIDEO
+                    },
+                    mediaCount = mediaCount,
                     allowCamera = true,
                     allowGooglePhotos = true,
                     allowAllMedia = true,
+                    enableCropMode = mBinding.switchIsCrop.isChecked,
                     mediaGridCount = 3
                 ) {
                     //TODO: Screen
@@ -70,7 +75,7 @@ In AndroidManifest.xml
                     navigationBarColor = R.color.white
                     //TODO: Toolbar
                     toolBarColor = R.color.white
-                    backPressIcon = R.drawable.ic_back
+                    backPressIcon = R.drawable.ic_back_contact_us
                     backPressIconDescription = ""
                     toolBarTitle = ""
                     toolBarTitleColor = R.color.black
@@ -80,7 +85,12 @@ In AndroidManifest.xml
                     cameraIcon = R.drawable.ic_camera_media_gallery
                     //TODO: Google Photos Icon
                     googlePhotosIcon = R.drawable.ic_google_photos_media_gallery
+
+                    //TODO: Media Content
+                    selectedCountBackground = R.drawable.ic_photo_count
+
                     //TODO: Bucket Contents
+                    backgroundColor = com.hashone.commons.R.color.white
                     bucketTitleColor = com.hashone.commons.R.color.pure_black
                     bucketTitleFont = com.hashone.commons.R.font.roboto_medium
                     bucketTitleSize = 16F
@@ -93,24 +103,28 @@ In AndroidManifest.xml
                     selectedCountSize = 14F
                     //TODO: Action button
                     buttonBackgroundColor = com.hashone.commons.R.color.black
+                    buttonBackgroundSelectorColor = com.hashone.commons.R.color.dark_gray
+
                     buttonRadius = 16F
                     buttonText = ""
                     buttonTextColor = com.hashone.commons.R.color.white
                     buttonTextFont = com.hashone.commons.R.font.roboto_bold
                     buttonTextSize = 14F
+
+		    //TODO: After Media file select gallery exit or open in background
+                    isForceClose = mBinding.switchIsForceClose.isChecked
+
+                    //TODO: For OldCrop View Pass bellow parm OR Next Activity Class Name
+                    appPackageName = packageName
+                    cropClassName = "OldCropActivity"
+                    projectDirectoryPath = getInternalFileDir(this@MainActivity).absolutePath
+                    
                 }),
                 onActivityResult = object : BetterActivityResult.OnActivityResult<ActivityResult> {
                     override fun onActivityResult(activityResult: ActivityResult) {
                         if (activityResult.resultCode == Activity.RESULT_OK) {
                             activityResult.data?.let { intent ->
-                                if (intent.hasExtra(KEY_MEDIA_PATH)) {
-                                    val filePath = intent.getStringExtra(KEY_MEDIA_PATH)
-                                    Toast.makeText(
-                                        mActivity,
-                                        "Selected: $filePath",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                } else {
+                                if (intent.hasExtra(KEY_MEDIA_PATHS)){
                                     val selectedMedia: ArrayList<MediaItem>? =
                                         intent.serializable(KEY_MEDIA_PATHS)
                                     selectedMedia?.let {
@@ -119,6 +133,24 @@ In AndroidManifest.xml
                                             "Selected: ${selectedMedia.size}",
                                             Toast.LENGTH_LONG
                                         ).show()
+                                        Glide.with(this@MainActivity).load(selectedMedia[0].path)
+                                            .into(mBinding.cropedImage)
+                                    }
+                                } else {
+                                    if (intent.hasExtra(CropActivity.KEY_RETURN_CROP_DATA)) {
+                                        val myCropDataSaved =
+                                            intent.extras?.serializable<CropDataSaved>(
+                                                CropActivity.KEY_RETURN_CROP_DATA
+                                            )
+                                        Glide.with(this@MainActivity).load(myCropDataSaved!!.cropImg)
+                                            .into(mBinding.cropedImage)
+                                    } else {
+                                        val filePath =
+                                            intent.extras!!.getString(KEY_IMAGE_PATH)!!
+                                        val originalImagePath =
+                                            intent.extras!!.getString(KEY_IMAGE_ORIGINAL_PATH)!!
+                                        Glide.with(this@MainActivity).load(filePath)
+                                            .into(mBinding.cropedImage)
                                     }
                                 }
                             }
