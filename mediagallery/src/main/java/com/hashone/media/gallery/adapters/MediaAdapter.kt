@@ -16,7 +16,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.hashone.commons.extensions.getColorCode
-import com.hashone.commons.extensions.getScreenWidth
 import com.hashone.commons.extensions.onClick
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.R
@@ -29,7 +28,7 @@ import com.hashone.media.gallery.utils.ACTION_UPDATE_FOLDER_COUNT
 import com.hashone.media.gallery.utils.KEY_BUCKET_ID
 
 class MediaAdapter(
-    var mContext: Context,
+    private var mContext: Context,
     private var mImagesList: ArrayList<MediaItem>,
     var builder: MediaGallery.Builder,
     private var mIsMultipleMode: Boolean = false,
@@ -59,8 +58,8 @@ class MediaAdapter(
                                 val selectedIndex = (mContext as MediaActivity).selectedIndex(this)
                                 if (selectedIndex != -1) {
                                     mBinding.textViewImageCount.text = "${selectedIndex + 1}"
-                                    if (builder.selectedCountBackground != -1)
-                                        mBinding.textViewImageCount.setBackgroundResource(builder.selectedCountBackground)
+                                    if (builder.bucketBuilder.countBackgroundRes != -1)
+                                        mBinding.textViewImageCount.setBackgroundResource(builder.bucketBuilder.countBackgroundRes)
                                     mBinding.textViewImageCount.isVisible = true
                                     setupItemForeground(mBinding.imageViewImageItem, true)
                                 } else {
@@ -111,8 +110,8 @@ class MediaAdapter(
                     setupItemForeground(mBinding.imageViewImageItem, isSelected)
                     mBinding.textViewImageCount.isVisible = isSelected && mIsMultipleMode
                     if (mBinding.textViewImageCount.isVisible) {
-                        if (builder.selectedCountBackground != -1)
-                            mBinding.textViewImageCount.setBackgroundResource(builder.selectedCountBackground)
+                        if (builder.bucketBuilder.countBackgroundRes != -1)
+                            mBinding.textViewImageCount.setBackgroundResource(builder.bucketBuilder.countBackgroundRes)
                         mBinding.textViewImageCount.text = "${selectedIndex + 1}"
                     }
 

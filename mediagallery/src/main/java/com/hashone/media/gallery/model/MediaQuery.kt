@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import com.hashone.commons.extensions.getLocaleString
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.R
@@ -91,15 +92,16 @@ fun fetchMediaBucketsAsync(
                         )
 
                         (context as MediaActivity).mMediaPref.storeMediaToPref(bucketId, mediaList)
-                        bucketList.add(
-                            MediaBucketData(
-                                bucketId,
-                                bucketDisplayName,
-                                mediaList[0].path,
-                                mediaList.size,
-                                mediaType = mediaType //if (bucketMediaTypeName == 1) MediaType.IMAGE else MediaType.VIDEO
+                        if (mediaList.size > 0)
+                            bucketList.add(
+                                MediaBucketData(
+                                    bucketId,
+                                    bucketDisplayName,
+                                    mediaList[0].path,
+                                    mediaList.size,
+                                    mediaType = mediaType //if (bucketMediaTypeName == 1) MediaType.IMAGE else MediaType.VIDEO
+                                )
                             )
-                        )
                     }
                 } while (it.moveToNext())
             }
@@ -113,15 +115,16 @@ fun fetchMediaBucketsAsync(
             -1L
         )
         (context as MediaActivity).mMediaPref.storeMediaToPref(-1L, mediaList)
-        bucketList.add(
-            0, MediaBucketData(
-                -1L,
-                getLocaleString(R.string.label_all),
-                mediaList[0].path,
-                mediaList.size,
-                mediaType = mediaType
+        if (mediaList.size > 0)
+            bucketList.add(
+                0, MediaBucketData(
+                    -1L,
+                    getLocaleString(R.string.label_all),
+                    mediaList[0].path,
+                    mediaList.size,
+                    mediaType = mediaType
+                )
             )
-        )
     }
     return bucketList
 }

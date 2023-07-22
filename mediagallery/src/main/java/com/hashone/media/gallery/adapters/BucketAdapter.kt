@@ -21,8 +21,8 @@ import com.hashone.media.gallery.model.MediaBucketData
 
 
 class BucketAdapter(
-    var mContext: Context,
-    var builder: MediaGallery.Builder,
+    private var mContext: Context,
+    private var builder: MediaGallery.Builder,
     private var mFoldersList: ArrayList<MediaBucketData>,
     private var mOnItemClickListener: AdapterView.OnItemClickListener? = null
 ) : RecyclerView.Adapter<BucketAdapter.ItemViewHolder>() {
@@ -52,29 +52,29 @@ class BucketAdapter(
                         )
                         .into(mBinding.imageViewFolderItem)
 
-                    mBinding.listItem.setBackgroundColor(mContext.getColorCode(builder.backgroundColor))
+                    mBinding.listItem.setBackgroundColor(mContext.getColorCode(builder.bucketBuilder.backgroundColor))
                     mBinding.textViewFolderName.text = this.name
                     mBinding.textViewFilesCount.text = "${this.mediaCount}"
                     mBinding.textViewSelectedCount.isVisible = this.selectedCount > 0
                     mBinding.textViewSelectedCount.text = "${this.selectedCount}"
 
                     mBinding.textViewFolderName.applyTextStyle(
-                        mContext.getColorCode(builder.bucketTitleColor),
-                        builder.bucketTitleFont,
-                        builder.bucketTitleSize
+                        mContext.getColorCode(builder.bucketBuilder.titleColor),
+                        builder.bucketBuilder.titleFont,
+                        builder.bucketBuilder.titleSize
                     )
                     mBinding.textViewFilesCount.applyTextStyle(
-                        mContext.getColorCode(builder.bucketSubTitleColor),
-                        builder.bucketSubTitleFont,
-                        builder.bucketSubTitleSize
+                        mContext.getColorCode(builder.bucketBuilder.subTitleColor),
+                        builder.bucketBuilder.subTitleFont,
+                        builder.bucketBuilder.subTitleSize
                     )
                     mBinding.textViewSelectedCount.applyTextStyle(
-                        mContext.getColorCode(builder.selectedCountColor),
-                        builder.selectedCountFont,
-                        builder.selectedCountSize
+                        mContext.getColorCode(builder.bucketBuilder.countColor),
+                        builder.bucketBuilder.countFont,
+                        builder.bucketBuilder.countSize
                     )
                     mBinding.textViewSelectedCount.backgroundTintList =
-                        ColorStateList.valueOf(mContext.getColorCode(builder.selectedCountBackgroundColor))
+                        ColorStateList.valueOf(mContext.getColorCode(builder.bucketBuilder.countBackgroundColor))
 
                     mBinding.root.onClick {
                         if (mOnItemClickListener != null) {

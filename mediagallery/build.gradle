@@ -54,7 +54,7 @@ dependencies {
     api 'com.google.android.material:material:1.9.0'
     api 'com.github.hashonetech:commons:v1.0.18'
 
-    api 'com.github.hashonetech:crop-module:1.0.0'
+    api 'com.github.hashonetech:crop-module:1.0.1'
 }
 
 afterEvaluate {

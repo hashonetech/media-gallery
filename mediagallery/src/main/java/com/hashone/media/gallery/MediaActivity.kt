@@ -2,10 +2,8 @@ package com.hashone.media.gallery
 
 import android.Manifest
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -26,6 +24,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -70,13 +69,14 @@ import com.hashone.media.gallery.utils.KEY_IMAGE_ORIGINAL_PATH
 import com.hashone.media.gallery.utils.KEY_IMAGE_ORIGINAL_REPLACE
 import com.hashone.media.gallery.utils.KEY_IMAGE_PATH
 import com.hashone.media.gallery.utils.KEY_MEDIA_GALLERY
-import com.hashone.media.gallery.utils.KEY_MEDIA_PATH
 import com.hashone.media.gallery.utils.KEY_MEDIA_PATHS
 import com.hashone.media.gallery.utils.MediaPref
+import com.hashone.media.gallery.utils.REQUEST_CODE_CAMERA
 import com.hashone.media.gallery.utils.file.FileCreator
 import com.hashone.media.gallery.utils.file.FileExtension
 import com.hashone.media.gallery.utils.file.FileOperationRequest
 import com.hashone.media.gallery.utils.file.StorageType
+import com.hashone.media.gallery.utils.getApplicationInfoCompat
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -105,8 +105,7 @@ class MediaActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        builder =
-            (intent!!.extras!!.serializable<MediaGallery>(KEY_MEDIA_GALLERY)!!).builder
+        builder = (intent!!.extras!!.serializable<MediaGallery>(KEY_MEDIA_GALLERY)!!).builder
 
         setWindowUI()
 
@@ -129,46 +128,47 @@ class MediaActivity : BaseActivity() {
 
     //TODO: Screen UI - Start
     private fun setWindowUI() {
-        if (builder.isFullScreen) {
+        if (builder.screenBuilder.isFullScreen) {
             supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
-            setStatusBarColor(getColorCode(builder.statusBarColor))
-            navigationUI(false, getColorCode(builder.navigationBarColor))
+            setStatusBarColor(getColorCode(builder.screenBuilder.statusBarColor))
+            navigationUI(false, getColorCode(builder.screenBuilder.navigationBarColor))
             hideSystemUI()
         } else {
-            if (builder.statusBarColor != -1) {
-                setStatusBarColor(getColorCode(builder.statusBarColor))
-                navigationUI(true, getColorCode(builder.navigationBarColor))
+            if (builder.screenBuilder.statusBarColor != -1) {
+                setStatusBarColor(getColorCode(builder.screenBuilder.statusBarColor))
+                navigationUI(true, getColorCode(builder.screenBuilder.navigationBarColor))
             }
         }
     }
 
     private fun setScreenUI() {
         //TODO: Screen
-        if (builder.windowBackgroundColor != -1)
-            mBinding.layoutMediaParent.setBackgroundColor(getColorCode(builder.windowBackgroundColor))
+        if (builder.screenBuilder.windowBackgroundColor != -1) mBinding.layoutMediaParent.setBackgroundColor(
+            getColorCode(builder.screenBuilder.windowBackgroundColor)
+        )
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        if (builder.isFullScreen) {
+        if (builder.screenBuilder.isFullScreen) {
             hideSystemUI()
-            setStatusBarColor(getColorCode(builder.statusBarColor))
-            navigationUI(false, getColorCode(builder.statusBarColor))
+            setStatusBarColor(getColorCode(builder.screenBuilder.statusBarColor))
+            navigationUI(false, getColorCode(builder.screenBuilder.statusBarColor))
         }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (builder.isFullScreen) {
+        if (builder.screenBuilder.isFullScreen) {
             if (hasFocus) {
                 hideSystemUI()
-                setStatusBarColor(getColorCode(builder.statusBarColor))
-                navigationUI(false, getColorCode(builder.statusBarColor))
+                setStatusBarColor(getColorCode(builder.screenBuilder.statusBarColor))
+                navigationUI(false, getColorCode(builder.screenBuilder.statusBarColor))
             }
         }
     }
@@ -185,24 +185,25 @@ class MediaActivity : BaseActivity() {
             subtitle = ""
         }
 
-        if (builder.toolBarColor != -1)
-            mBinding.toolBarMedia.setBackgroundColor(getColorCode(builder.toolBarColor))
-        if (builder.backPressIcon != -1)
-            mBinding.toolBarMedia.setNavigationIcon(builder.backPressIcon)
-        mBinding.toolBarMedia.navigationContentDescription = builder.backPressIconDescription
+        if (builder.toolBarBuilder.toolBarColor != -1) mBinding.toolBarMedia.setBackgroundColor(
+            getColorCode(builder.toolBarBuilder.toolBarColor)
+        )
+        if (builder.toolBarBuilder.backIcon != -1) mBinding.toolBarMedia.setNavigationIcon(
+            builder.toolBarBuilder.backIcon
+        )
+        mBinding.toolBarMedia.navigationContentDescription =
+            builder.toolBarBuilder.backIconDescription
 
-        if (builder.toolBarTitle.isNotEmpty())
-            mBinding.textViewTitle.text = builder.toolBarTitle
-        if (builder.toolBarTitleColor != -1)
-            mBinding.textViewTitle.setTextColor(getColorCode(builder.toolBarTitleColor))
-        if (builder.toolBarTitleFont != -1)
-            mBinding.textViewTitle.typeface =
-                ResourcesCompat.getFont(mActivity, builder.toolBarTitleFont)
-        if (builder.toolBarTitleSize != -1F)
-            mBinding.textViewTitle.setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                builder.toolBarTitleSize
-            )
+        if (builder.toolBarBuilder.title.isNotEmpty()) mBinding.textViewTitle.text =
+            builder.toolBarBuilder.title
+        if (builder.toolBarBuilder.titleColor != -1) mBinding.textViewTitle.setTextColor(
+            getColorCode(builder.toolBarBuilder.titleColor)
+        )
+        if (builder.toolBarBuilder.titleFont != -1) mBinding.textViewTitle.typeface =
+            ResourcesCompat.getFont(mActivity, builder.toolBarBuilder.titleFont)
+        if (builder.toolBarBuilder.titleSize != -1F) mBinding.textViewTitle.setTextSize(
+            TypedValue.COMPLEX_UNIT_SP, builder.toolBarBuilder.titleSize
+        )
 
         updateMediaCount()
     }
@@ -232,11 +233,14 @@ class MediaActivity : BaseActivity() {
     private fun setGooglePhotosUI() {
         mBinding.fabGooglePhotos.isVisible = builder.allowGooglePhotos
 
-        mBinding.fabGooglePhotos.setImageResource(builder.googlePhotosIcon)
+        mBinding.fabGooglePhotos.setImageResource(builder.screenBuilder.googlePhotosIcon)
 
         mBinding.fabGooglePhotos.onClick {
             if (isGooglePhotosAppInstalled(PACKAGE_NAME_GOOGLE_PHOTOS)) {
-                if (packageManager.getApplicationInfo(PACKAGE_NAME_GOOGLE_PHOTOS, 0).enabled) {
+                if (packageManager.getApplicationInfoCompat(
+                        PACKAGE_NAME_GOOGLE_PHOTOS, 0
+                    ).enabled
+                ) {
                     mGooglePhotoActivityResult.launch(Intent().apply {
                         action = Intent.ACTION_PICK
                         type = when (builder.mediaType) {
@@ -279,8 +283,7 @@ class MediaActivity : BaseActivity() {
                     ).apply {
                         setActionTextColor(Color.YELLOW)
                         setAction(getLocaleString(R.string.label_enable)) { }
-                        addCallback(object :
-                            BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                        addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
                             override fun onShown(transientBottomBar: Snackbar?) {
                                 super.onShown(transientBottomBar)
                                 transientBottomBar!!.view.findViewById<View>(com.google.android.material.R.id.snackbar_action)
@@ -365,17 +368,15 @@ class MediaActivity : BaseActivity() {
         fun createCopyAndReturnRealPath(context: Context, uri: Uri?): String? {
             val contentResolver = context.contentResolver ?: return null
 
-            var fileName =
-                if (uri!!.toString().startsWith("file:", ignoreCase = true)) {
-                    val splitString = uri.encodedPath!!.split("/")
-                    splitString[splitString.size - 1]
-                } else {
-                    uri.toFilePath(activity = mActivity)
-                }
-            fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+            var fileName = if (uri!!.toString().startsWith("file:", ignoreCase = true)) {
+                val splitString = uri.encodedPath!!.split("/")
+                splitString[splitString.size - 1]
+            } else {
+                uri.toFilePath(activity = mActivity)
+            }
+            fileName = fileName.substring(fileName.lastIndexOf("/") + 1)
             // Create file path inside app's data dir
-            val filePath =
-                (context.applicationInfo.dataDir.toString() + File.separator + fileName)
+            val filePath = (context.applicationInfo.dataDir.toString() + File.separator + fileName)
 
             val file = File(filePath)
             if (!file.exists()) {
@@ -400,20 +401,21 @@ class MediaActivity : BaseActivity() {
     //TODO: Action Button UI
     private fun setActionButtonUI() {
 
-        if (builder.buttonBackgroundColor != -1)
-            mBinding.cardViewDone.setCardBackgroundColor(getColorCode(builder.buttonBackgroundColor))
+        if (builder.actionButtonBuilder.backgroundColor != -1) mBinding.cardViewDone.setCardBackgroundColor(
+            getColorCode(builder.actionButtonBuilder.backgroundColor)
+        )
         mBinding.cardViewDone.radius = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            builder.buttonRadius,
+            builder.actionButtonBuilder.radius,
             mActivity.resources.displayMetrics
         )
 
-        if (builder.buttonText.isNotEmpty())
-            mBinding.textViewDone.text = builder.buttonText
+        if (builder.actionButtonBuilder.text.isNotEmpty()) mBinding.textViewDone.text =
+            builder.actionButtonBuilder.text
         mBinding.textViewDone.applyTextStyle(
-            getColorCode(builder.buttonTextColor),
-            builder.buttonTextFont,
-            builder.buttonTextSize
+            getColorCode(builder.actionButtonBuilder.textColor),
+            builder.actionButtonBuilder.textFont,
+            builder.actionButtonBuilder.textSize
         )
 
         mBinding.textViewDone.onClick {
@@ -463,244 +465,264 @@ class MediaActivity : BaseActivity() {
 
     fun removeItem(position: Int) = mSelectedImagesList.removeAt(position)
     private fun getNewCopModuleIntent(mediaItem: MediaItem): Intent {
-        return Crop.open(activity = this@MediaActivity, Crop.build(
+        val cropIntent = Crop.build(
             originalImageFilePath = mediaItem.path,
-        ) {
-            cropState = null
+            cropDataSaved = null,
+            cropState = null,
             croppedImageBitmap = null
+        ) {
+
             //TODO: Screen
-            windowBackgroundColor = com.hashone.cropper.R.color.extra_extra_light_gray_color
-            statusBarColor = com.hashone.cropper.R.color.extra_extra_light_gray_color
-            navigationBarColor = com.hashone.cropper.R.color.white
+            screenBuilder = Crop.ScreenBuilder(
+                windowBackgroundColor = com.hashone.cropper.R.color.window_bg_color,
+                statusBarColor = com.hashone.cropper.R.color.white,
+                navigationBarColor = com.hashone.cropper.R.color.white,
+                cropOuterBorderColor = com.hashone.cropper.R.color.un_select_color,
+                borderWidth = 1f,
+                borderSpacing = 2f,
+            )
 
             //TODO: Toolbar
-            toolBarColor = com.hashone.cropper.R.color.white
-            backPressIcon = com.hashone.cropper.R.drawable.ic_back
-            backPressIconDescription = ""
-            toolBarTitle = "Crop"
-            toolBarTitleColor = com.hashone.cropper.R.color.black
-            toolBarTitleFont = com.hashone.cropper.R.font.outfit_regular
-            toolBarTitleSize = 16F
+            toolBarBuilder = Crop.ToolBarBuilder(
+                toolBarColor = com.hashone.cropper.R.color.white,
+                backIcon = com.hashone.cropper.R.drawable.ic_back,
+                title = "Crop",
+                titleColor = com.hashone.cropper.R.color.black,
+                titleFont = com.hashone.cropper.R.font.roboto_medium,
+                titleSize = 16F,
+            )
+
 
             //TODO: AspectRatio
-            aspectRatioBackgroundColor = com.hashone.cropper.R.color.white
-            aspectRatioSelectedColor = com.hashone.cropper.R.color.black
-            aspectRatioUnSelectedColor = com.hashone.cropper.R.color.dark_gray_color_2
-            aspectRatioTitleFont = com.hashone.cropper.R.font.roboto_medium
+            aspectRatioBuilder = Crop.AspectRatioBuilder(
+                backgroundColor = com.hashone.cropper.R.color.white,
+                selectedColor = com.hashone.cropper.R.color.black,
+                unSelectedColor = com.hashone.cropper.R.color.un_select_color,
+                titleFont = com.hashone.cropper.R.font.roboto_medium,
+            )
+
 
             //TODO: Bottom Icon & Text
-            cropDoneTextColor = com.hashone.cropper.R.color.black
-            cropDoneIcon = com.hashone.cropper.R.drawable.ic_check_croppy_selected
-            cropDoneText = "Crop"
-            cropDoneTextFont = com.hashone.cropper.R.font.roboto_medium
-            cropDoneTextSize = 16F
+            bottomPanelBuilder = Crop.BottomPanelBuilder(
+                cropBottomBackgroundColor = com.hashone.cropper.R.color.white,
+                dividerColor = com.hashone.cropper.R.color.white,
+                doneButtonBuilder = Crop.ButtonBuilder(
+                    textColor = com.hashone.cropper.R.color.black,
+                    icon = com.hashone.cropper.R.drawable.ic_check_croppy_selected,
+                    buttonText = "Crop",
+                    textFont = com.hashone.cropper.R.font.roboto_medium,
+                    textSize = 16F,
+                ),
+                cancelButtonBuilder = Crop.ButtonBuilder(
+                    textColor = com.hashone.cropper.R.color.black,
+                    icon = com.hashone.cropper.R.drawable.ic_cancel,
+                    buttonText = "Skip",
+                    textFont = com.hashone.cropper.R.font.roboto_medium,
+                    textSize = 16F,
+                ),
+            )
+        }
 
-            cropCancelTextColor = com.hashone.cropper.R.color.black
-            cropCancelIcon = com.hashone.cropper.R.drawable.ic_cancel
-            cropCancelText = "Skip"
-            cropCancelTextFont = com.hashone.cropper.R.font.roboto_medium
-            cropCancelTextSize = 16F
-
-            cropBottomBackgroundColor = com.hashone.cropper.R.color.white
-            dividerColor = com.hashone.cropper.R.color.extra_extra_light_gray_color
-
-        })
+        return Crop.open(activity = this@MediaActivity, cropIntent)
     }
 
     fun finishPickImages(images: ArrayList<MediaItem>) {
-        if (builder.enableCropMode && builder.mediaType == MediaType.IMAGE && builder.cropClassName.isEmpty() && builder.appPackageName.isEmpty()) {
+        if (builder.enableCropMode && builder.mediaType == MediaType.IMAGE && builder.mediaCropBuilder.cropClassName.isEmpty() && builder.mediaCropBuilder.appPackageName.isEmpty()) {
             getNewCopModuleIntent(images[0]).let {
-                mActivityLauncher.launch(
-                    it,
+                mActivityLauncher.launch(it,
                     onActivityResult = object :
                         BetterActivityResult.OnActivityResult<ActivityResult> {
-                        override fun onActivityResult(activityResult: ActivityResult) {
-                            if (activityResult.resultCode == Activity.RESULT_OK) {
-                                activityResult.data?.let { intentData ->
+                        override fun onActivityResult(result: ActivityResult) {
+                            if (result.resultCode == Activity.RESULT_OK) {
+                                result.data?.let { intentData ->
                                     if (intentData.hasExtra(CropActivity.KEY_RETURN_CROP_DATA)) {
                                         val myCropDataSaved =
                                             intentData.extras?.serializable<CropDataSaved>(
                                                 CropActivity.KEY_RETURN_CROP_DATA
                                             )
-                                        setResult(RESULT_OK, Intent().apply {
-                                            putExtra(
-                                                CropActivity.KEY_RETURN_CROP_DATA,
-                                                myCropDataSaved
+                                        setResultData(images, myCropDataSaved)
+                                    } else {
+                                        setResultData(images)
+                                    }
+                                    if (builder.isForceClose) finish()
+                                }
+                            }
+                        }
+                    })
+            }
+        } else if (builder.enableCropMode && builder.mediaType == MediaType.IMAGE && builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
+            if (images.size > 0) {
+                val className =
+                    Class.forName("${builder.mediaCropBuilder.appPackageName}.${builder.mediaCropBuilder.cropClassName}")
+                val intent = Intent(this, className)
+                val file = File(images[0].path)
+                val uri = Uri.fromFile(file)
+                val fileOperationRequest = FileOperationRequest(
+                    StorageType.INTERNAL,
+                    builder.mediaCropBuilder.projectDirectoryPath,
+                    file.nameWithoutExtension + System.currentTimeMillis(),
+                    getExtensionOfFile(file)
+                )
+                val destinationPath = FileCreator.createFile(
+                    fileOperationRequest, this
+                )
+                intent.apply {
+                    Bundle().apply {
+                        putString(KEY_CROP_URI, uri.path)
+                        putString(KEY_CROP_FILET, file.absolutePath)
+                        putString(KEY_CROP_DESTINATION_PATH, destinationPath.absolutePath)
+                        putString(
+                            KEY_CROP_PROJECT_DIRECTORY,
+                            builder.mediaCropBuilder.projectDirectoryPath
+                        )
+                    }.also { this.putExtras(it) }
+                }
+
+                intent.let {
+                    mActivityLauncher.launch(it,
+                        onActivityResult = object :
+                            BetterActivityResult.OnActivityResult<ActivityResult> {
+                            override fun onActivityResult(result: ActivityResult) {
+                                if (result.resultCode == Activity.RESULT_OK) {
+                                    result.data?.let { intentData ->
+
+                                        if (intentData.hasExtra(KEY_IMAGE_PATH) && intentData.hasExtra(
+                                                KEY_IMAGE_ORIGINAL_PATH
+                                            ) && intentData.hasExtra(KEY_IMAGE_ORIGINAL_REPLACE)
+                                        ) {
+                                            val filePath =
+                                                intentData.extras!!.getString(KEY_IMAGE_PATH)!!
+                                            val originalImagePath =
+                                                intentData.extras!!.getString(
+                                                    KEY_IMAGE_ORIGINAL_PATH
+                                                )!!
+                                            val isReplace =
+                                                if (intentData.hasExtra(KEY_IMAGE_ORIGINAL_REPLACE)) {
+                                                    intentData.extras!!.getBoolean(
+                                                        KEY_IMAGE_ORIGINAL_REPLACE, false
+                                                    )
+                                                } else {
+                                                    false
+                                                }
+                                            setResultData(
+
+                                                ArrayList(),
+                                                null,
+                                                filePath,
+                                                originalImagePath,
+                                                isReplace
                                             )
-                                        })
-                                    } else {
-                                        setResult(RESULT_OK, Intent().apply {
-                                            putExtra(CropActivity.KEY_RETURN_CROP_DATA, images)
-                                            putExtra(KEY_MEDIA_PATHS, images)
-                                        })
+
+                                        } else {
+                                            setResultData(images)
+                                        }
+                                        if (builder.isForceClose) finish()
                                     }
-                                    if (builder.isForceClose) finish()
                                 }
                             }
-                        }
-                    }
+                        })
+                }
+            }
+        } else if (builder.mediaType == MediaType.IMAGE && builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
+            if (images.size > 0) {
+                val className =
+                    Class.forName("${builder.mediaCropBuilder.appPackageName}.${builder.mediaCropBuilder.cropClassName}")
+                val intent = Intent(this, className)
+                val file = File(images[0].path)
+                val uri = Uri.fromFile(file)
+                val fileOperationRequest = FileOperationRequest(
+                    StorageType.INTERNAL,
+                    builder.mediaCropBuilder.projectDirectoryPath,
+                    file.nameWithoutExtension + System.currentTimeMillis(),
+                    getExtensionOfFile(file)
                 )
-            }
-        }
-        else if (builder.enableCropMode && builder.mediaType == MediaType.IMAGE && builder.cropClassName.isNotEmpty() && builder.appPackageName.isNotEmpty()) {
-            val c = Class.forName("${builder.appPackageName}.${builder.cropClassName}")
-            val intent = Intent(this, c)
-            val file = File(images[0].path)
-            val uri = Uri.fromFile(file)
-            val fileOperationRequest = FileOperationRequest(
-                StorageType.INTERNAL,
-                builder.projectDirectoryPath,
-                file.nameWithoutExtension + System.currentTimeMillis(),
-                getExtensionOfFile(file)
-            )
-            val destinationPath =
-                FileCreator
-                    .createFile(
-                        fileOperationRequest,
-                        this
-                    )
-            intent.apply {
-                Bundle().apply {
-                    putString(KEY_CROP_URI, uri.path)
-                    putString(KEY_CROP_FILET, file.absolutePath)
-                    putString(KEY_CROP_DESTINATION_PATH, destinationPath.absolutePath)
-                    putString(KEY_CROP_PROJECT_DIRECTORY, builder.projectDirectoryPath)
-                }.also { this.putExtras(it) }
-            }
+                val destinationPath = FileCreator.createFile(
+                    fileOperationRequest, this
+                )
+                intent.apply {
+                    Bundle().apply {
+                        putString(KEY_CROP_URI, uri.path)
+                        putString(KEY_CROP_FILET, file.absolutePath)
+                        putString(KEY_CROP_DESTINATION_PATH, destinationPath.absolutePath)
+                        putString(
+                            KEY_CROP_PROJECT_DIRECTORY,
+                            builder.mediaCropBuilder.projectDirectoryPath
+                        )
+                    }.also { this.putExtras(it) }
+                }
 
-            intent.let {
-                mActivityLauncher.launch(
-                    it,
-                    onActivityResult = object :
-                        BetterActivityResult.OnActivityResult<ActivityResult> {
-                        override fun onActivityResult(activityResult: ActivityResult) {
-                            if (activityResult.resultCode == Activity.RESULT_OK) {
-                                activityResult.data?.let { intentData ->
+                intent.let {
+                    mActivityLauncher.launch(it,
+                        onActivityResult = object :
+                            BetterActivityResult.OnActivityResult<ActivityResult> {
+                            override fun onActivityResult(result: ActivityResult) {
+                                if (result.resultCode == Activity.RESULT_OK) {
+                                    result.data?.let { intentData ->
 
-                                    if (intentData.hasExtra(KEY_IMAGE_PATH) && intentData.hasExtra(
-                                            KEY_IMAGE_ORIGINAL_PATH
-                                        ) && intentData.hasExtra(KEY_IMAGE_ORIGINAL_REPLACE)
-                                    ) {
-                                        val filePath =
-                                            intentData.extras!!.getString(KEY_IMAGE_PATH)!!
-                                        val originalImagePath =
-                                            intentData.extras!!.getString(KEY_IMAGE_ORIGINAL_PATH)!!
-                                        val isReplace =
-                                            if (intentData.hasExtra(KEY_IMAGE_ORIGINAL_REPLACE)) {
-                                                intentData.extras!!.getBoolean(
-                                                    KEY_IMAGE_ORIGINAL_REPLACE,
+                                        if (intentData.hasExtra(KEY_IMAGE_PATH) && intentData.hasExtra(
+                                                KEY_IMAGE_ORIGINAL_PATH
+                                            ) && intentData.hasExtra(KEY_IMAGE_ORIGINAL_REPLACE)
+                                        ) {
+                                            val filePath =
+                                                intentData.extras!!.getString(KEY_IMAGE_PATH)!!
+                                            val originalImagePath =
+                                                intentData.extras!!.getString(
+                                                    KEY_IMAGE_ORIGINAL_PATH
+                                                )!!
+                                            val isReplace =
+                                                if (intentData.hasExtra(KEY_IMAGE_ORIGINAL_REPLACE)) {
+                                                    intentData.extras!!.getBoolean(
+                                                        KEY_IMAGE_ORIGINAL_REPLACE, false
+                                                    )
+                                                } else {
                                                     false
-                                                )
-                                            } else {
-                                                false
-                                            }
-                                        setResult(
-                                            Activity.RESULT_OK,
-                                            Intent()
-                                                .putExtra(KEY_IMAGE_PATH, filePath)
-                                                .putExtra(
-                                                    KEY_IMAGE_ORIGINAL_PATH,
-                                                    originalImagePath
-                                                )
-                                                .putExtra(KEY_IMAGE_ORIGINAL_REPLACE, isReplace)
-                                        )
-                                    } else {
-                                        setResult(RESULT_OK, Intent().apply {
-                                            putExtra(CropActivity.KEY_RETURN_CROP_DATA, images)
-                                            putExtra(KEY_MEDIA_PATHS, images)
-                                        })
+                                                }
+
+                                            setResultData(
+                                                ArrayList(),
+                                                null,
+                                                filePath,
+                                                originalImagePath,
+                                                isReplace
+                                            )
+
+                                        } else {
+                                            setResultData(images)
+                                        }
+                                        if (builder.isForceClose) finish()
                                     }
-                                    if (builder.isForceClose) finish()
                                 }
                             }
-                        }
-                    }
-                )
+                        })
+                }
             }
-        }
-        else if (builder.mediaType == MediaType.IMAGE && builder.cropClassName.isNotEmpty() && builder.appPackageName.isNotEmpty()) {
-            val c = Class.forName("${builder.appPackageName}.${builder.cropClassName}")
-            val intent = Intent(this, c)
-            val file = File(images[0].path)
-            val uri = Uri.fromFile(file)
-            val fileOperationRequest = FileOperationRequest(
-                StorageType.INTERNAL,
-                builder.projectDirectoryPath,
-                file.nameWithoutExtension + System.currentTimeMillis(),
-                getExtensionOfFile(file)
-            )
-            val destinationPath =
-                FileCreator
-                    .createFile(
-                        fileOperationRequest,
-                        this
-                    )
-            intent.apply {
-                Bundle().apply {
-                    putString(KEY_CROP_URI, uri.path)
-                    putString(KEY_CROP_FILET, file.absolutePath)
-                    putString(KEY_CROP_DESTINATION_PATH, destinationPath.absolutePath)
-                    putString(KEY_CROP_PROJECT_DIRECTORY, builder.projectDirectoryPath)
-                }.also { this.putExtras(it) }
-            }
-
-            intent.let {
-                mActivityLauncher.launch(
-                    it,
-                    onActivityResult = object :
-                        BetterActivityResult.OnActivityResult<ActivityResult> {
-                        override fun onActivityResult(activityResult: ActivityResult) {
-                            if (activityResult.resultCode == Activity.RESULT_OK) {
-                                activityResult.data?.let { intentData ->
-
-                                    if (intentData.hasExtra(KEY_IMAGE_PATH) && intentData.hasExtra(
-                                            KEY_IMAGE_ORIGINAL_PATH
-                                        ) && intentData.hasExtra(KEY_IMAGE_ORIGINAL_REPLACE)
-                                    ) {
-                                        val filePath =
-                                            intentData.extras!!.getString(KEY_IMAGE_PATH)!!
-                                        val originalImagePath =
-                                            intentData.extras!!.getString(KEY_IMAGE_ORIGINAL_PATH)!!
-                                        val isReplace =
-                                            if (intentData.hasExtra(KEY_IMAGE_ORIGINAL_REPLACE)) {
-                                                intentData.extras!!.getBoolean(
-                                                    KEY_IMAGE_ORIGINAL_REPLACE,
-                                                    false
-                                                )
-                                            } else {
-                                                false
-                                            }
-                                        setResult(
-                                            Activity.RESULT_OK,
-                                            Intent()
-                                                .putExtra(KEY_IMAGE_PATH, filePath)
-                                                .putExtra(
-                                                    KEY_IMAGE_ORIGINAL_PATH,
-                                                    originalImagePath
-                                                )
-                                                .putExtra(KEY_IMAGE_ORIGINAL_REPLACE, isReplace)
-                                        )
-                                    } else {
-                                        setResult(RESULT_OK, Intent().apply {
-                                            putExtra(CropActivity.KEY_RETURN_CROP_DATA, images)
-                                            putExtra(KEY_MEDIA_PATHS, images)
-                                        })
-                                    }
-                                    if (builder.isForceClose) finish()
-                                }
-                            }
-                        }
-                    }
-                )
-            }
-        }
-        else {
-            setResult(RESULT_OK, Intent().apply {
-                putExtra(KEY_MEDIA_PATHS, images)
-//                putExtra(KEY_MEDIA_PATH, images[0].path)
-            })
+        } else {
+            setResultData(images)
             if (builder.isForceClose) finish()
         }
+    }
+
+    private fun setResultData(
+        images: ArrayList<MediaItem>,
+        cropData: CropDataSaved? = null,
+        filePath: String = "",
+        originalImagePath: String = " ",
+        isReplace: Boolean = false
+    ) {
+        Log.d("Testdata", "images:$images filePath:$filePath originalImagePath:$originalImagePath")
+        setResult(RESULT_OK, Intent().apply {
+            if (cropData != null)
+                putExtra(CropActivity.KEY_RETURN_CROP_DATA, cropData)
+            if (images.isNotEmpty())
+                putExtra(KEY_MEDIA_PATHS, images)
+            if (filePath.isNotEmpty())
+                putExtra(KEY_IMAGE_PATH, filePath)
+            if (originalImagePath.isNotEmpty())
+                putExtra(
+                    KEY_IMAGE_ORIGINAL_PATH, originalImagePath
+                )
+            putExtra(KEY_IMAGE_ORIGINAL_REPLACE, isReplace)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -708,9 +730,9 @@ class MediaActivity : BaseActivity() {
         if (mOptionMenu == null) {
             mOptionMenu = menu
             mOptionMenu?.findItem(R.id.action_camera)?.isVisible = builder.allowCamera
-            mOptionMenu?.findItem(R.id.action_camera)?.icon = getDrawable(builder.cameraIcon)
-        } else
-            updateHeaderOptionsUI(mSelectedImagesList.size > 0)
+            mOptionMenu?.findItem(R.id.action_camera)?.icon =
+                ContextCompat.getDrawable(this, builder.toolBarBuilder.cameraIcon)
+        } else updateHeaderOptionsUI(mSelectedImagesList.size > 0)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -728,14 +750,13 @@ class MediaActivity : BaseActivity() {
     }
 
     //TODO: Camera - Start
-    private val REQUEST_CODE_CAMERA = 104
     private var mCurrentRequestCode = -1
 
     private fun setCameraUI() {
 
     }
 
-    fun updateCameraUI(isVisible: Boolean) {
+    private fun updateCameraUI(isVisible: Boolean) {
         mOptionMenu?.let {
             it.findItem(R.id.action_camera).isVisible = if (builder.allowCamera) {
                 isVisible
@@ -749,8 +770,7 @@ class MediaActivity : BaseActivity() {
         mCurrentRequestCode = requestCode
         val permissions = ArrayList<String>()
         if (mCurrentRequestCode == REQUEST_CODE_CAMERA) {
-            if (!isPermissionGranted(Manifest.permission.CAMERA))
-                permissions.add(Manifest.permission.CAMERA)
+            if (!isPermissionGranted(Manifest.permission.CAMERA)) permissions.add(Manifest.permission.CAMERA)
         }
         if (permissions.isNotEmpty()) {
             requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
@@ -765,10 +785,8 @@ class MediaActivity : BaseActivity() {
             openCamera()
         } else {
             showCustomAlertDialog(message = getLocaleString(R.string.allow_camera_permission),
-                negativeButtonText = getLocaleString(R.string.label_cancel)
-                    .uppercase(Locale.getDefault()),
-                positionButtonText = getLocaleString(R.string.label_grant)
-                    .uppercase(Locale.getDefault()),
+                negativeButtonText = getLocaleString(R.string.label_cancel).uppercase(Locale.getDefault()),
+                positionButtonText = getLocaleString(R.string.label_grant).uppercase(Locale.getDefault()),
                 negativeCallback = {
                     alertDialog?.cancel()
                 },
@@ -795,7 +813,6 @@ class MediaActivity : BaseActivity() {
     private fun openCamera() {
         if (checkCameraPermission(REQUEST_CODE_CAMERA)) {
             if (checkCameraHardware()) {
-
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
                 val chooserIntent =
@@ -819,18 +836,14 @@ class MediaActivity : BaseActivity() {
                                         }
 
                                         MediaScannerConnection.scanFile(
-                                            mActivity,
-                                            arrayOf(videoFilePath), null
+                                            mActivity, arrayOf(videoFilePath), null
                                         ) { _, _ ->
-                                            setResult(Activity.RESULT_OK, Intent().apply {
-                                                putExtra(KEY_MEDIA_PATHS, arrayList)
-                                            })
+                                            setResultData(arrayList)
                                             finish()
                                         }
                                     }
                                 } else {
-                                    val bitmap =
-                                        result.data?.extras?.parcelable<Bitmap>("data")
+                                    val bitmap = result.data?.extras?.parcelable<Bitmap>("data")
                                     bitmap?.let {
                                         val savedFile = bitmap.saveToFile(
                                             fileName = "Camera_${System.currentTimeMillis()}.$EXTENSION_PNG",
@@ -844,12 +857,9 @@ class MediaActivity : BaseActivity() {
                                             add(imageItem)
                                         }
                                         MediaScannerConnection.scanFile(
-                                            mActivity,
-                                            arrayOf(savedFile.absolutePath), null
+                                            mActivity, arrayOf(savedFile.absolutePath), null
                                         ) { _, _ ->
-                                            setResult(Activity.RESULT_OK, Intent().apply {
-                                                putExtra(KEY_MEDIA_PATHS, arrayList)
-                                            })
+                                            setResultData(arrayList)
                                             finish()
                                         }
                                     }
@@ -862,8 +872,8 @@ class MediaActivity : BaseActivity() {
     }
     //TODO: Camera - End
 
-    fun getExtensionOfFile(file: File): FileExtension {
-        return when (file.extension.toLowerCase()) {
+    private fun getExtensionOfFile(file: File): FileExtension {
+        return when (file.extension.lowercase()) {
             "webp" -> {
                 FileExtension.WEBP
             }
