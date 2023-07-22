@@ -13,8 +13,16 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	dependencies {
 	        implementation 'com.github.hashonetech:media-gallery:Tag'
 	}
+ 
+## 📸 Screenshot
 
-In AndroidManifest.xml
+<div style="display:flex;">
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/680f5b61-df51-41c6-afca-e385bb48f14f" width="20%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/26d56e1c-da40-4912-947f-00049cb167b8" width="20%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/fa0e67be-1592-42af-a4d5-87e874231f3a" width="20%">
+</div>
+
+### AndroidManifest.xml 
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -51,7 +59,7 @@ In AndroidManifest.xml
 		</provider>
 	 </application>
 	 
- Implementation
+## Implementation
 
 	if (checkPermissions()) {
             mActivityLauncher.launch(
@@ -159,3 +167,4 @@ In AndroidManifest.xml
                 }
             )
         }
+	
