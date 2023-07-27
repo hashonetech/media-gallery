@@ -50,11 +50,11 @@ android {
 
 dependencies {
     api 'androidx.core:core-ktx:1.10.1'
-    api 'androidx.appcompat:appcompat:1.7.0-alpha02'
+    api 'androidx.appcompat:appcompat:1.7.0-alpha03'
     api 'com.google.android.material:material:1.9.0'
     api 'com.github.hashonetech:commons:v1.0.18'
 
-    api 'com.github.hashonetech:crop-module:1.0.1'
+    api 'com.github.hashonetech:crop-module:v1.0.2'
 }
 
 afterEvaluate {

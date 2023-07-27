@@ -88,7 +88,7 @@ class MainActivity : BaseActivity() {
             ) {
                 //TODO: Screen
                 screenBuilder = MediaGallery.ScreenBuilder(
-                    isFullScreen = true,
+                    isFullScreen = false,
                     windowBackgroundColor = R.color.white,
                     statusBarColor = R.color.white,
                     navigationBarColor = R.color.white,
