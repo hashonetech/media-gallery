@@ -20,9 +20,9 @@ import com.hashone.commons.extensions.serializable
 import com.hashone.cropper.CropActivity
 import com.hashone.cropper.model.CropDataSaved
 import com.hashone.media.gallery.builder.MediaGallery
-import com.hashone.media.gallery.databinding.ActivityMainBinding
 import com.hashone.media.gallery.enums.MediaType
 import com.hashone.media.gallery.model.MediaItem
+import com.hashone.media.gallery.test.databinding.ActivityMainBinding
 import com.hashone.media.gallery.utils.KEY_IMAGE_ORIGINAL_PATH
 import com.hashone.media.gallery.utils.KEY_IMAGE_PATH
 import com.hashone.media.gallery.utils.KEY_MEDIA_PATHS
@@ -89,20 +89,20 @@ class MainActivity : BaseActivity() {
                 //TODO: Screen
                 screenBuilder = MediaGallery.ScreenBuilder(
                     isFullScreen = false,
-                    windowBackgroundColor = R.color.white,
-                    statusBarColor = R.color.white,
-                    navigationBarColor = R.color.white,
+                    windowBackgroundColor = com.hashone.media.gallery.test.R.color.white,
+                    statusBarColor = com.hashone.media.gallery.test.R.color.white,
+                    navigationBarColor = com.hashone.media.gallery.test.R.color.white,
                     //TODO: Google Photos Icon
 //                    googlePhotosIcon = R.drawable.ic_google_photos_media_gallery
                 )
 
                 //TODO: Toolbar
                 toolBarBuilder = MediaGallery.ToolBarBuilder(
-                    toolBarColor = R.color.white,
+                    toolBarColor = com.hashone.media.gallery.test.R.color.white,
                     backIconDescription = "",
                     title = "",
-                    titleColor = R.color.black,
-                    titleFont = R.font.roboto_medium,
+                    titleColor = com.hashone.media.gallery.test.R.color.black,
+                    titleFont = com.hashone.media.gallery.test.R.font.roboto_medium,
                     titleSize = 16F,
                     //TODO: Camera Icon
 //                    cameraIcon = R.drawable.ic_camera_media_gallery
@@ -231,17 +231,17 @@ class MainActivity : BaseActivity() {
             if (!it.isNullOrEmpty()) {
                 var mIsGranted: Boolean = false
                 it.forEach { (permission, isGranted) ->
-                    when (mCurrentRequestCode) {
+                    mIsGranted = when (mCurrentRequestCode) {
                         REQUEST_CODE_IMAGE -> {
-                            mIsGranted = isGranted
+                            isGranted
                         }
 
                         REQUEST_CODE_VIDEO -> {
-                            mIsGranted = isGranted
+                            isGranted
                         }
 
                         else -> {
-                            mIsGranted = isGranted
+                            isGranted
                         }
                     }
                 }
@@ -253,7 +253,7 @@ class MainActivity : BaseActivity() {
         if (isGranted) {
             openMediaGallery(mCurrentRequestCode)
         } else {
-            showCustomAlertDialog(message = getLocaleString(R.string.allow_permission),
+            showCustomAlertDialog(message = getLocaleString(com.hashone.media.gallery.test.R.string.allow_permission),
                 negativeButtonText = getLocaleString(R.string.label_cancel).uppercase(Locale.getDefault()),
                 positionButtonText = getLocaleString(R.string.label_grant).uppercase(Locale.getDefault()),
                 negativeCallback = {

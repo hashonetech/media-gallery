@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.hashone'
-version = '1.0.10'
+version = '1.0.12'
 
 android {
     namespace 'com.hashone.media.gallery'
@@ -15,6 +15,7 @@ android {
         minSdk 26
         targetSdk 33
         consumerProguardFiles "consumer-rules.pro"
+        multiDexEnabled true
     }
 
     libraryVariants.all { variant ->
@@ -50,7 +51,7 @@ android {
 
 dependencies {
     api 'androidx.core:core-ktx:1.10.1'
-    api 'androidx.appcompat:appcompat:1.7.0-alpha03'
+    api 'androidx.appcompat:appcompat:1.7.0-alpha02'
     api 'com.google.android.material:material:1.9.0'
     api 'com.github.hashonetech:commons:v1.0.18'
 
@@ -65,7 +66,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.hashone'
                 artifactId = 'media-gallery'
-                version = '1.0.10'
+                version = '1.0.12'
             }
         }
     }

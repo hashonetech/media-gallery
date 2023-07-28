@@ -13,8 +13,8 @@ object FileCreator {
     private fun createInternalFile(
         fileOperationRequest: FileOperationRequest, context: Context
     ): File {
-        val contextWrapper = ContextWrapper(context)
-        val path = contextWrapper.getDir(context.filesDir.name, Context.MODE_PRIVATE)
+//        val contextWrapper = ContextWrapper(context)
+//        val path = contextWrapper.getDir(context.filesDir.name, Context.MODE_PRIVATE)
         val parentFolder = File(fileOperationRequest.projectDir).also { it.mkdirs() }
 
         return File(

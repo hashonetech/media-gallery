@@ -80,7 +80,7 @@ fun fetchMediaBucketsAsync(
                 do {
                     val bucketId = it.getLong(bucketIdIndex)
                     val bucketDisplayName = it.getString(bucketDisplayNameIndex)
-                    val bucketMediaTypeName = it.getInt(bucketMediaTypeIndex)
+//                    val bucketMediaTypeName = it.getInt(bucketMediaTypeIndex)
 
 
                     if (!bucketIdList.contains(bucketId)) {

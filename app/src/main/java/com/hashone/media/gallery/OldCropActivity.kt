@@ -5,8 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
-import com.hashone.media.gallery.databinding.ActivityMainBinding
-import com.hashone.media.gallery.databinding.ActivityOldCropBinding
+import com.hashone.media.gallery.test.databinding.ActivityOldCropBinding
 import com.hashone.media.gallery.utils.KEY_CROP_DESTINATION_PATH
 import com.hashone.media.gallery.utils.KEY_CROP_FILET
 import com.hashone.media.gallery.utils.KEY_CROP_PROJECT_DIRECTORY
@@ -30,8 +29,7 @@ class OldCropActivity : AppCompatActivity() {
         val projectDirectoryPath = intent.extras!!.getString(KEY_CROP_PROJECT_DIRECTORY)!!
         mBinding.cropTextView.text = "uriPath:$uriPath \nfilePath:$filePath \ndestinationPath:$destinationPath \nprojectDirectoryPath:$projectDirectoryPath"
 
-        Glide.with(this@OldCropActivity).load(filePath)
-            .into(mBinding.cropedImage)
+        Glide.with(this@OldCropActivity).load(filePath).into(mBinding.cropedImage)
 
         mBinding.btnSubmit.setOnClickListener {
                 setResult(
