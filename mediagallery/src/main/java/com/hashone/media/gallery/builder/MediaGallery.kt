@@ -8,6 +8,7 @@ import androidx.annotation.FloatRange
 import androidx.annotation.FontRes
 import androidx.annotation.IntRange
 import com.hashone.commons.R
+import com.hashone.commons.extensions.getLocaleString
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.enums.MediaType
 import java.io.Serializable
@@ -57,6 +58,12 @@ open class MediaGallery(val builder: Builder) : Serializable {
         //TODO: Toolbar
         var toolBarBuilder = ToolBarBuilder()
 
+        //TODO: Warning Ui
+        var warningUiBuilder = WarningUiBuilder()
+
+        //TODO: Permission
+        var permissionBuilder = PermissionBuilder()
+
         //TODO: Bucket Contents
         var bucketBuilder = BucketBuilder()
 
@@ -78,32 +85,32 @@ open class MediaGallery(val builder: Builder) : Serializable {
         var projectDirectoryPath: String = ""
     ) : Serializable
 
-     class BucketBuilder(
-         @ColorRes
-         var backgroundColor: Int = R.color.white,
-         @ColorRes
-         var titleColor: Int = R.color.pure_black,
-         @FontRes
-         var titleFont: Int = R.font.roboto_medium,
-         @FloatRange
-         var titleSize: Float = 16F,
-         @ColorRes
-         var subTitleColor: Int = R.color.pure_black,
-         @FontRes
-         var subTitleFont: Int = R.font.roboto_regular,
-         @FloatRange
-         var subTitleSize: Float = 14F,
-         @ColorRes
-         var countBackgroundColor: Int = R.color.pure_black,
-         @ColorRes
-         var countColor: Int = R.color.pure_black,
-         @FontRes
-         var countFont: Int = R.font.roboto_regular,
-         @FloatRange
-         var countSize: Float = 14F,
-         //TODO: Media Content
-         @DrawableRes
-         var countBackgroundRes: Int = -1,
+    class BucketBuilder(
+        @ColorRes
+        var backgroundColor: Int = R.color.white,
+        @ColorRes
+        var titleColor: Int = R.color.pure_black,
+        @FontRes
+        var titleFont: Int = R.font.roboto_medium,
+        @FloatRange
+        var titleSize: Float = 16F,
+        @ColorRes
+        var subTitleColor: Int = R.color.pure_black,
+        @FontRes
+        var subTitleFont: Int = R.font.roboto_regular,
+        @FloatRange
+        var subTitleSize: Float = 14F,
+        @ColorRes
+        var countBackgroundColor: Int = R.color.pure_black,
+        @ColorRes
+        var countColor: Int = R.color.pure_black,
+        @FontRes
+        var countFont: Int = R.font.roboto_regular,
+        @FloatRange
+        var countSize: Float = 14F,
+        //TODO: Media Content
+        @DrawableRes
+        var countBackgroundRes: Int = -1,
     ) : Serializable
 
     class ActionButtonBuilder(
@@ -121,36 +128,49 @@ open class MediaGallery(val builder: Builder) : Serializable {
         var textSize: Float = 16F,
     ) : Serializable
 
-     class ToolBarBuilder(
-         @ColorRes
-         var toolBarColor: Int = R.color.white,
-         @DrawableRes
-         var backIcon: Int = com.hashone.media.gallery.R.drawable.ic_back_media_gallery,
-         var backIconDescription: String = "",
-         var title: String = "",
-         @ColorRes
-         var titleColor: Int = R.color.black,
-         @FontRes
-         var titleFont: Int = R.font.roboto_medium,
-         @FloatRange
-         var titleSize: Float = 16F,
-         //TODO: Cameras
-         @DrawableRes
-         var cameraIcon: Int = com.hashone.media.gallery.R.drawable.ic_camera_media_gallery
+    class ToolBarBuilder(
+        @ColorRes
+        var toolBarColor: Int = R.color.white,
+        @DrawableRes
+        var backIcon: Int = com.hashone.media.gallery.R.drawable.ic_back_media_gallery,
+        var backIconDescription: String = "",
+        var title: String = "",
+        @ColorRes
+        var titleColor: Int = R.color.black,
+        @FontRes
+        var titleFont: Int = R.font.roboto_medium,
+        @FloatRange
+        var titleSize: Float = 16F,
+        //TODO: Cameras
+        @DrawableRes
+        var cameraIcon: Int = com.hashone.media.gallery.R.drawable.ic_camera_media_gallery
     ) : Serializable
 
     class ScreenBuilder(
-          var isFullScreen: Boolean = false,
-          @ColorRes
-          var windowBackgroundColor: Int = R.color.white,
-          @ColorRes
-          var statusBarColor: Int = R.color.white,
-          @ColorRes
-          var navigationBarColor: Int = R.color.white,
-          //TODO: Google Photos
-          @DrawableRes
-          var googlePhotosIcon: Int =
-              com.hashone.media.gallery.R.drawable.ic_google_photos_media_gallery
+        var isFullScreen: Boolean = false,
+        @ColorRes
+        var windowBackgroundColor: Int = R.color.white,
+        @ColorRes
+        var statusBarColor: Int = R.color.white,
+        @ColorRes
+        var navigationBarColor: Int = R.color.white,
+        //TODO: Google Photos
+        @DrawableRes
+        var googlePhotosIcon: Int =
+            com.hashone.media.gallery.R.drawable.ic_google_photos_media_gallery
+    ) : Serializable
+
+
+    class WarningUiBuilder(
+        var message: String = getLocaleString(R.string.allow_permission),
+        var settingText: String = getLocaleString(com.hashone.media.gallery.R.string.setting_text),
+    ) : Serializable
+
+
+    class PermissionBuilder(
+        var message: String = getLocaleString(R.string.allow_permission),
+        var positiveText: String = getLocaleString(com.hashone.media.gallery.R.string.label_grant),
+        var negativeText: String = getLocaleString(com.hashone.media.gallery.R.string.label_cancel),
     ) : Serializable
 
 

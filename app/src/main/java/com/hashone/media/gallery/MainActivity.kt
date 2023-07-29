@@ -26,16 +26,16 @@ import com.hashone.media.gallery.test.databinding.ActivityMainBinding
 import com.hashone.media.gallery.utils.KEY_IMAGE_ORIGINAL_PATH
 import com.hashone.media.gallery.utils.KEY_IMAGE_PATH
 import com.hashone.media.gallery.utils.KEY_MEDIA_PATHS
+import com.hashone.media.gallery.utils.REQUEST_CODE_CAMERA
+import com.hashone.media.gallery.utils.REQUEST_CODE_IMAGE
+import com.hashone.media.gallery.utils.REQUEST_CODE_IMAGE_VIDEO
+import com.hashone.media.gallery.utils.REQUEST_CODE_VIDEO
 import java.util.Locale
 
 class MainActivity : BaseActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
 
-    private val REQUEST_CODE_IMAGE = 101
-    private val REQUEST_CODE_VIDEO = 102
-    private val REQUEST_CODE_IMAGE_VIDEO = 103
-    private val REQUEST_CODE_CAMERA = 104
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,122 +70,134 @@ class MainActivity : BaseActivity() {
     }
 
     private fun openMediaGallery(requestCode: Int) {
-        if (checkPermissions(requestCode)) {
-            val mediaCount = mBinding.spCount.selectedItemPosition + 1
+//        if (checkPermissions(requestCode)) {
+        val mediaCount = mBinding.spCount.selectedItemPosition + 1
 
-            mActivityLauncher.launch(MediaGallery.open(activity = mActivity, MediaGallery.build(
-                mediaType = when (requestCode) {
-                    REQUEST_CODE_IMAGE -> MediaType.IMAGE
-                    REQUEST_CODE_VIDEO -> MediaType.VIDEO
-                    else -> MediaType.IMAGE_VIDEO
-                },
-                mediaCount = mediaCount,
-                allowCamera = true,
-                allowGooglePhotos = true,
-                allowAllMedia = true,
-                enableCropMode = mBinding.switchIsCrop.isChecked,
-                mediaGridCount = 3
-            ) {
-                //TODO: Screen
-                screenBuilder = MediaGallery.ScreenBuilder(
-                    isFullScreen = false,
-                    windowBackgroundColor = com.hashone.media.gallery.test.R.color.white,
-                    statusBarColor = com.hashone.media.gallery.test.R.color.white,
-                    navigationBarColor = com.hashone.media.gallery.test.R.color.white,
-                    //TODO: Google Photos Icon
+        mActivityLauncher.launch(MediaGallery.open(activity = mActivity, MediaGallery.build(
+            mediaType = when (requestCode) {
+                REQUEST_CODE_IMAGE -> MediaType.IMAGE
+                REQUEST_CODE_VIDEO -> MediaType.VIDEO
+                else -> MediaType.IMAGE_VIDEO
+            },
+            mediaCount = mediaCount,
+            allowCamera = true,
+            allowGooglePhotos = true,
+            allowAllMedia = true,
+            enableCropMode = mBinding.switchIsCrop.isChecked,
+            mediaGridCount = 3
+        ) {
+            //TODO: Screen
+            screenBuilder = MediaGallery.ScreenBuilder(
+                isFullScreen = false,
+                windowBackgroundColor = com.hashone.media.gallery.test.R.color.white,
+                statusBarColor = com.hashone.media.gallery.test.R.color.white,
+                navigationBarColor = com.hashone.media.gallery.test.R.color.white,
+                //TODO: Google Photos Icon
 //                    googlePhotosIcon = R.drawable.ic_google_photos_media_gallery
-                )
+            )
 
-                //TODO: Toolbar
-                toolBarBuilder = MediaGallery.ToolBarBuilder(
-                    toolBarColor = com.hashone.media.gallery.test.R.color.white,
-                    backIconDescription = "",
-                    title = "",
-                    titleColor = com.hashone.media.gallery.test.R.color.black,
-                    titleFont = com.hashone.media.gallery.test.R.font.roboto_medium,
-                    titleSize = 16F,
-                    //TODO: Camera Icon
+            //TODO: Toolbar
+            toolBarBuilder = MediaGallery.ToolBarBuilder(
+                toolBarColor = com.hashone.media.gallery.test.R.color.white,
+                backIconDescription = "",
+                title = "",
+                titleColor = com.hashone.media.gallery.test.R.color.black,
+                titleFont = com.hashone.media.gallery.test.R.font.roboto_medium,
+                titleSize = 16F,
+                //TODO: Camera Icon
 //                    cameraIcon = R.drawable.ic_camera_media_gallery
+            )
+
+            //TODO: Warning Ui
+            warningUiBuilder = MediaGallery.WarningUiBuilder(
+                message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+                settingText = getLocaleString(R.string.setting_text),
+            )
+
+            //TODO: Permission
+            permissionBuilder = MediaGallery.PermissionBuilder(
+                message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+                positiveText = getLocaleString(R.string.label_grant),
+                negativeText = getLocaleString(R.string.label_cancel),
+            )
+
+            //TODO: Bucket Contents
+            bucketBuilder = MediaGallery.BucketBuilder(
+                backgroundColor = com.hashone.commons.R.color.white,
+                titleColor = com.hashone.commons.R.color.pure_black,
+                titleFont = com.hashone.commons.R.font.roboto_medium,
+                titleSize = 16F,
+                subTitleColor = com.hashone.commons.R.color.pure_black,
+                subTitleFont = com.hashone.commons.R.font.roboto_regular,
+                subTitleSize = 14F,
+                countBackgroundColor = com.hashone.commons.R.color.pure_black,
+                countColor = com.hashone.commons.R.color.white,
+                countFont = com.hashone.commons.R.font.roboto_regular,
+                countSize = 14F,
+                //TODO: Media Content
+                countBackgroundRes = R.drawable.ic_photo_count
+            )
+
+            //TODO: Action button
+            actionButtonBuilder = MediaGallery.ActionButtonBuilder(
+                backgroundColor = com.hashone.commons.R.color.black,
+                backgroundSelectorColor = com.hashone.commons.R.color.dark_gray,
+                radius = 16F,
+                text = "",
+                textColor = com.hashone.commons.R.color.white,
+                textFont = com.hashone.commons.R.font.roboto_bold,
+                textSize = 14F,
+            )
+
+
+            isForceClose = mBinding.switchIsForceClose.isChecked
+
+            if (mBinding.switchIsOldCrop.isChecked || !mBinding.switchIsForceClose.isChecked) {
+                mediaCropBuilder = MediaGallery.MediaCropBuilder(
+                    appPackageName = packageName,
+                    cropClassName = "OldCropActivity",
+                    projectDirectoryPath = getInternalFileDir(this@MainActivity).absolutePath
                 )
-
-
-                //TODO: Bucket Contents
-                bucketBuilder = MediaGallery.BucketBuilder(
-                    backgroundColor = com.hashone.commons.R.color.white,
-                    titleColor = com.hashone.commons.R.color.pure_black,
-                    titleFont = com.hashone.commons.R.font.roboto_medium,
-                    titleSize = 16F,
-                    subTitleColor = com.hashone.commons.R.color.pure_black,
-                    subTitleFont = com.hashone.commons.R.font.roboto_regular,
-                    subTitleSize = 14F,
-                    countBackgroundColor = com.hashone.commons.R.color.pure_black,
-                    countColor = com.hashone.commons.R.color.white,
-                    countFont = com.hashone.commons.R.font.roboto_regular,
-                    countSize = 14F,
-                    //TODO: Media Content
-                    countBackgroundRes = R.drawable.ic_photo_count
-                )
-
-                //TODO: Action button
-                actionButtonBuilder = MediaGallery.ActionButtonBuilder(
-                    backgroundColor = com.hashone.commons.R.color.black,
-                    backgroundSelectorColor = com.hashone.commons.R.color.dark_gray,
-                    radius = 16F,
-                    text = "",
-                    textColor = com.hashone.commons.R.color.white,
-                    textFont = com.hashone.commons.R.font.roboto_bold,
-                    textSize = 14F,
-                )
-
-
-                isForceClose = mBinding.switchIsForceClose.isChecked
-
-                if (mBinding.switchIsOldCrop.isChecked || !mBinding.switchIsForceClose.isChecked) {
-                    mediaCropBuilder = MediaGallery.MediaCropBuilder(
-                        appPackageName = packageName,
-                        cropClassName = "OldCropActivity",
-                        projectDirectoryPath = getInternalFileDir(this@MainActivity).absolutePath
-                    )
-                }
-            }),
-                onActivityResult = object : BetterActivityResult.OnActivityResult<ActivityResult> {
-                    override fun onActivityResult(result: ActivityResult) {
-                        if (result.resultCode == Activity.RESULT_OK) {
-                            result.data?.let { intent ->
-                                if (intent.hasExtra(CropActivity.KEY_RETURN_CROP_DATA)) {
-                                    val myCropDataSaved =
-                                        intent.extras?.serializable<CropDataSaved>(
-                                            CropActivity.KEY_RETURN_CROP_DATA
-                                        )
-                                    Glide.with(this@MainActivity).load(myCropDataSaved!!.cropImg)
-                                        .into(mBinding.cropedImage)
-                                } else if (intent.hasExtra(KEY_IMAGE_PATH)) {
-                                    val filePath = intent.extras!!.getString(KEY_IMAGE_PATH)!!
-                                    if (intent.hasExtra(KEY_IMAGE_ORIGINAL_PATH)) {
-                                        val originalImagePath =
-                                            intent.extras!!.getString(KEY_IMAGE_ORIGINAL_PATH)!!
-                                    }
-                                    Glide.with(this@MainActivity).load(filePath)
-                                        .into(mBinding.cropedImage)
-                                } else if (intent.hasExtra(KEY_MEDIA_PATHS)) {
-                                    val selectedMedia: ArrayList<MediaItem>? =
-                                        intent.serializable(KEY_MEDIA_PATHS)
-                                    selectedMedia?.let {
-                                        Toast.makeText(
-                                            mActivity,
-                                            "Selected: ${selectedMedia.size}",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                        Glide.with(this@MainActivity).load(selectedMedia[0].path)
-                                            .into(mBinding.cropedImage)
-                                    }
-                                } else {
+            }
+        }),
+            onActivityResult = object : BetterActivityResult.OnActivityResult<ActivityResult> {
+                override fun onActivityResult(result: ActivityResult) {
+                    if (result.resultCode == Activity.RESULT_OK) {
+                        result.data?.let { intent ->
+                            if (intent.hasExtra(CropActivity.KEY_RETURN_CROP_DATA)) {
+                                val myCropDataSaved =
+                                    intent.extras?.serializable<CropDataSaved>(
+                                        CropActivity.KEY_RETURN_CROP_DATA
+                                    )
+                                Glide.with(this@MainActivity).load(myCropDataSaved!!.cropImg)
+                                    .into(mBinding.cropedImage)
+                            } else if (intent.hasExtra(KEY_IMAGE_PATH)) {
+                                val filePath = intent.extras!!.getString(KEY_IMAGE_PATH)!!
+                                if (intent.hasExtra(KEY_IMAGE_ORIGINAL_PATH)) {
+                                    val originalImagePath =
+                                        intent.extras!!.getString(KEY_IMAGE_ORIGINAL_PATH)!!
                                 }
+                                Glide.with(this@MainActivity).load(filePath)
+                                    .into(mBinding.cropedImage)
+                            } else if (intent.hasExtra(KEY_MEDIA_PATHS)) {
+                                val selectedMedia: ArrayList<MediaItem>? =
+                                    intent.serializable(KEY_MEDIA_PATHS)
+                                selectedMedia?.let {
+                                    Toast.makeText(
+                                        mActivity,
+                                        "Selected: ${selectedMedia.size}",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    Glide.with(this@MainActivity).load(selectedMedia[0].path)
+                                        .into(mBinding.cropedImage)
+                                }
+                            } else {
                             }
                         }
                     }
-                })
-        }
+                }
+            })
+//        }
     }
 
     private var mCurrentRequestCode = -1
@@ -253,7 +265,7 @@ class MainActivity : BaseActivity() {
         if (isGranted) {
             openMediaGallery(mCurrentRequestCode)
         } else {
-            showCustomAlertDialog(message = getLocaleString(com.hashone.media.gallery.test.R.string.allow_permission),
+            showCustomAlertDialog(message = getLocaleString(R.string.allow_permission),
                 negativeButtonText = getLocaleString(R.string.label_cancel).uppercase(Locale.getDefault()),
                 positionButtonText = getLocaleString(R.string.label_grant).uppercase(Locale.getDefault()),
                 negativeCallback = {

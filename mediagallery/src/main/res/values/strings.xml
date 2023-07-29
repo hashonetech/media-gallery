@@ -1,4 +1,4 @@
-<resources>
+<resources >
     <string name="label_back">Back</string>
     <string name="google_photos_not_installed">Google Photos is not installed</string>
     <string name="google_photos_disable">Google Photos is Disable</string>
@@ -17,4 +17,7 @@
     <string name="label_all">All</string>
     <string name="label_gallery">Gallery</string>
     <string name="label_done">Done</string>
+
+    <string name="allow_permission">You need to allow access to storage permissions.</string>
+    <string name="setting_text">Update Now</string>
 </resources>

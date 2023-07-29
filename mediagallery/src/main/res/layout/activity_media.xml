@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutMediaParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -95,6 +96,57 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolBarMedia" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/permissionContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:padding="24dp"
+        android:layout_marginHorizontal="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolBarMedia">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/permissionMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/settingText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Please allow access to your photo library to let the app save images." />
+
+        <TextView
+            android:id="@+id/settingText"
+            android:layout_width="259dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:ellipsize="end"
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="center"
+            android:paddingTop="14dp"
+            android:paddingBottom="15dp"
+            android:stateListAnimator="@null"
+            android:textAllCaps="false"
+            android:textColor="@color/positive_blue"
+            android:textSize="16sp"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/permissionMessage"
+            android:text="Update Now" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabGooglePhotos"

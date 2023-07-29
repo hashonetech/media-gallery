@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -72,6 +73,9 @@ import com.hashone.media.gallery.utils.KEY_MEDIA_GALLERY
 import com.hashone.media.gallery.utils.KEY_MEDIA_PATHS
 import com.hashone.media.gallery.utils.MediaPref
 import com.hashone.media.gallery.utils.REQUEST_CODE_CAMERA
+import com.hashone.media.gallery.utils.REQUEST_CODE_IMAGE
+import com.hashone.media.gallery.utils.REQUEST_CODE_IMAGE_VIDEO
+import com.hashone.media.gallery.utils.REQUEST_CODE_VIDEO
 import com.hashone.media.gallery.utils.file.FileCreator
 import com.hashone.media.gallery.utils.file.FileExtension
 import com.hashone.media.gallery.utils.file.FileOperationRequest
@@ -85,6 +89,7 @@ import java.util.Locale
 
 class MediaActivity : BaseActivity() {
 
+    private var isFromSetting: Boolean = false
     val mSelectedImagesList = ArrayList<MediaItem>()
     private lateinit var mBinding: ActivityMediaBinding
     lateinit var mMediaPref: MediaPref
@@ -118,12 +123,30 @@ class MediaActivity : BaseActivity() {
         mMediaPref = MediaPref(mActivity)
         mMediaPref.clearMediaPref()
 
+        WarningScreenUi()
         setScreenUI()
         setToolbarUI()
         setCameraUI()
         setGooglePhotosUI()
         setActionButtonUI()
-        initViews()
+        if (checkPermissions(if (builder.mediaType == MediaType.IMAGE) REQUEST_CODE_IMAGE else if (builder.mediaType == MediaType.VIDEO) REQUEST_CODE_VIDEO else REQUEST_CODE_IMAGE_VIDEO)) {
+            initViews()
+        }
+        mBinding.settingText.setOnClickListener {
+            val intent = Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.fromParts("package", packageName, null)
+            ).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            isFromSetting = true
+            startActivity(intent)
+        }
+    }
+
+    private fun WarningScreenUi() {
+        mBinding.permissionMessage.text = builder.warningUiBuilder.message
+        mBinding.settingText.text = builder.warningUiBuilder.settingText
     }
 
     //TODO: Screen UI - Start
@@ -214,6 +237,12 @@ class MediaActivity : BaseActivity() {
 
     override fun onResume() {
         updateHeaderOptionsUI(mSelectedImagesList.size > 0)
+        if (isFromSetting) {
+            isFromSetting = false
+            if (checkPermissions(if (builder.mediaType == MediaType.IMAGE) REQUEST_CODE_IMAGE else if (builder.mediaType == MediaType.VIDEO) REQUEST_CODE_VIDEO else REQUEST_CODE_IMAGE_VIDEO)) {
+                initViews()
+            }
+        }
         super.onResume()
     }
 
@@ -425,6 +454,7 @@ class MediaActivity : BaseActivity() {
 
     private fun initViews() {
         try {
+            noPermission(false)
             loadFragment(BucketsFragment(), Bundle().apply {
                 putSerializable(KEY_MEDIA_GALLERY, builder)
             }, false)
@@ -884,5 +914,101 @@ class MediaActivity : BaseActivity() {
 
             else -> FileExtension.PNG
         }
+    }
+
+    private fun checkPermissions(requestCode: Int): Boolean {
+        mCurrentRequestCode = requestCode
+        Log.d("TestData","checkPermissions requestCode:$requestCode")
+        val permissions = ArrayList<String>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (mCurrentRequestCode == REQUEST_CODE_IMAGE) {
+                if (!isPermissionGranted(Manifest.permission.READ_MEDIA_IMAGES)) permissions.add(
+                    Manifest.permission.READ_MEDIA_IMAGES
+                )
+            } else if (mCurrentRequestCode == REQUEST_CODE_VIDEO) {
+                if (!isPermissionGranted(Manifest.permission.READ_MEDIA_VIDEO)) permissions.add(
+                    Manifest.permission.READ_MEDIA_VIDEO
+                )
+            } else if (mCurrentRequestCode == REQUEST_CODE_CAMERA) {
+                if (!isPermissionGranted(Manifest.permission.CAMERA)) permissions.add(Manifest.permission.CAMERA)
+            } else {
+                if (!isPermissionGranted(Manifest.permission.READ_MEDIA_IMAGES)) permissions.add(
+                    Manifest.permission.READ_MEDIA_IMAGES
+                )
+                if (!isPermissionGranted(Manifest.permission.READ_MEDIA_VIDEO)) permissions.add(
+                    Manifest.permission.READ_MEDIA_VIDEO
+                )
+            }
+        } else {
+            if (mCurrentRequestCode == REQUEST_CODE_CAMERA) {
+                if (!isPermissionGranted(Manifest.permission.CAMERA)) permissions.add(Manifest.permission.CAMERA)
+            } else if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) permissions.add(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
+        if (permissions.isNotEmpty()) {
+            requestPermissionLauncher.launch(permissions.toTypedArray())
+        } else {
+            return true
+        }
+        return false
+    }
+
+    private var requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            if (!it.isNullOrEmpty()) {
+                var mIsGranted: Boolean = false
+                it.forEach { (permission, isGranted) ->
+                    mIsGranted = when (mCurrentRequestCode) {
+                        REQUEST_CODE_IMAGE -> {
+                            isGranted
+                        }
+
+                        REQUEST_CODE_VIDEO -> {
+                            isGranted
+                        }
+
+                        else -> {
+                            isGranted
+                        }
+                    }
+                }
+                checkPermissionStatus(mIsGranted)
+            }
+        }
+
+    private fun checkPermissionStatus(isGranted: Boolean) {
+        if (isGranted) {
+            initViews()
+        } else {
+            showCustomAlertDialog(message = builder.permissionBuilder.message,
+                negativeButtonText = builder.permissionBuilder.negativeText.uppercase(Locale.getDefault()),
+                positionButtonText = builder.permissionBuilder.positiveText.uppercase(Locale.getDefault()),
+                negativeCallback = {
+                   noPermission()
+                    alertDialog?.cancel()
+                },
+                positiveCallback = {
+                    val intent = Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", packageName, null)
+                    ).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    isFromSetting = true
+                    startActivity(intent)
+                    alertDialog?.cancel()
+                },
+                onDismissListener = { noPermission() },
+                onCancelListener = {
+
+                })
+        }
+    }
+
+    private fun noPermission(isVisible: Boolean = true)
+    {
+        mBinding.permissionContainer.isVisible = isVisible
+        mBinding.fabGooglePhotos.isVisible = !isVisible
     }
 }

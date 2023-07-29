@@ -19,7 +19,7 @@
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+<!--    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />-->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera.any" />
