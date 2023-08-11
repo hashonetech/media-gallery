@@ -27,7 +27,8 @@ fun fetchMediaBucketsAsync(
             MediaStore.Files.FileColumns.MIME_TYPE,
             MediaStore.Files.FileColumns.MEDIA_TYPE,
             MediaStore.Files.FileColumns.DATE_TAKEN,
-            MediaStore.Files.FileColumns.DATE_ADDED
+            MediaStore.Files.FileColumns.DATE_ADDED,
+//            MediaStore.Files.FileColumns.RESOLUTION
         ),
         Bundle().apply {
             putString(
@@ -96,7 +97,7 @@ fun fetchMediaBucketsAsync(
                             bucketList.add(
                                 MediaBucketData(
                                     bucketId,
-                                    bucketDisplayName,
+                                    if (bucketDisplayName.isNullOrEmpty()) "0" else bucketDisplayName,
                                     mediaList[0].path,
                                     mediaList.size,
                                     mediaType = mediaType //if (bucketMediaTypeName == 1) MediaType.IMAGE else MediaType.VIDEO
@@ -146,7 +147,8 @@ fun fetchMediaAsync(
             MediaStore.Files.FileColumns.MIME_TYPE,
             MediaStore.Files.FileColumns.MEDIA_TYPE,
             MediaStore.Files.FileColumns.SIZE,
-            MediaStore.Files.FileColumns.DURATION
+            MediaStore.Files.FileColumns.DURATION,
+//            MediaStore.Files.FileColumns.RESOLUTION,
         ),
         Bundle().apply {
             putString(
@@ -185,7 +187,7 @@ fun fetchMediaAsync(
             val mediaSizeIndex = cursor.getColumnIndex(MediaStore.Files.FileColumns.SIZE)
             val mediaDurationIndex = cursor.getColumnIndex(MediaStore.Files.FileColumns.DURATION)
             val mediaTypeIndex = cursor.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE)
-
+            val mediaResolution = cursor.getColumnIndex(MediaStore.Files.FileColumns.RESOLUTION)
             do {
                 mediaList.add(
                     MediaItem(
@@ -195,7 +197,8 @@ fun fetchMediaAsync(
                         path = cursor.getString(mediaDataIndex),
                         mediaSize = cursor.getLong(mediaSizeIndex),
                         mediaDuration = cursor.getLong(mediaDurationIndex),
-                        mediaType = if (cursor.getInt(mediaTypeIndex) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) MediaType.VIDEO else MediaType.IMAGE
+                        mediaType = if (cursor.getInt(mediaTypeIndex) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) MediaType.VIDEO else MediaType.IMAGE,
+                        mediaResolution = if (mediaResolution != -1) cursor.getString(mediaResolution) else ""
                     )
                 )
             } while (cursor.moveToNext())

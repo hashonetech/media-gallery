@@ -1,4 +1,4 @@
-<resources >
+<resources>
     <string name="label_back">Back</string>
     <string name="google_photos_not_installed">Google Photos is not installed</string>
     <string name="google_photos_disable">Google Photos is Disable</string>
@@ -20,4 +20,9 @@
 
     <string name="allow_permission">You need to allow access to storage permissions.</string>
     <string name="setting_text">Update Now</string>
+    <string name="camera_action_title">Capture Image or Video</string>
+    <string name="duration_error">Oops! Please select a video that\'s 30 seconds or shorter.</string>
+    <string name="file_size_error">Select the video under 100 MB for faster processing!</string>
+    <string name="size_error">Oops! Please select a video that\'s width and height 1920 or less.</string>
+    <string name="okay">Okay</string>
 </resources>

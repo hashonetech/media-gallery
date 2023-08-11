@@ -1,6 +1,7 @@
 package com.hashone.media.gallery.utils
 
 const val ACTION_UPDATE_FOLDER_COUNT = "ACTION_UPDATE_FOLDER_COUNT"
+const val ACTION_FINISH_GALLERY = "ACTION_FINISH_GALLERY"
 const val REQUEST_CODE_IMAGE = 101
 const val REQUEST_CODE_VIDEO = 102
 const val REQUEST_CODE_IMAGE_VIDEO = 103

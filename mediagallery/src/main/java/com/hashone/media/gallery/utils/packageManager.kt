@@ -2,6 +2,7 @@ package com.hashone.media.gallery.utils
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.media.MediaMetadataRetriever
 import android.os.Build
 import android.view.View
 import android.view.Window

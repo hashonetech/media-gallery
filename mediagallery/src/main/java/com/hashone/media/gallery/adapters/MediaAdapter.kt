@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,8 @@ import com.hashone.media.gallery.enums.MediaType
 import com.hashone.media.gallery.model.MediaItem
 import com.hashone.media.gallery.utils.ACTION_UPDATE_FOLDER_COUNT
 import com.hashone.media.gallery.utils.KEY_BUCKET_ID
+import com.hashone.media.gallery.utils.byteToMB
+import com.hashone.media.gallery.utils.getVideoWidthHeight
 
 class MediaAdapter(
     private var mContext: Context,
@@ -130,10 +133,17 @@ class MediaAdapter(
                     } else {
                         false
                     }
-
-                    mBinding.root.onClick {
-                        selectOrRemoveImage(this, position)
+                    mBinding.root.setOnClickListener {
+                        if (builder.videoValidationBuilder.checkValidation && this.mediaType != MediaType.IMAGE) {
+                            val videoWidthHeight = getVideoWidthHeight(this.path , this.mediaResolution)
+                            val width = videoWidthHeight.first
+                            val height = videoWidthHeight.second
+                            if (java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(this.mediaDuration) > builder.videoValidationBuilder.durationLimit || byteToMB(mediaSize) > builder.videoValidationBuilder.sizeLimit || width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution) {
+                                mOnSelectionChangeListener!!.onNotValidVideo(this)
+                            } else selectOrRemoveImage(this, position)
+                        } else selectOrRemoveImage(this, position)
                     }
+
                 }
             }
         } catch (e: Exception) {

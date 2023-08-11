@@ -2,4 +2,5 @@
 <resources>
     <color name="imagepicker_black_alpha_30">#80000000</color>
     <color name="positive_blue">#007aff</color>
+    <color name="divider_color">#ecedef</color>
 </resources>

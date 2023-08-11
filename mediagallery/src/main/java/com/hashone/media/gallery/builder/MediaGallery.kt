@@ -24,6 +24,8 @@ open class MediaGallery(val builder: Builder) : Serializable {
             allowAllMedia: Boolean,
             enableCropMode: Boolean = false,
             mediaGridCount: Int = 3,
+            videoValidationBuilder: VideoValidationBuilder = VideoValidationBuilder(),
+            cameraActionTitle: String = getLocaleString(com.hashone.media.gallery.R.string.camera_action_title),
             block: Builder.() -> Unit
         ) = Builder(
             mediaType,
@@ -33,7 +35,9 @@ open class MediaGallery(val builder: Builder) : Serializable {
             allowGooglePhotos,
             allowAllMedia,
             enableCropMode,
-            mediaGridCount
+            mediaGridCount,
+            cameraActionTitle,
+            videoValidationBuilder
         ).apply(block).build()
 
         fun open(activity: Activity, mediaGallery: MediaGallery): Intent =
@@ -50,8 +54,13 @@ open class MediaGallery(val builder: Builder) : Serializable {
         val allowAllMedia: Boolean = false,
         val enableCropMode: Boolean = false,
         @IntRange
-        val mediaGridCount: Int = 3
-    ) : Serializable {
+        val mediaGridCount: Int = 3,
+        val cameraActionTitle: String = getLocaleString(com.hashone.media.gallery.R.string.camera_action_title),
+
+        //TODO: Video Validation Builder
+        val videoValidationBuilder: VideoValidationBuilder = VideoValidationBuilder(),
+
+        ) : Serializable {
         //TODO: Screen
         var screenBuilder = ScreenBuilder()
 
@@ -163,15 +172,78 @@ open class MediaGallery(val builder: Builder) : Serializable {
 
     class WarningUiBuilder(
         var message: String = getLocaleString(R.string.allow_permission),
+        @ColorRes
+        var messageColor: Int = R.color.black,
+        @FontRes
+        var messageFont: Int = R.font.roboto_regular,
+        @FloatRange
+        var messageSize: Float = 14F,
         var settingText: String = getLocaleString(com.hashone.media.gallery.R.string.setting_text),
+        @ColorRes
+        var settingColor: Int = com.hashone.media.gallery.R.color.positive_blue,
+        @FontRes
+        var settingFont: Int = R.font.roboto_bold,
+        @FloatRange
+        var settingSize: Float = 16F,
     ) : Serializable
 
 
     class PermissionBuilder(
         var message: String = getLocaleString(R.string.allow_permission),
+        @ColorRes
+        var messageColor: Int = R.color.black,
+        @FontRes
+        var messageFont: Int = R.font.roboto_medium,
+        @FloatRange
+        var messageSize: Float = 16F,
         var positiveText: String = getLocaleString(com.hashone.media.gallery.R.string.label_grant),
+        @ColorRes
+        var positiveColor: Int = R.color.black,
+        @FontRes
+        var positiveFont: Int = R.font.roboto_medium,
+        @FloatRange
+        var positiveSize: Float = 16F,
         var negativeText: String = getLocaleString(com.hashone.media.gallery.R.string.label_cancel),
+        @ColorRes
+        var negativeColor: Int = R.color.black,
+        @FontRes
+        var negativeFont: Int = R.font.roboto_medium,
+        @FloatRange
+        var negativeSize: Float = 16F,
+
+        ) : Serializable
+
+    class VideoValidationBuilder(
+        var checkValidation: Boolean = false,
+        // TODO video Duration Limit in second
+        @IntRange
+        var durationLimit: Int = 30,
+        var durationLimitMessage: String = getLocaleString(com.hashone.media.gallery.R.string.duration_error),
+        // TODO video Size Limit in MB
+        @IntRange
+        var sizeLimit: Int = 100,
+        var sizeLimitMessage: String = getLocaleString(com.hashone.media.gallery.R.string.file_size_error),
+        // TODO video Resolution Size Limit px
+        @IntRange
+        var maxResolution: Int = 1920,
+        var maxResolutionMessage: String = getLocaleString(com.hashone.media.gallery.R.string.size_error),
+
+        val videoValidationDialogBuilder: VideoValidationDialogBuilder = VideoValidationDialogBuilder(),
+        ) : Serializable
+
+    class VideoValidationDialogBuilder(
+        @ColorRes
+        var titleColor: Int = R.color.dark_gray,
+        @FontRes
+        var titleFont: Int = R.font.roboto_regular,
+        @FloatRange
+        var titleSize: Float = 14F,
+        var positiveText: String = getLocaleString(com.hashone.media.gallery.R.string.okay),
+        @ColorRes
+        var positiveColor: Int = R.color.black,
+        @FontRes
+        var positiveFont: Int = R.font.roboto_regular,
+        @FloatRange
+        var positiveSize: Float = 16F,
     ) : Serializable
-
-
 }

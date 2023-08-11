@@ -125,7 +125,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:text="Please allow access to your photo library to let the app save images." />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/settingText"
             android:layout_width="259dp"
             android:layout_height="wrap_content"

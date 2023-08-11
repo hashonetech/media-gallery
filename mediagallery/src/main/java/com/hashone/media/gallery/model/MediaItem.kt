@@ -11,4 +11,5 @@ data class MediaItem(
     var mediaSize: Long = 0L,
     var mediaDuration: Long = 0L,
     var mediaType: MediaType = MediaType.IMAGE_VIDEO,
+    var mediaResolution: String = "",
 ) : Serializable

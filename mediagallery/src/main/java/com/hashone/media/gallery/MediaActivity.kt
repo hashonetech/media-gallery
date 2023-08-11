@@ -2,11 +2,15 @@ package com.hashone.media.gallery
 
 import android.Manifest
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.media.MediaMetadataRetriever
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
@@ -17,6 +21,7 @@ import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -25,6 +30,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
@@ -46,6 +52,7 @@ import com.hashone.commons.extensions.isPermissionGranted
 import com.hashone.commons.extensions.navigationUI
 import com.hashone.commons.extensions.onClick
 import com.hashone.commons.extensions.parcelable
+import com.hashone.commons.extensions.registerBroadCastReceiver
 import com.hashone.commons.extensions.saveToFile
 import com.hashone.commons.extensions.serializable
 import com.hashone.commons.extensions.setStatusBarColor
@@ -59,9 +66,11 @@ import com.hashone.cropper.builder.Crop
 import com.hashone.cropper.model.CropDataSaved
 import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.databinding.ActivityMediaBinding
+import com.hashone.media.gallery.databinding.DialogConfirmationBinding
 import com.hashone.media.gallery.enums.MediaType
 import com.hashone.media.gallery.fragment.BucketsFragment
 import com.hashone.media.gallery.model.MediaItem
+import com.hashone.media.gallery.utils.ACTION_FINISH_GALLERY
 import com.hashone.media.gallery.utils.KEY_CROP_DESTINATION_PATH
 import com.hashone.media.gallery.utils.KEY_CROP_FILET
 import com.hashone.media.gallery.utils.KEY_CROP_PROJECT_DIRECTORY
@@ -76,6 +85,7 @@ import com.hashone.media.gallery.utils.REQUEST_CODE_CAMERA
 import com.hashone.media.gallery.utils.REQUEST_CODE_IMAGE
 import com.hashone.media.gallery.utils.REQUEST_CODE_IMAGE_VIDEO
 import com.hashone.media.gallery.utils.REQUEST_CODE_VIDEO
+import com.hashone.media.gallery.utils.byteToMB
 import com.hashone.media.gallery.utils.file.FileCreator
 import com.hashone.media.gallery.utils.file.FileExtension
 import com.hashone.media.gallery.utils.file.FileOperationRequest
@@ -86,6 +96,8 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 import java.util.Locale
+import java.util.concurrent.TimeUnit
+
 
 class MediaActivity : BaseActivity() {
 
@@ -99,11 +111,24 @@ class MediaActivity : BaseActivity() {
     private var mOptionMenu: Menu? = null
 
     companion object {
-
         fun newIntent(context: Context, mediaGallery: MediaGallery): Intent {
             return Intent(context, MediaActivity::class.java).apply {
                 Bundle().apply { putSerializable(KEY_MEDIA_GALLERY, mediaGallery) }
                     .also { this.putExtras(it) }
+            }
+        }
+    }
+
+    private val mBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            try {
+                if (intent != null) {
+                    if (intent.action != null && intent.action == ACTION_FINISH_GALLERY) {
+                        finish()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
@@ -142,11 +167,25 @@ class MediaActivity : BaseActivity() {
             isFromSetting = true
             startActivity(intent)
         }
+
+        mActivity.registerBroadCastReceiver(
+            mBroadcastReceiver, IntentFilter().apply {
+                addAction(ACTION_FINISH_GALLERY)
+            }
+        )
     }
 
     private fun WarningScreenUi() {
         mBinding.permissionMessage.text = builder.warningUiBuilder.message
+        mBinding.permissionMessage.applyTextStyle(
+            getColorCode(builder.warningUiBuilder.messageColor),
+            builder.warningUiBuilder.messageFont, builder.warningUiBuilder.messageSize
+        )
         mBinding.settingText.text = builder.warningUiBuilder.settingText
+        mBinding.settingText.applyTextStyle(
+            getColorCode(builder.warningUiBuilder.settingColor),
+            builder.warningUiBuilder.settingFont, builder.warningUiBuilder.settingSize
+        )
     }
 
     //TODO: Screen UI - Start
@@ -368,9 +407,38 @@ class MediaActivity : BaseActivity() {
     private inner class CopyFileTaskGoogle(val context: Context, val uri: Uri) :
         CoroutineAsyncTask<Void, Void, String>() {
 
+        private var width: Int = 0
+        private var height: Int = 0
+        private var timeInSec: Long = 0
+        private var fileSizeMB: Long = 0
+
         override fun doInBackground(vararg params: Void?): String? {
             try {
-                return createCopyAndReturnRealPath(context, uri)
+                val resultFile = createCopyAndReturnRealPath(context, uri)
+                try {
+                    val retriever = MediaMetadataRetriever()
+                    retriever.setDataSource(resultFile)
+                    width = Integer.valueOf(
+                        retriever.extractMetadata(
+                            MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH
+                        )
+                    )
+                    height = Integer.valueOf(
+                        retriever.extractMetadata(
+                            MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT
+                        )
+                    )
+                    val time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                    timeInSec = TimeUnit.MILLISECONDS.toSeconds(time!!.toLong())
+                    retriever.release()
+                    fileSizeMB = byteToMB(File(resultFile).length())
+
+
+                } catch (e:Exception){
+                    e.printStackTrace()
+                }
+
+                return resultFile
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -381,17 +449,55 @@ class MediaActivity : BaseActivity() {
             super.onPostExecute(result)
             try {
                 if (result != null) {
-                    val imageItem = MediaItem().apply {
-                        path = File(result).absolutePath
+                    Log.d(
+                        "TestData",
+                        "CopyFileTaskGoogle width:$width height:$height timeInSec:$timeInSec fileSizeMB:$fileSizeMB"
+                    )
+                    if (fileSizeMB.toInt() != 0 && builder.videoValidationBuilder.checkValidation && builder.mediaType != MediaType.IMAGE) {
+                        var message = ""
+                        if (timeInSec > builder.videoValidationBuilder.durationLimit
+                        ) {
+                            message = builder.videoValidationBuilder.durationLimitMessage
+                        } else if (timeInSec > builder.videoValidationBuilder.sizeLimit) {
+                            message = builder.videoValidationBuilder.sizeLimitMessage
+                        } else if (width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution) {
+                            message = builder.videoValidationBuilder.maxResolutionMessage
+                        } else {
+                            val imageItem = MediaItem().apply {
+                                path = File(result).absolutePath
+                            }
+                            val arrayList = ArrayList<MediaItem>().apply {
+                                add(imageItem)
+                            }
+                            finishPickImages(arrayList)
+                        }
+                        Log.d(
+                            "TestData",
+                            "CopyFileTaskGoogle width:$width height:$height timeInSec:$timeInSec fileSizeMB:$fileSizeMB :::::message:$message"
+                        )
+                        if (message.isNotEmpty()) {
+                            showCustomAlertDialog(title = message,
+                                positionButtonText = builder.videoValidationBuilder.videoValidationDialogBuilder.positiveText,
+                                positiveCallback = {
+                                    alertDialog?.cancel()
+                                },
+                                onDismissListener = {},
+                                onCancelListener = {})
+                        }
+                    } else {
+                        val imageItem = MediaItem().apply {
+                            path = File(result).absolutePath
+                        }
+                        val arrayList = ArrayList<MediaItem>().apply {
+                            add(imageItem)
+                        }
+                        finishPickImages(arrayList)
                     }
-                    val arrayList = ArrayList<MediaItem>().apply {
-                        add(imageItem)
-                    }
-                    finishPickImages(arrayList)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+
         }
 
         fun createCopyAndReturnRealPath(context: Context, uri: Uri?): String? {
@@ -426,6 +532,70 @@ class MediaActivity : BaseActivity() {
         }
     }
     //TODO: Google Photos - End
+
+
+    fun showCustomAlertDialog(
+        title: String = "",
+        positionButtonText: String = "",
+        isCancelable: Boolean = true,
+        positiveCallback: View.OnClickListener? = null,
+        keyEventCallback: DialogInterface.OnKeyListener? = null,
+        onDismissListener: DialogInterface.OnDismissListener? = null,
+        onCancelListener: DialogInterface.OnCancelListener? = null,
+    ) {
+        try {
+            val dialogBuilder =
+                AlertDialog.Builder(mActivity, com.hashone.commons.R.style.CustomAlertDialog)
+            val dialogBinding =
+                DialogConfirmationBinding.inflate(LayoutInflater.from(mActivity), null, false)
+            dialogBinding.textViewTitle.text = title
+            dialogBinding.textViewYes.text = positionButtonText
+            dialogBinding.textViewTitle.isVisible = title.isNotEmpty()
+            dialogBinding.textViewYes.isVisible = positionButtonText.isNotEmpty()
+
+            dialogBinding.textViewTitle.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                builder.videoValidationBuilder.videoValidationDialogBuilder.titleSize
+            )
+            dialogBinding.textViewTitle.setTextColor(
+                ContextCompat.getColor(
+                    mActivity,
+                    builder.videoValidationBuilder.videoValidationDialogBuilder.titleColor
+                )
+            )
+            dialogBinding.textViewTitle.typeface = ResourcesCompat.getFont(
+                mActivity,
+                builder.videoValidationBuilder.videoValidationDialogBuilder.titleFont
+            )
+
+            dialogBinding.textViewYes.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                builder.videoValidationBuilder.videoValidationDialogBuilder.positiveSize
+            )
+            dialogBinding.textViewYes.setTextColor(
+                ContextCompat.getColor(
+                    mActivity,
+                    builder.videoValidationBuilder.videoValidationDialogBuilder.positiveColor
+                )
+            )
+            dialogBinding.textViewYes.typeface = ResourcesCompat.getFont(
+                mActivity,
+                builder.videoValidationBuilder.videoValidationDialogBuilder.positiveFont
+            )
+
+            dialogBuilder.setView(dialogBinding.root)
+            alertDialog = dialogBuilder.create()
+            if (!mActivity.isDestroyed) if (alertDialog != null && !alertDialog!!.isShowing) alertDialog!!.show()
+            alertDialog!!.setCancelable(isCancelable)
+            dialogBinding.textViewYes.setOnClickListener(positiveCallback)
+            alertDialog!!.setOnDismissListener(onDismissListener)
+            alertDialog!!.setOnCancelListener(onCancelListener)
+            alertDialog!!.setOnKeyListener(keyEventCallback)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
 
     //TODO: Action Button UI
     private fun setActionButtonUI() {
@@ -580,7 +750,7 @@ class MediaActivity : BaseActivity() {
                         }
                     })
             }
-        } else if (builder.enableCropMode && builder.mediaType == MediaType.IMAGE && builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
+        } else if (!builder.enableCropMode && /* && builder.mediaType == MediaType.IMAGE &&*/ builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
             if (images.size > 0) {
                 val className =
                     Class.forName("${builder.mediaCropBuilder.appPackageName}.${builder.mediaCropBuilder.cropClassName}")
@@ -605,6 +775,8 @@ class MediaActivity : BaseActivity() {
                             KEY_CROP_PROJECT_DIRECTORY,
                             builder.mediaCropBuilder.projectDirectoryPath
                         )
+                        if (images.isNotEmpty())
+                            putExtra(KEY_MEDIA_PATHS, images)
                     }.also { this.putExtras(it) }
                 }
 
@@ -678,6 +850,8 @@ class MediaActivity : BaseActivity() {
                             KEY_CROP_PROJECT_DIRECTORY,
                             builder.mediaCropBuilder.projectDirectoryPath
                         )
+                        if (images.isNotEmpty())
+                            putExtra(KEY_MEDIA_PATHS, images)
                     }.also { this.putExtras(it) }
                 }
 
@@ -739,7 +913,6 @@ class MediaActivity : BaseActivity() {
         originalImagePath: String = " ",
         isReplace: Boolean = false
     ) {
-        Log.d("Testdata", "images:$images filePath:$filePath originalImagePath:$originalImagePath")
         setResult(RESULT_OK, Intent().apply {
             if (cropData != null)
                 putExtra(CropActivity.KEY_RETURN_CROP_DATA, cropData)
@@ -845,9 +1018,15 @@ class MediaActivity : BaseActivity() {
             if (checkCameraHardware()) {
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-                val chooserIntent =
-                    Intent.createChooser(takePictureIntent, "Capture Image or Video")
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takeVideoIntent))
+                val chooserIntent = Intent.createChooser(
+                    if (builder.mediaType == MediaType.IMAGE) takePictureIntent else if (builder.mediaType == MediaType.VIDEO) takeVideoIntent else takePictureIntent,
+                    builder.cameraActionTitle
+                )
+                if (builder.mediaType == MediaType.IMAGE_VIDEO)
+                    chooserIntent.putExtra(
+                        Intent.EXTRA_INITIAL_INTENTS,
+                        arrayOf(takePictureIntent, takeVideoIntent)
+                    )
 
                 mActivityLauncher.launch(chooserIntent,
                     onActivityResult = object :
@@ -918,7 +1097,6 @@ class MediaActivity : BaseActivity() {
 
     private fun checkPermissions(requestCode: Int): Boolean {
         mCurrentRequestCode = requestCode
-        Log.d("TestData","checkPermissions requestCode:$requestCode")
         val permissions = ArrayList<String>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (mCurrentRequestCode == REQUEST_CODE_IMAGE) {
@@ -985,7 +1163,7 @@ class MediaActivity : BaseActivity() {
                 negativeButtonText = builder.permissionBuilder.negativeText.uppercase(Locale.getDefault()),
                 positionButtonText = builder.permissionBuilder.positiveText.uppercase(Locale.getDefault()),
                 negativeCallback = {
-                   noPermission()
+                    noPermission()
                     alertDialog?.cancel()
                 },
                 positiveCallback = {
@@ -1006,9 +1184,13 @@ class MediaActivity : BaseActivity() {
         }
     }
 
-    private fun noPermission(isVisible: Boolean = true)
-    {
+    private fun noPermission(isVisible: Boolean = true) {
         mBinding.permissionContainer.isVisible = isVisible
         mBinding.fabGooglePhotos.isVisible = !isVisible
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(mBroadcastReceiver)
+        super.onDestroy()
     }
 }

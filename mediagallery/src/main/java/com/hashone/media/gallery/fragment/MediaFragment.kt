@@ -1,13 +1,18 @@
 package com.hashone.media.gallery.fragment
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,12 +23,15 @@ import com.hashone.media.gallery.R
 import com.hashone.media.gallery.adapters.MediaAdapter
 import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.callback.OnSelectionChangeListener
+import com.hashone.media.gallery.databinding.DialogConfirmationBinding
 import com.hashone.media.gallery.databinding.FragmentImagesBinding
 import com.hashone.media.gallery.model.MediaItem
 import com.hashone.media.gallery.model.fetchMediaAsync
 import com.hashone.media.gallery.utils.KEY_BUCKET_ID
 import com.hashone.media.gallery.utils.KEY_BUCKET_NAME
 import com.hashone.media.gallery.utils.KEY_BUCKET_PATH
+import com.hashone.media.gallery.utils.byteToMB
+import com.hashone.media.gallery.utils.getVideoWidthHeight
 
 class MediaFragment : Fragment() {
 
@@ -86,7 +94,7 @@ class MediaFragment : Fragment() {
             val mediaPref = (mActivity as MediaActivity).mMediaPref.getMediaByBucketId(mBucketId)
             mMediaList.addAll(mediaPref)
             setAdapter()
-            if (mMediaList.isEmpty()){
+            if (mMediaList.isEmpty()) {
                 LoadMediaTask().execute()
             }
         } catch (e: Exception) {
@@ -173,6 +181,32 @@ class MediaFragment : Fragment() {
                                     e.printStackTrace()
                                 }
                             }
+
+                            override fun onNotValidVideo(imageItem: MediaItem) {
+                                val videoWidthHeight = getVideoWidthHeight(imageItem.path , imageItem.mediaResolution)
+                                val width = videoWidthHeight.first
+                                val height = videoWidthHeight.second
+                                val message =
+                                    if (java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(
+                                            imageItem.mediaDuration
+                                        ) > builder.videoValidationBuilder.durationLimit
+                                    ) {
+                                        builder.videoValidationBuilder.durationLimitMessage
+                                    } else if (byteToMB(imageItem.mediaSize) > builder.videoValidationBuilder.sizeLimit) {
+                                        builder.videoValidationBuilder.sizeLimitMessage
+                                    } else if (width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution) {
+                                        builder.videoValidationBuilder.maxResolutionMessage
+                                    } else {
+                                        "${builder.videoValidationBuilder.durationLimitMessage}\n${builder.videoValidationBuilder.sizeLimitMessage}\n${builder.videoValidationBuilder.maxResolutionMessage}"
+                                    }
+                                showCustomAlertDialog(title = message,
+                                    positionButtonText = builder.videoValidationBuilder.videoValidationDialogBuilder.positiveText,
+                                    positiveCallback = {
+                                        alertDialog?.cancel()
+                                    },
+                                    onDismissListener = {},
+                                    onCancelListener = {})
+                            }
                         }
                     )
 
@@ -180,6 +214,69 @@ class MediaFragment : Fragment() {
                     adapter = imageAdapter
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    var alertDialog: AlertDialog? = null
+    fun showCustomAlertDialog(
+        title: String = "",
+        positionButtonText: String = "",
+        isCancelable: Boolean = true,
+        positiveCallback: View.OnClickListener? = null,
+        keyEventCallback: DialogInterface.OnKeyListener? = null,
+        onDismissListener: DialogInterface.OnDismissListener? = null,
+        onCancelListener: DialogInterface.OnCancelListener? = null,
+    ) {
+        try {
+            val dialogBuilder =
+                AlertDialog.Builder(mActivity, com.hashone.commons.R.style.CustomAlertDialog)
+            val dialogBinding =
+                DialogConfirmationBinding.inflate(LayoutInflater.from(mActivity), null, false)
+            dialogBinding.textViewTitle.text = title
+            dialogBinding.textViewYes.text = positionButtonText
+            dialogBinding.textViewTitle.isVisible = title.isNotEmpty()
+            dialogBinding.textViewYes.isVisible = positionButtonText.isNotEmpty()
+
+            dialogBinding.textViewTitle.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                builder.videoValidationBuilder.videoValidationDialogBuilder.titleSize
+            )
+            dialogBinding.textViewTitle.setTextColor(
+                ContextCompat.getColor(
+                    mActivity,
+                    builder.videoValidationBuilder.videoValidationDialogBuilder.titleColor
+                )
+            )
+            dialogBinding.textViewTitle.typeface = ResourcesCompat.getFont(
+                mActivity,
+                builder.videoValidationBuilder.videoValidationDialogBuilder.titleFont
+            )
+
+            dialogBinding.textViewYes.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                builder.videoValidationBuilder.videoValidationDialogBuilder.positiveSize
+            )
+            dialogBinding.textViewYes.setTextColor(
+                ContextCompat.getColor(
+                    mActivity,
+                    builder.videoValidationBuilder.videoValidationDialogBuilder.positiveColor
+                )
+            )
+            dialogBinding.textViewYes.typeface = ResourcesCompat.getFont(
+                mActivity,
+                builder.videoValidationBuilder.videoValidationDialogBuilder.positiveFont
+            )
+
+            dialogBuilder.setView(dialogBinding.root)
+            alertDialog = dialogBuilder.create()
+            if (!mActivity.isDestroyed) if (alertDialog != null && !alertDialog!!.isShowing) alertDialog!!.show()
+            alertDialog!!.setCancelable(isCancelable)
+            dialogBinding.textViewYes.setOnClickListener(positiveCallback)
+            alertDialog!!.setOnDismissListener(onDismissListener)
+            alertDialog!!.setOnCancelListener(onCancelListener)
+            alertDialog!!.setOnKeyListener(keyEventCallback)
         } catch (e: Exception) {
             e.printStackTrace()
         }
