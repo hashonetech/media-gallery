@@ -193,21 +193,21 @@ open class MediaGallery(val builder: Builder) : Serializable {
         @ColorRes
         var messageColor: Int = R.color.black,
         @FontRes
-        var messageFont: Int = R.font.roboto_medium,
+        var messageFont: Int = R.font.roboto_regular,
         @FloatRange
-        var messageSize: Float = 16F,
+        var messageSize: Float = 14F,
         var positiveText: String = getLocaleString(com.hashone.media.gallery.R.string.label_grant),
         @ColorRes
         var positiveColor: Int = R.color.black,
         @FontRes
-        var positiveFont: Int = R.font.roboto_medium,
+        var positiveFont: Int = R.font.roboto_bold,
         @FloatRange
         var positiveSize: Float = 16F,
         var negativeText: String = getLocaleString(com.hashone.media.gallery.R.string.label_cancel),
         @ColorRes
         var negativeColor: Int = R.color.black,
         @FontRes
-        var negativeFont: Int = R.font.roboto_medium,
+        var negativeFont: Int = R.font.roboto_regular,
         @FloatRange
         var negativeSize: Float = 16F,
 

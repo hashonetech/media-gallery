@@ -31,6 +31,7 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
@@ -42,6 +43,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.hashone.commons.base.BaseActivity
 import com.hashone.commons.base.BetterActivityResult
 import com.hashone.commons.base.CoroutineAsyncTask
+import com.hashone.commons.databinding.DialogConfirmationBinding
 import com.hashone.commons.extensions.applyTextStyle
 import com.hashone.commons.extensions.checkCameraHardware
 import com.hashone.commons.extensions.getColorCode
@@ -59,6 +61,7 @@ import com.hashone.commons.extensions.setStatusBarColor
 import com.hashone.commons.extensions.toFilePath
 import com.hashone.commons.utils.EXTENSION_PNG
 import com.hashone.commons.utils.PACKAGE_NAME_GOOGLE_PHOTOS
+import com.hashone.commons.utils.dpToPx
 import com.hashone.commons.utils.getInternalCameraDir
 import com.hashone.commons.utils.showSnackBar
 import com.hashone.cropper.CropActivity
@@ -66,7 +69,7 @@ import com.hashone.cropper.builder.Crop
 import com.hashone.cropper.model.CropDataSaved
 import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.databinding.ActivityMediaBinding
-import com.hashone.media.gallery.databinding.DialogConfirmationBinding
+import com.hashone.media.gallery.databinding.DialogWarningBinding
 import com.hashone.media.gallery.enums.MediaType
 import com.hashone.media.gallery.fragment.BucketsFragment
 import com.hashone.media.gallery.model.MediaItem
@@ -97,6 +100,7 @@ import java.io.IOException
 import java.io.OutputStream
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import kotlin.math.roundToInt
 
 
 class MediaActivity : BaseActivity() {
@@ -476,7 +480,7 @@ class MediaActivity : BaseActivity() {
                             "CopyFileTaskGoogle width:$width height:$height timeInSec:$timeInSec fileSizeMB:$fileSizeMB :::::message:$message"
                         )
                         if (message.isNotEmpty()) {
-                            showCustomAlertDialog(title = message,
+                            showWarningDialog(title = message,
                                 positionButtonText = builder.videoValidationBuilder.videoValidationDialogBuilder.positiveText,
                                 positiveCallback = {
                                     alertDialog?.cancel()
@@ -534,7 +538,7 @@ class MediaActivity : BaseActivity() {
     //TODO: Google Photos - End
 
 
-    fun showCustomAlertDialog(
+    fun showWarningDialog(
         title: String = "",
         positionButtonText: String = "",
         isCancelable: Boolean = true,
@@ -547,7 +551,7 @@ class MediaActivity : BaseActivity() {
             val dialogBuilder =
                 AlertDialog.Builder(mActivity, com.hashone.commons.R.style.CustomAlertDialog)
             val dialogBinding =
-                DialogConfirmationBinding.inflate(LayoutInflater.from(mActivity), null, false)
+                DialogWarningBinding.inflate(LayoutInflater.from(mActivity), null, false)
             dialogBinding.textViewTitle.text = title
             dialogBinding.textViewYes.text = positionButtonText
             dialogBinding.textViewTitle.isVisible = title.isNotEmpty()
@@ -987,11 +991,11 @@ class MediaActivity : BaseActivity() {
         if (isGranted) {
             openCamera()
         } else {
-            showCustomAlertDialog(message = getLocaleString(R.string.allow_camera_permission),
+            showGalleryCustomAlertDialog(message = getLocaleString(R.string.allow_camera_permission),
                 negativeButtonText = getLocaleString(R.string.label_cancel).uppercase(Locale.getDefault()),
                 positionButtonText = getLocaleString(R.string.label_grant).uppercase(Locale.getDefault()),
                 negativeCallback = {
-                    alertDialog?.cancel()
+                    galleryAlertDialog?.cancel()
                 },
                 positiveCallback = {
                     val intent = Intent(
@@ -1001,7 +1005,7 @@ class MediaActivity : BaseActivity() {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     }
                     startActivity(intent)
-                    alertDialog?.cancel()
+                    galleryAlertDialog?.cancel()
                 },
                 onDismissListener = {},
                 onCancelListener = {})
@@ -1159,12 +1163,12 @@ class MediaActivity : BaseActivity() {
         if (isGranted) {
             initViews()
         } else {
-            showCustomAlertDialog(message = builder.permissionBuilder.message,
+            showGalleryCustomAlertDialog(message = builder.permissionBuilder.message,
                 negativeButtonText = builder.permissionBuilder.negativeText.uppercase(Locale.getDefault()),
                 positionButtonText = builder.permissionBuilder.positiveText.uppercase(Locale.getDefault()),
                 negativeCallback = {
                     noPermission()
-                    alertDialog?.cancel()
+                    galleryAlertDialog?.cancel()
                 },
                 positiveCallback = {
                     val intent = Intent(
@@ -1175,7 +1179,7 @@ class MediaActivity : BaseActivity() {
                     }
                     isFromSetting = true
                     startActivity(intent)
-                    alertDialog?.cancel()
+                    galleryAlertDialog?.cancel()
                 },
                 onDismissListener = { noPermission() },
                 onCancelListener = {
@@ -1192,5 +1196,79 @@ class MediaActivity : BaseActivity() {
     override fun onDestroy() {
         unregisterReceiver(mBroadcastReceiver)
         super.onDestroy()
+    }
+
+    var galleryAlertDialog: AlertDialog? = null
+    fun showGalleryCustomAlertDialog(
+        title: String = "",
+        message: String = "",
+        positionButtonText: String = "",
+        negativeButtonText: String = "",
+        neutralButtonText: String = "",
+        isCancelable: Boolean = true,
+        negativeCallback: View.OnClickListener? = null,
+        positiveCallback: View.OnClickListener? = null,
+        neutralCallback: View.OnClickListener? = null,
+        keyEventCallback: DialogInterface.OnKeyListener? = null,
+        onDismissListener: DialogInterface.OnDismissListener? = null,
+        onCancelListener: DialogInterface.OnCancelListener? = null
+    ) {
+        try {
+            val alertBuilder = AlertDialog.Builder(mActivity, com.hashone.commons.R.style.CustomAlertDialog)
+            val dialogBinding =
+                DialogConfirmationBinding.inflate(LayoutInflater.from(mActivity), null, false)
+            dialogBinding.textViewTitle.text = title
+            dialogBinding.textViewMessage.text = message
+            dialogBinding.textViewYes.text = positionButtonText
+            dialogBinding.textViewNo.text = negativeButtonText
+            dialogBinding.textViewNeutral.text = neutralButtonText
+            dialogBinding.textViewTitle.isVisible = title.isNotEmpty()
+
+            if (title.isEmpty()) {
+                val mLayoutParams =
+                    dialogBinding.textViewMessage.layoutParams as ConstraintLayout.LayoutParams
+                mLayoutParams.setMargins(0, dpToPx(24F).roundToInt(), 0, 0)
+                dialogBinding.textViewMessage.layoutParams = mLayoutParams
+
+                dialogBinding.textViewMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
+
+                dialogBinding.textViewMessage.applyTextStyle(
+                    ContextCompat.getColor(
+                        mActivity,
+                        builder.permissionBuilder.messageColor
+                    ),
+                    builder.permissionBuilder.messageFont,
+                    builder.permissionBuilder.messageSize
+                )
+
+            }
+
+            dialogBinding.textViewYes.isVisible = positionButtonText.isNotEmpty()
+            dialogBinding.textViewNo.isVisible = negativeButtonText.isNotEmpty()
+            dialogBinding.view4.isVisible = neutralButtonText.isNotEmpty()
+            dialogBinding.textViewNeutral.isVisible = neutralButtonText.isNotEmpty()
+
+
+            dialogBinding.textViewYes.typeface = ResourcesCompat.getFont(mActivity, builder.permissionBuilder.positiveFont)
+            dialogBinding.textViewYes.setTextColor(ContextCompat.getColor(mActivity, builder.permissionBuilder.positiveColor))
+            dialogBinding.textViewYes.setTextSize(TypedValue.COMPLEX_UNIT_SP, builder.permissionBuilder.positiveSize)
+
+            dialogBinding.textViewNo.typeface = ResourcesCompat.getFont(mActivity, builder.permissionBuilder.negativeFont)
+            dialogBinding.textViewNo.setTextColor(ContextCompat.getColor(mActivity, builder.permissionBuilder.negativeColor))
+            dialogBinding.textViewNo.setTextSize(TypedValue.COMPLEX_UNIT_SP, builder.permissionBuilder.negativeSize)
+
+            alertBuilder.setView(dialogBinding.root)
+            galleryAlertDialog = alertBuilder.create()
+            if (!mActivity.isDestroyed) if (galleryAlertDialog != null && !galleryAlertDialog!!.isShowing) galleryAlertDialog!!.show()
+            galleryAlertDialog!!.setCancelable(isCancelable)
+            dialogBinding.textViewYes.setOnClickListener(positiveCallback)
+            dialogBinding.textViewNo.setOnClickListener(negativeCallback)
+            dialogBinding.textViewNeutral.setOnClickListener(neutralCallback)
+            galleryAlertDialog!!.setOnDismissListener(onDismissListener)
+            galleryAlertDialog!!.setOnCancelListener(onCancelListener)
+            galleryAlertDialog!!.setOnKeyListener(keyEventCallback)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

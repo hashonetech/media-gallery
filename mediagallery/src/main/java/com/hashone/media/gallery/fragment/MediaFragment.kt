@@ -23,7 +23,7 @@ import com.hashone.media.gallery.R
 import com.hashone.media.gallery.adapters.MediaAdapter
 import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.callback.OnSelectionChangeListener
-import com.hashone.media.gallery.databinding.DialogConfirmationBinding
+import com.hashone.media.gallery.databinding.DialogWarningBinding
 import com.hashone.media.gallery.databinding.FragmentImagesBinding
 import com.hashone.media.gallery.model.MediaItem
 import com.hashone.media.gallery.model.fetchMediaAsync
@@ -199,7 +199,7 @@ class MediaFragment : Fragment() {
                                     } else {
                                         "${builder.videoValidationBuilder.durationLimitMessage}\n${builder.videoValidationBuilder.sizeLimitMessage}\n${builder.videoValidationBuilder.maxResolutionMessage}"
                                     }
-                                showCustomAlertDialog(title = message,
+                                showWarningDialog(title = message,
                                     positionButtonText = builder.videoValidationBuilder.videoValidationDialogBuilder.positiveText,
                                     positiveCallback = {
                                         alertDialog?.cancel()
@@ -220,7 +220,7 @@ class MediaFragment : Fragment() {
     }
 
     var alertDialog: AlertDialog? = null
-    fun showCustomAlertDialog(
+    fun showWarningDialog(
         title: String = "",
         positionButtonText: String = "",
         isCancelable: Boolean = true,
@@ -233,7 +233,7 @@ class MediaFragment : Fragment() {
             val dialogBuilder =
                 AlertDialog.Builder(mActivity, com.hashone.commons.R.style.CustomAlertDialog)
             val dialogBinding =
-                DialogConfirmationBinding.inflate(LayoutInflater.from(mActivity), null, false)
+                DialogWarningBinding.inflate(LayoutInflater.from(mActivity), null, false)
             dialogBinding.textViewTitle.text = title
             dialogBinding.textViewYes.text = positionButtonText
             dialogBinding.textViewTitle.isVisible = title.isNotEmpty()
