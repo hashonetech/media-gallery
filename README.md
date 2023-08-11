@@ -17,9 +17,9 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 ## 📸 Screenshot
 
 <div style="display:flex;">
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/680f5b61-df51-41c6-afca-e385bb48f14f" width="20%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/26d56e1c-da40-4912-947f-00049cb167b8" width="20%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/fa0e67be-1592-42af-a4d5-87e874231f3a" width="20%">
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/e752f7c9-b0da-4e10-a982-53f230ed47c0" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/ef7c2008-e7be-43e8-ae54-1de2f6f7b3f6" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/338277c0-ca58-4b74-98ee-31e04ce32ec7" width="30%">
 </div>
 
 ### AndroidManifest.xml 
@@ -77,56 +77,78 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
                     mediaGridCount = 3
                 ) {
                     //TODO: Screen
-                    isFullScreen = false
-                    windowBackgroundColor = R.color.white
-                    statusBarColor = R.color.white
-                    navigationBarColor = R.color.white
-                    //TODO: Toolbar
-                    toolBarColor = R.color.white
-                    backPressIcon = R.drawable.ic_back_contact_us
-                    backPressIconDescription = ""
-                    toolBarTitle = ""
-                    toolBarTitleColor = R.color.black
-                    toolBarTitleFont = R.font.roboto_medium
-                    toolBarTitleSize = 16F
-                    //TODO: Camera Icon
-                    cameraIcon = R.drawable.ic_camera_media_gallery
-                    //TODO: Google Photos Icon
-                    googlePhotosIcon = R.drawable.ic_google_photos_media_gallery
-
-                    //TODO: Media Content
-                    selectedCountBackground = R.drawable.ic_photo_count
-
-                    //TODO: Bucket Contents
-                    backgroundColor = com.hashone.commons.R.color.white
-                    bucketTitleColor = com.hashone.commons.R.color.pure_black
-                    bucketTitleFont = com.hashone.commons.R.font.roboto_medium
-                    bucketTitleSize = 16F
-                    bucketSubTitleColor = com.hashone.commons.R.color.pure_black
-                    bucketSubTitleFont = com.hashone.commons.R.font.roboto_regular
-                    bucketSubTitleSize = 14F
-                    selectedCountBackgroundColor = com.hashone.commons.R.color.pure_black
-                    selectedCountColor = com.hashone.commons.R.color.white
-                    selectedCountFont = com.hashone.commons.R.font.roboto_regular
-                    selectedCountSize = 14F
-                    //TODO: Action button
-                    buttonBackgroundColor = com.hashone.commons.R.color.black
-                    buttonBackgroundSelectorColor = com.hashone.commons.R.color.dark_gray
-
-                    buttonRadius = 16F
-                    buttonText = ""
-                    buttonTextColor = com.hashone.commons.R.color.white
-                    buttonTextFont = com.hashone.commons.R.font.roboto_bold
-                    buttonTextSize = 14F
-
-		    //TODO: After Media file select gallery exit or open in background
-                    isForceClose = mBinding.switchIsForceClose.isChecked
-
-                    //TODO: For OldCrop View Pass bellow parm OR Next Activity Class Name
-                    appPackageName = packageName
-                    cropClassName = "OldCropActivity"
-                    projectDirectoryPath = getInternalFileDir(this@MainActivity).absolutePath
-                    
+	            screenBuilder = MediaGallery.ScreenBuilder(
+	                isFullScreen = false,
+	                windowBackgroundColor = com.hashone.media.gallery.test.R.color.white,
+	                statusBarColor = com.hashone.media.gallery.test.R.color.white,
+	                navigationBarColor = com.hashone.media.gallery.test.R.color.white,
+	                //TODO: Google Photos Icon
+	                googlePhotosIcon = R.drawable.ic_google_photos_media_gallery
+	            )
+	
+	            //TODO: Toolbar
+	            toolBarBuilder = MediaGallery.ToolBarBuilder(
+	                toolBarColor = com.hashone.media.gallery.test.R.color.white,
+	                backIconDescription = "",
+	                title = "",
+	                titleColor = com.hashone.media.gallery.test.R.color.black,
+	                titleFont = com.hashone.media.gallery.test.R.font.roboto_medium,
+	                titleSize = 16F,
+	                //TODO: Camera Icon
+                    	cameraIcon = R.drawable.ic_camera_media_gallery
+	            )
+	
+	            //TODO: Warning Ui
+	            warningUiBuilder = MediaGallery.WarningUiBuilder(
+	                message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+	                settingText = getLocaleString(R.string.setting_text),
+	            )
+	
+	            //TODO: Permission
+	            permissionBuilder = MediaGallery.PermissionBuilder(
+	                message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+	                positiveText = getLocaleString(R.string.label_grant),
+	                negativeText = getLocaleString(R.string.label_cancel),
+	            )
+	
+	            //TODO: Bucket Contents
+	            bucketBuilder = MediaGallery.BucketBuilder(
+	                backgroundColor = com.hashone.commons.R.color.white,
+	                titleColor = com.hashone.commons.R.color.pure_black,
+	                titleFont = com.hashone.commons.R.font.roboto_medium,
+	                titleSize = 16F,
+	                subTitleColor = com.hashone.commons.R.color.pure_black,
+	                subTitleFont = com.hashone.commons.R.font.roboto_regular,
+	                subTitleSize = 14F,
+	                countBackgroundColor = com.hashone.commons.R.color.pure_black,
+	                countColor = com.hashone.commons.R.color.white,
+	                countFont = com.hashone.commons.R.font.roboto_regular,
+	                countSize = 14F,
+	                //TODO: Media Content
+	                countBackgroundRes = R.drawable.ic_photo_count
+	            )
+	
+	            //TODO: Action button
+	            actionButtonBuilder = MediaGallery.ActionButtonBuilder(
+	                backgroundColor = com.hashone.commons.R.color.black,
+	                backgroundSelectorColor = com.hashone.commons.R.color.dark_gray,
+	                radius = 16F,
+	                text = "",
+	                textColor = com.hashone.commons.R.color.white,
+	                textFont = com.hashone.commons.R.font.roboto_bold,
+	                textSize = 14F,
+	            )
+	
+	
+	            isForceClose = mBinding.switchIsForceClose.isChecked
+	
+	            if (mBinding.switchIsOldCrop.isChecked || !mBinding.switchIsForceClose.isChecked) {
+	                mediaCropBuilder = MediaGallery.MediaCropBuilder(
+	                    appPackageName = packageName,
+	                    cropClassName = "OldCropActivity",
+	                    projectDirectoryPath = getInternalFileDir(this@MainActivity).absolutePath
+	                )
+	            }
                 }),
                 onActivityResult = object : BetterActivityResult.OnActivityResult<ActivityResult> {
                     override fun onActivityResult(activityResult: ActivityResult) {
