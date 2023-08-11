@@ -74,7 +74,36 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
                     allowGooglePhotos = true,
                     allowAllMedia = true,
                     enableCropMode = mBinding.switchIsCrop.isChecked,
-                    mediaGridCount = 3
+                    mediaGridCount = 3,
+		    
+      		//TODO Video Validation
+                    videoValidationBuilder = MediaGallery.VideoValidationBuilder(
+                        checkValidation = true,
+			
+                        //TODO video Duration Limit in second
+                        durationLimit = 30,
+                        durationLimitMessage = getLocaleString(R.string.duration_error),
+			
+                        //TODO video Size Limit in MB
+                        sizeLimit = 100,
+                        sizeLimitMessage = getLocaleString(R.string.file_size_error),
+			
+                        //TODO video Resolution Size Limit px
+                        maxResolution = 1920,
+                        maxResolutionMessage = getLocaleString(R.string.size_error),
+			
+                        //TODO video Validation Dialog UI
+                        videoValidationDialogBuilder = MediaGallery.VideoValidationDialogBuilder(
+                            titleColor = com.hashone.commons.R.color.dark_gray,
+                            titleFont = com.hashone.commons.R.font.roboto_regular,
+                            titleSize = 14F,
+                            positiveText = getLocaleString(R.string.okay),
+                            positiveColor = com.hashone.commons.R.color.black,
+                            positiveFont = com.hashone.commons.R.font.roboto_regular,
+                            positiveSize = 16F,
+                        )
+                    ),
+                    cameraActionTitle = getLocaleString(com.hashone.media.gallery.R.string.camera_action_title),
                 ) {
                     //TODO: Screen
 	            screenBuilder = MediaGallery.ScreenBuilder(
@@ -82,6 +111,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	                windowBackgroundColor = com.hashone.media.gallery.test.R.color.white,
 	                statusBarColor = com.hashone.media.gallery.test.R.color.white,
 	                navigationBarColor = com.hashone.media.gallery.test.R.color.white,
+		 
 	                //TODO: Google Photos Icon
 	                googlePhotosIcon = R.drawable.ic_google_photos_media_gallery
 	            )
@@ -94,6 +124,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	                titleColor = com.hashone.media.gallery.test.R.color.black,
 	                titleFont = com.hashone.media.gallery.test.R.font.roboto_medium,
 	                titleSize = 16F,
+		 
 	                //TODO: Camera Icon
                     	cameraIcon = R.drawable.ic_camera_media_gallery
 	            )
@@ -101,14 +132,29 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	            //TODO: Warning Ui
 	            warningUiBuilder = MediaGallery.WarningUiBuilder(
 	                message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+		 	messageColor = R.color.black,
+    			messageFont = R.font.roboto_regular,
+       			messageSize = 14F,
 	                settingText = getLocaleString(R.string.setting_text),
+		  	settingColor = com.hashone.media.gallery.R.color.positive_blue,
+         		settingFont = R.font.roboto_bold,
+         		settingSize = 16F,
 	            )
 	
 	            //TODO: Permission
 	            permissionBuilder = MediaGallery.PermissionBuilder(
 	                message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+		 	messageColor = R.color.black,
+    			messageFont = R.font.roboto_medium,
+       			messageSize = 16F,
 	                positiveText = getLocaleString(R.string.label_grant),
+		 	positiveColor = R.color.black,
+   			positiveFont = R.font.roboto_medium,
+			positiveSize = 16F,
 	                negativeText = getLocaleString(R.string.label_cancel),
+		 	negativeColor = R.color.black,
+   			negativeFont = R.font.roboto_medium,
+   			negativeSize = 16F,
 	            )
 	
 	            //TODO: Bucket Contents
@@ -124,6 +170,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	                countColor = com.hashone.commons.R.color.white,
 	                countFont = com.hashone.commons.R.font.roboto_regular,
 	                countSize = 14F,
+		 
 	                //TODO: Media Content
 	                countBackgroundRes = R.drawable.ic_photo_count
 	            )
