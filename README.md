@@ -24,25 +24,36 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 
 ### AndroidManifest.xml 
 
+    //TODO: When allow to use camera feature
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
     <queries>
         <intent>
             <action android:name="android.intent.action.GET_CONTENT" />
-
-            <data android:mimeType="*/*" />
+		//TODO: For Image Only
+		<data android:mimeType="image/*" />
+     
+	   	//TODO: For Video Only
+	    	<data android:mimeType="video/*" />
+     
+	   	//TODO: For Image and Video both
+	    	<data android:mimeType="*/*" />
         </intent>
         <intent>
             <action android:name="android.intent.action.MAIN" />
         </intent>
     </queries>
 
+    //TODO: Below 33 SDK version
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    //TODO: 33 and above SDK version
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    //TODO: 33 and above SDK version
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    //TODO: Allow only when use Camera feature
     <uses-permission android:name="android.permission.CAMERA" />
 
 	<application
