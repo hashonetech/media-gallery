@@ -160,10 +160,12 @@ class MainActivity : BaseActivity() {
                         positiveColor = com.hashone.commons.R.color.black,
                         positiveFont = com.hashone.commons.R.font.roboto_bold,
                         positiveSize = 16F,
+                        positiveIsCap = true,
                         negativeText = getLocaleString(R.string.label_cancel),
                         negativeColor = com.hashone.commons.R.color.black,
                         negativeFont = com.hashone.commons.R.font.roboto_regular,
                         negativeSize = 16F,
+                        negativeIsCap = true,
                     )
 
                     //TODO: Bucket Contents

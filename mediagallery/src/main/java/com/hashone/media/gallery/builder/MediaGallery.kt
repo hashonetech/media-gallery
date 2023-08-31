@@ -203,6 +203,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
         var positiveFont: Int = R.font.roboto_bold,
         @FloatRange
         var positiveSize: Float = 16F,
+        var positiveIsCap: Boolean = true,
         var negativeText: String = getLocaleString(com.hashone.media.gallery.R.string.label_cancel),
         @ColorRes
         var negativeColor: Int = R.color.black,
@@ -210,6 +211,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
         var negativeFont: Int = R.font.roboto_regular,
         @FloatRange
         var negativeSize: Float = 16F,
+        var negativeIsCap: Boolean = true,
 
         ) : Serializable
 

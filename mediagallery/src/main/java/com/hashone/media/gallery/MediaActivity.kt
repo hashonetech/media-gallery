@@ -1022,15 +1022,22 @@ class MediaActivity : BaseActivity() {
             if (checkCameraHardware()) {
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+                takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0) //Low Quality
+                takeVideoIntent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, (builder.videoValidationBuilder.sizeLimit * 1048576L))  //builder.videoValidationBuilder.sizeLimit MB
+                takeVideoIntent.putExtra(
+                    MediaStore.EXTRA_DURATION_LIMIT,
+                    builder.videoValidationBuilder.durationLimit
+                ) //30Seconds
                 val chooserIntent = Intent.createChooser(
                     if (builder.mediaType == MediaType.IMAGE) takePictureIntent else if (builder.mediaType == MediaType.VIDEO) takeVideoIntent else takePictureIntent,
                     builder.cameraActionTitle
                 )
-                if (builder.mediaType == MediaType.IMAGE_VIDEO)
+                if (builder.mediaType == MediaType.IMAGE_VIDEO) {
                     chooserIntent.putExtra(
                         Intent.EXTRA_INITIAL_INTENTS,
                         arrayOf(takePictureIntent, takeVideoIntent)
                     )
+                }
 
                 mActivityLauncher.launch(chooserIntent,
                     onActivityResult = object :
@@ -1252,10 +1259,12 @@ class MediaActivity : BaseActivity() {
             dialogBinding.textViewYes.typeface = ResourcesCompat.getFont(mActivity, builder.permissionBuilder.positiveFont)
             dialogBinding.textViewYes.setTextColor(ContextCompat.getColor(mActivity, builder.permissionBuilder.positiveColor))
             dialogBinding.textViewYes.setTextSize(TypedValue.COMPLEX_UNIT_SP, builder.permissionBuilder.positiveSize)
+            dialogBinding.textViewYes.isAllCaps = builder.permissionBuilder.positiveIsCap
 
             dialogBinding.textViewNo.typeface = ResourcesCompat.getFont(mActivity, builder.permissionBuilder.negativeFont)
             dialogBinding.textViewNo.setTextColor(ContextCompat.getColor(mActivity, builder.permissionBuilder.negativeColor))
             dialogBinding.textViewNo.setTextSize(TypedValue.COMPLEX_UNIT_SP, builder.permissionBuilder.negativeSize)
+            dialogBinding.textViewNo.isAllCaps = builder.permissionBuilder.negativeIsCap
 
             alertBuilder.setView(dialogBinding.root)
             galleryAlertDialog = alertBuilder.create()
