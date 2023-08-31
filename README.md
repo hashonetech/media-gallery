@@ -3,6 +3,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 
 [![](https://jitpack.io/v/hashonetech/media-gallery.svg)](https://jitpack.io/#hashonetech/media-gallery)
 
+```gradle
 	allprojects {
 		repositories {
 			...
@@ -13,7 +14,8 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	dependencies {
 	        implementation 'com.github.hashonetech:media-gallery:Tag'
 	}
- 
+ ```
+
 ## 📸 Screenshot
 
 <div style="display:flex;">
@@ -24,6 +26,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 
 ### AndroidManifest.xml 
 
+```xml
     //TODO: When allow to use camera feature
     <uses-feature
         android:name="android.hardware.camera"
@@ -69,9 +72,11 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 		    ...>
 		</provider>
 	 </application>
-	 
+```
+
 ## Implementation
 
+   ```kotlin
 	if (checkPermissions()) {
             mActivityLauncher.launch(
                 MediaGallery.open(activity = mActivity, MediaGallery.build(
@@ -80,16 +85,20 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
                         REQUEST_CODE_VIDEO -> MediaType.VIDEO
                         else -> MediaType.IMAGE_VIDEO
                     },
+   		//TODO: How much media file you want to choose
                     mediaCount = mediaCount,
-                    allowCamera = true,
-                    allowGooglePhotos = true,
-                    allowAllMedia = true,
-                    enableCropMode = mBinding.switchIsCrop.isChecked,
+   		//TODO: if you want to show camear option
+                    allowCamera = true/false,
+                    allowGooglePhotos = true/false,
+   		//TODO: if you want to show all midea file folder 
+                    allowAllMedia = true/false,
+   		//TODO: if you want to start new crop module
+                    enableCropMode = true/false,
                     mediaGridCount = 3,
 		    
       		//TODO Video Validation
                     videoValidationBuilder = MediaGallery.VideoValidationBuilder(
-                        checkValidation = true,
+                        checkValidation = true/false,
 			
                         //TODO video Duration Limit in second
                         durationLimit = 30,
@@ -118,7 +127,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
                 ) {
                     //TODO: Screen
 	            screenBuilder = MediaGallery.ScreenBuilder(
-	                isFullScreen = false,
+	                isFullScreen = true/false,
 	                windowBackgroundColor = com.hashone.media.gallery.test.R.color.white,
 	                statusBarColor = com.hashone.media.gallery.test.R.color.white,
 	                navigationBarColor = com.hashone.media.gallery.test.R.color.white,
@@ -142,31 +151,33 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	
 	            //TODO: Warning Ui
 	            warningUiBuilder = MediaGallery.WarningUiBuilder(
-	                message = getLocaleString(com.hashone.commons.R.string.allow_permission),
-		 	messageColor = R.color.black,
-    			messageFont = R.font.roboto_regular,
-       			messageSize = 14F,
-	                settingText = getLocaleString(R.string.setting_text),
-		  	settingColor = com.hashone.media.gallery.R.color.positive_blue,
-         		settingFont = R.font.roboto_bold,
-         		settingSize = 16F,
-	            )
+                        message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+                        messageColor = com.hashone.commons.R.color.black,
+                        messageFont = com.hashone.commons.R.font.roboto_regular,
+                        messageSize = 14F,
+                        settingText = getLocaleString(R.string.setting_text),
+                        settingColor = com.hashone.media.gallery.R.color.positive_blue,
+                        settingFont = com.hashone.commons.R.font.roboto_bold,
+                        settingSize = 16F,
+                    )
 	
 	            //TODO: Permission
 	            permissionBuilder = MediaGallery.PermissionBuilder(
-	                message = getLocaleString(com.hashone.commons.R.string.allow_permission),
-		 	messageColor = R.color.black,
-    			messageFont = R.font.roboto_medium,
-       			messageSize = 16F,
-	                positiveText = getLocaleString(R.string.label_grant),
-		 	positiveColor = R.color.black,
-   			positiveFont = R.font.roboto_medium,
-			positiveSize = 16F,
-	                negativeText = getLocaleString(R.string.label_cancel),
-		 	negativeColor = R.color.black,
-   			negativeFont = R.font.roboto_medium,
-   			negativeSize = 16F,
-	            )
+                        message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+                        messageColor = com.hashone.commons.R.color.black,
+                        messageFont = com.hashone.commons.R.font.roboto_regular,
+                        messageSize = 14F,
+                        positiveText = getLocaleString(R.string.label_grant),
+                        positiveColor = com.hashone.commons.R.color.black,
+                        positiveFont = com.hashone.commons.R.font.roboto_bold,
+                        positiveSize = 16F,
+                        positiveIsCap = true,
+                        negativeText = getLocaleString(R.string.label_cancel),
+                        negativeColor = com.hashone.commons.R.color.black,
+                        negativeFont = com.hashone.commons.R.font.roboto_regular,
+                        negativeSize = 16F,
+                        negativeIsCap = true,
+                    )
 	
 	            //TODO: Bucket Contents
 	            bucketBuilder = MediaGallery.BucketBuilder(
@@ -197,16 +208,16 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	                textSize = 14F,
 	            )
 	
+	            //TODO: If you want to close gallery after selection media file
+	            isForceClose = true/false
 	
-	            isForceClose = mBinding.switchIsForceClose.isChecked
-	
-	            if (mBinding.switchIsOldCrop.isChecked || !mBinding.switchIsForceClose.isChecked) {
-	                mediaCropBuilder = MediaGallery.MediaCropBuilder(
+	            //TODO: Bellow Builder pass only if you want to start any next activity after media select
+	            mediaCropBuilder = MediaGallery.MediaCropBuilder(
 	                    appPackageName = packageName,
 	                    cropClassName = "OldCropActivity",
 	                    projectDirectoryPath = getInternalFileDir(this@MainActivity).absolutePath
 	                )
-	            }
+	            
                 }),
                 onActivityResult = object : BetterActivityResult.OnActivityResult<ActivityResult> {
                     override fun onActivityResult(activityResult: ActivityResult) {
@@ -247,4 +258,47 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
                 }
             )
         }
+```
+
+## Old Crop
+
+   ```kotlin
+	enableCropMode = false
+	isForceClose = true
+	mediaCropBuilder = MediaGallery.MediaCropBuilder(
+	                    appPackageName = packageName,
+	                    cropClassName = "OldCropActivity",
+	                    projectDirectoryPath = getInternalFileDir(this@MainActivity).absolutePath
+	                )
+
+   ```
 	
+## New Crop
+
+   ```kotlin
+	enableCropMode = true
+	isForceClose = true
+   ```
+
+### License
+
+
+```
+Copyright 2023 Hashone Tech LLP
+
+Licensed to the Apache Software Foundation (ASF) under one or more contributor
+license agreements. See the NOTICE file distributed with this work for
+additional information regarding copyright ownership. The ASF licenses this
+file to you under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+```
+
