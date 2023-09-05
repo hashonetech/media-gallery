@@ -96,24 +96,23 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
                     enableCropMode = true/false,
                     mediaGridCount = 3,
 		    
-      		//TODO Video Validation
+      		//TODO video Duration Limit in second
                     videoValidationBuilder = MediaGallery.VideoValidationBuilder(
-                        checkValidation = true/false,
-			
+                        checkValidation = true,
                         //TODO video Duration Limit in second
+                        checkDuration = true,
                         durationLimit = 30,
                         durationLimitMessage = getLocaleString(R.string.duration_error),
-			
                         //TODO video Size Limit in MB
+                        checkFileSize = true,
                         sizeLimit = 100,
                         sizeLimitMessage = getLocaleString(R.string.file_size_error),
-			
                         //TODO video Resolution Size Limit px
+                        checkResolution = true,
                         maxResolution = 1920,
                         maxResolutionMessage = getLocaleString(R.string.size_error),
-			
                         //TODO video Validation Dialog UI
-                        videoValidationDialogBuilder = MediaGallery.VideoValidationDialogBuilder(
+                        durationDialogBuilder = MediaGallery.VideoValidationDialogBuilder(
                             titleColor = com.hashone.commons.R.color.dark_gray,
                             titleFont = com.hashone.commons.R.font.roboto_regular,
                             titleSize = 14F,
@@ -121,7 +120,33 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
                             positiveColor = com.hashone.commons.R.color.black,
                             positiveFont = com.hashone.commons.R.font.roboto_regular,
                             positiveSize = 16F,
+                        ),
+                         //TODO video Validation Dialog UI
+                        sizeDialogBuilder = MediaGallery.VideoValidationDialogBuilder(
+                            titleColor = com.hashone.commons.R.color.dark_gray,
+                            titleFont = com.hashone.commons.R.font.roboto_regular,
+                            titleSize = 14F,
+                            positiveText = getLocaleString(R.string.okay),
+                            positiveColor = com.hashone.commons.R.color.black,
+                            positiveFont = com.hashone.commons.R.font.roboto_regular,
+                            positiveSize = 16F,
+                        ),
+                         //TODO video Validation Dialog UI
+                        resolutionDialogBuilder = MediaGallery.VideoValidationDialogBuilder(
+                            titleColor = com.hashone.commons.R.color.dark_gray,
+                            titleFont = com.hashone.commons.R.font.roboto_regular,
+                            titleSize = 14F,
+                            positiveText = getLocaleString(R.string.no),
+                            positiveColor = com.hashone.commons.R.color.black,
+                            positiveFont = com.hashone.commons.R.font.roboto_regular,
+                            positiveSize = 16F,
+                            negativeText = getLocaleString(R.string.convert),
+                            negativeColor = com.hashone.commons.R.color.black,
+                            negativeFont = com.hashone.commons.R.font.roboto_regular,
+                            negativeSize = 16F,
+
                         )
+
                     ),
                     cameraActionTitle = getLocaleString(com.hashone.media.gallery.R.string.camera_action_title),
                 ) {
