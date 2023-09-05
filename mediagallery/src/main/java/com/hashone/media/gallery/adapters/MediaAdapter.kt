@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +16,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
+import com.bumptech.glide.load.resource.bitmap.VideoBitmapDecoder
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.hashone.commons.extensions.getColorCode
-import com.hashone.commons.extensions.onClick
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.R
 import com.hashone.media.gallery.builder.MediaGallery
@@ -29,6 +31,9 @@ import com.hashone.media.gallery.utils.ACTION_UPDATE_FOLDER_COUNT
 import com.hashone.media.gallery.utils.KEY_BUCKET_ID
 import com.hashone.media.gallery.utils.byteToMB
 import com.hashone.media.gallery.utils.getVideoWidthHeight
+import java.io.File
+import java.util.concurrent.TimeUnit
+
 
 class MediaAdapter(
     private var mContext: Context,
@@ -58,6 +63,7 @@ class MediaAdapter(
                     with(holder) {
                         with(mImagesList[position]) {
                             if (mIsMultipleMode) {
+
                                 val selectedIndex = (mContext as MediaActivity).selectedIndex(this)
                                 if (selectedIndex != -1) {
                                     mBinding.textViewImageCount.text = "${selectedIndex + 1}"
@@ -98,8 +104,9 @@ class MediaAdapter(
                 with(mImagesList[position]) {
                     val selectedIndex = (mContext as MediaActivity).selectedIndex(this)
                     val isSelected = mIsMultipleMode && selectedIndex != -1
+
                     Glide.with(mContext)
-                        .load(this.path)
+                        .load(Uri.fromFile(File(this.path)))
                         .apply(
                             RequestOptions().centerCrop().dontAnimate()
                                 .format(DecodeFormat.PREFER_RGB_565)
@@ -108,9 +115,10 @@ class MediaAdapter(
                                 .dontTransform()
                                 .downsample(DownsampleStrategy.CENTER_INSIDE)
                         )
+                        .error(R.drawable.ic_broken)
                         .into(mBinding.imageViewImageItem)
 
-                    setupItemForeground(mBinding.imageViewImageItem, isSelected)
+                    setupItemForeground(mBinding.imageViewImageItem, isSelected || (mContext as MediaActivity).mSelectedImagesList.size >= mMaxSize)
                     mBinding.textViewImageCount.isVisible = isSelected && mIsMultipleMode
                     if (mBinding.textViewImageCount.isVisible) {
                         if (builder.bucketBuilder.countBackgroundRes != -1)
@@ -119,31 +127,28 @@ class MediaAdapter(
                     }
 
                     mBinding.layoutVideoDetails.isVisible = if (this.mediaType == MediaType.VIDEO) {
-                        mBinding.textViewVideoDuration.text = String.format(
-                            "%02d:%02d",
-                            java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(this.mediaDuration),
-                            java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(this.mediaDuration) -
-                                    java.util.concurrent.TimeUnit.MINUTES.toSeconds(
-                                        java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(
-                                            this.mediaDuration
-                                        )
-                                    )
-                        )
+                        val hh = TimeUnit.MILLISECONDS.toHours(mediaDuration)
+                        val mm = TimeUnit.MILLISECONDS.toMinutes(mediaDuration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(mediaDuration))
+                        val ss = TimeUnit.MILLISECONDS.toSeconds(mediaDuration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mediaDuration))
+                        mBinding.textViewVideoDuration.text = if(hh.toInt() != 0) (String.format("%02d:%02d:%02d",hh,mm,ss)) else (String.format("%02d:%02d",mm,ss))
                         true
                     } else {
                         false
                     }
                     mBinding.root.setOnClickListener {
-                        if (builder.videoValidationBuilder.checkValidation && this.mediaType != MediaType.IMAGE) {
-                            val videoWidthHeight = getVideoWidthHeight(this.path , this.mediaResolution)
-                            val width = videoWidthHeight.first
-                            val height = videoWidthHeight.second
-                            if (java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(this.mediaDuration) > builder.videoValidationBuilder.durationLimit || byteToMB(mediaSize) > builder.videoValidationBuilder.sizeLimit || width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution) {
-                                mOnSelectionChangeListener!!.onNotValidVideo(this)
+                            if (builder.videoValidationBuilder.checkValidation && this.mediaType != MediaType.IMAGE && (mContext as MediaActivity).mSelectedImagesList.size < mMaxSize) {
+                                val videoWidthHeight =
+                                    getVideoWidthHeight(this.path, this.mediaResolution)
+                                val width = videoWidthHeight.first
+                                val height = videoWidthHeight.second
+                                if (TimeUnit.MILLISECONDS.toSeconds(this.mediaDuration) > builder.videoValidationBuilder.durationLimit || byteToMB(
+                                        mediaSize
+                                    ) > builder.videoValidationBuilder.sizeLimit || width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution
+                                ) {
+                                    mOnSelectionChangeListener!!.onNotValidVideo(this, position)
+                                } else selectOrRemoveImage(this, position)
                             } else selectOrRemoveImage(this, position)
-                        } else selectOrRemoveImage(this, position)
                     }
-
                 }
             }
         } catch (e: Exception) {
@@ -190,8 +195,12 @@ class MediaAdapter(
                     })
                 }
             }
-            if (mOnSelectionChangeListener != null)
+            if (mOnSelectionChangeListener != null) {
                 mOnSelectionChangeListener!!.onSelectedImagesChanged((mContext as MediaActivity).mSelectedImagesList)
+                if ((mContext as MediaActivity).mSelectedImagesList.size >= mMaxSize){
+                    notifyDataSetChanged()
+                }
+            }
         } else {
             if (mOnSelectionChangeListener != null)
                 mOnSelectionChangeListener!!.onSingleModeImageSelected(image)

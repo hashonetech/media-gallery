@@ -31,6 +31,7 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.ui.text.font.Typeface
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -453,18 +454,19 @@ class MediaActivity : BaseActivity() {
             super.onPostExecute(result)
             try {
                 if (result != null) {
-                    Log.d(
-                        "TestData",
-                        "CopyFileTaskGoogle width:$width height:$height timeInSec:$timeInSec fileSizeMB:$fileSizeMB"
-                    )
                     if (fileSizeMB.toInt() != 0 && builder.videoValidationBuilder.checkValidation && builder.mediaType != MediaType.IMAGE) {
                         var message = ""
-                        if (timeInSec > builder.videoValidationBuilder.durationLimit
-                        ) {
+                        var isLargeResolution = false
+                        var dialogBuilder = builder.videoValidationBuilder.durationDialogBuilder
+                        if (builder.videoValidationBuilder.checkDuration && (timeInSec > builder.videoValidationBuilder.durationLimit)) {
+                            dialogBuilder = builder.videoValidationBuilder.durationDialogBuilder
                             message = builder.videoValidationBuilder.durationLimitMessage
-                        } else if (timeInSec > builder.videoValidationBuilder.sizeLimit) {
+                        } else if ( builder.videoValidationBuilder.checkFileSize && (fileSizeMB > builder.videoValidationBuilder.sizeLimit)) {
+                            dialogBuilder = builder.videoValidationBuilder.sizeDialogBuilder
                             message = builder.videoValidationBuilder.sizeLimitMessage
-                        } else if (width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution) {
+                        } else if (builder.videoValidationBuilder.checkResolution && (width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution)) {
+                            isLargeResolution = true
+                            dialogBuilder = builder.videoValidationBuilder.resolutionDialogBuilder
                             message = builder.videoValidationBuilder.maxResolutionMessage
                         } else {
                             val imageItem = MediaItem().apply {
@@ -475,15 +477,22 @@ class MediaActivity : BaseActivity() {
                             }
                             finishPickImages(arrayList)
                         }
-                        Log.d(
-                            "TestData",
-                            "CopyFileTaskGoogle width:$width height:$height timeInSec:$timeInSec fileSizeMB:$fileSizeMB :::::message:$message"
-                        )
+
                         if (message.isNotEmpty()) {
                             showWarningDialog(title = message,
-                                positionButtonText = builder.videoValidationBuilder.videoValidationDialogBuilder.positiveText,
+                                positionButtonText = dialogBuilder.positiveText,
+                                negativeButtonText = if (isLargeResolution) dialogBuilder.negativeText else "",
                                 positiveCallback = {
                                     alertDialog?.cancel()
+                                },
+                                negativeCallback = {
+                                    val imageItem = MediaItem().apply {
+                                        path = File(result).absolutePath
+                                    }
+                                    val arrayList = ArrayList<MediaItem>().apply {
+                                        add(imageItem)
+                                    }
+                                    finishPickImages(arrayList)
                                 },
                                 onDismissListener = {},
                                 onCancelListener = {})
@@ -541,8 +550,11 @@ class MediaActivity : BaseActivity() {
     fun showWarningDialog(
         title: String = "",
         positionButtonText: String = "",
+        negativeButtonText: String = "",
+        mDialogBuilder: MediaGallery.VideoValidationDialogBuilder = MediaGallery.VideoValidationDialogBuilder(),
         isCancelable: Boolean = true,
         positiveCallback: View.OnClickListener? = null,
+        negativeCallback: View.OnClickListener? = null,
         keyEventCallback: DialogInterface.OnKeyListener? = null,
         onDismissListener: DialogInterface.OnDismissListener? = null,
         onCancelListener: DialogInterface.OnCancelListener? = null,
@@ -554,37 +566,55 @@ class MediaActivity : BaseActivity() {
                 DialogWarningBinding.inflate(LayoutInflater.from(mActivity), null, false)
             dialogBinding.textViewTitle.text = title
             dialogBinding.textViewYes.text = positionButtonText
+            dialogBinding.textViewConfirm.text = negativeButtonText
             dialogBinding.textViewTitle.isVisible = title.isNotEmpty()
             dialogBinding.textViewYes.isVisible = positionButtonText.isNotEmpty()
+            dialogBinding.textViewConfirm.isVisible = negativeButtonText.isNotEmpty()
+            dialogBinding.view3.isVisible = negativeButtonText.isNotEmpty()
 
             dialogBinding.textViewTitle.setTextSize(
                 TypedValue.COMPLEX_UNIT_SP,
-                builder.videoValidationBuilder.videoValidationDialogBuilder.titleSize
+                mDialogBuilder.titleSize
             )
             dialogBinding.textViewTitle.setTextColor(
                 ContextCompat.getColor(
                     mActivity,
-                    builder.videoValidationBuilder.videoValidationDialogBuilder.titleColor
+                    mDialogBuilder.titleColor
                 )
             )
             dialogBinding.textViewTitle.typeface = ResourcesCompat.getFont(
                 mActivity,
-                builder.videoValidationBuilder.videoValidationDialogBuilder.titleFont
+                mDialogBuilder.titleFont
             )
 
             dialogBinding.textViewYes.setTextSize(
                 TypedValue.COMPLEX_UNIT_SP,
-                builder.videoValidationBuilder.videoValidationDialogBuilder.positiveSize
+                mDialogBuilder.positiveSize
             )
             dialogBinding.textViewYes.setTextColor(
                 ContextCompat.getColor(
                     mActivity,
-                    builder.videoValidationBuilder.videoValidationDialogBuilder.positiveColor
+                    mDialogBuilder.positiveColor
                 )
             )
             dialogBinding.textViewYes.typeface = ResourcesCompat.getFont(
                 mActivity,
-                builder.videoValidationBuilder.videoValidationDialogBuilder.positiveFont
+                mDialogBuilder.positiveFont
+            )
+
+            dialogBinding.textViewConfirm.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                mDialogBuilder.negativeSize
+            )
+            dialogBinding.textViewConfirm.setTextColor(
+                ContextCompat.getColor(
+                    mActivity,
+                    mDialogBuilder.negativeColor
+                )
+            )
+            dialogBinding.textViewConfirm.typeface = ResourcesCompat.getFont(
+                mActivity,
+                mDialogBuilder.negativeFont
             )
 
             dialogBuilder.setView(dialogBinding.root)
@@ -592,6 +622,7 @@ class MediaActivity : BaseActivity() {
             if (!mActivity.isDestroyed) if (alertDialog != null && !alertDialog!!.isShowing) alertDialog!!.show()
             alertDialog!!.setCancelable(isCancelable)
             dialogBinding.textViewYes.setOnClickListener(positiveCallback)
+            dialogBinding.textViewConfirm.setOnClickListener(negativeCallback)
             alertDialog!!.setOnDismissListener(onDismissListener)
             alertDialog!!.setOnCancelListener(onCancelListener)
             alertDialog!!.setOnKeyListener(keyEventCallback)

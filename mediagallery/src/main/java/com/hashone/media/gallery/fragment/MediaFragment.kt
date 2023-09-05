@@ -2,6 +2,7 @@ package com.hashone.media.gallery.fragment
 
 import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -27,6 +28,7 @@ import com.hashone.media.gallery.databinding.DialogWarningBinding
 import com.hashone.media.gallery.databinding.FragmentImagesBinding
 import com.hashone.media.gallery.model.MediaItem
 import com.hashone.media.gallery.model.fetchMediaAsync
+import com.hashone.media.gallery.utils.ACTION_UPDATE_FOLDER_COUNT
 import com.hashone.media.gallery.utils.KEY_BUCKET_ID
 import com.hashone.media.gallery.utils.KEY_BUCKET_NAME
 import com.hashone.media.gallery.utils.KEY_BUCKET_PATH
@@ -182,30 +184,80 @@ class MediaFragment : Fragment() {
                                 }
                             }
 
-                            override fun onNotValidVideo(imageItem: MediaItem) {
-                                val videoWidthHeight = getVideoWidthHeight(imageItem.path , imageItem.mediaResolution)
+                            override fun onNotValidVideo(
+                                imageItem: MediaItem,
+                                position: Int
+                            ) {
+                                val videoWidthHeight =
+                                    getVideoWidthHeight(imageItem.path, imageItem.mediaResolution)
                                 val width = videoWidthHeight.first
                                 val height = videoWidthHeight.second
-                                val message =
-                                    if (java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(
-                                            imageItem.mediaDuration
-                                        ) > builder.videoValidationBuilder.durationLimit
-                                    ) {
-                                        builder.videoValidationBuilder.durationLimitMessage
-                                    } else if (byteToMB(imageItem.mediaSize) > builder.videoValidationBuilder.sizeLimit) {
-                                        builder.videoValidationBuilder.sizeLimitMessage
-                                    } else if (width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution) {
-                                        builder.videoValidationBuilder.maxResolutionMessage
-                                    } else {
-                                        "${builder.videoValidationBuilder.durationLimitMessage}\n${builder.videoValidationBuilder.sizeLimitMessage}\n${builder.videoValidationBuilder.maxResolutionMessage}"
-                                    }
-                                showWarningDialog(title = message,
-                                    positionButtonText = builder.videoValidationBuilder.videoValidationDialogBuilder.positiveText,
-                                    positiveCallback = {
-                                        alertDialog?.cancel()
-                                    },
-                                    onDismissListener = {},
-                                    onCancelListener = {})
+                                var message = ""
+                                var isLargeResolution = false
+                                var dialogBuilder =
+                                    builder.videoValidationBuilder.durationDialogBuilder
+                                if (builder.videoValidationBuilder.checkDuration && (java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(
+                                        imageItem.mediaDuration
+                                    ) > builder.videoValidationBuilder.durationLimit)
+                                ) {
+                                    dialogBuilder =
+                                        builder.videoValidationBuilder.durationDialogBuilder
+                                    message = builder.videoValidationBuilder.durationLimitMessage
+                                } else if (builder.videoValidationBuilder.checkFileSize && (byteToMB(
+                                        imageItem.mediaSize
+                                    ) > builder.videoValidationBuilder.sizeLimit)
+                                ) {
+                                    dialogBuilder = builder.videoValidationBuilder.sizeDialogBuilder
+                                    message = builder.videoValidationBuilder.sizeLimitMessage
+                                } else if (builder.videoValidationBuilder.checkResolution && (width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution)) {
+                                    isLargeResolution = true
+                                    dialogBuilder =
+                                        builder.videoValidationBuilder.resolutionDialogBuilder
+                                    message = builder.videoValidationBuilder.maxResolutionMessage
+                                } else {
+                                    "${builder.videoValidationBuilder.durationLimitMessage}\n${builder.videoValidationBuilder.sizeLimitMessage}\n${builder.videoValidationBuilder.maxResolutionMessage}"
+                                }
+
+                                if (message.isNotEmpty()) {
+                                    showWarningDialog(
+                                        title = message,
+                                        positionButtonText = dialogBuilder.positiveText,
+                                        negativeButtonText = if (isLargeResolution) dialogBuilder.negativeText else "",
+                                        dialogBuilder,
+                                        positiveCallback = {
+                                            alertDialog?.cancel()
+                                        },
+                                        negativeCallback = {
+                                            alertDialog?.cancel()
+                                            if (builder.mediaCount > 1) {
+                                                (mActivity as MediaActivity).addItem(imageItem)
+                                                (mActivity as MediaActivity).updateHeaderOptionsUI((mActivity as MediaActivity).mSelectedImagesList.size > 0)
+                                                (mActivity as MediaActivity).updateMediaCount()
+
+                                                (mActivity as MediaActivity).sendBroadcast(Intent().apply {
+                                                    action = ACTION_UPDATE_FOLDER_COUNT
+                                                    putExtra(KEY_BUCKET_ID, imageItem.bucketId)
+                                                    putExtra("add", true)
+                                                })
+                                                if (mBinding.recyclerViewImages.adapter != null) {
+                                                    if (isSelected && (mActivity as MediaActivity).mSelectedImagesList.size >= builder.mediaCount){ mBinding.recyclerViewImages.adapter!!.notifyDataSetChanged()}else{
+                                                        mBinding.recyclerViewImages.adapter!!.notifyItemChanged(
+                                                            position,
+                                                            MediaAdapter.ImageSelectedOrUpdated()
+                                                        )
+                                                    }
+                                                }
+//                                                mBinding.recyclerViewImages.adapter.selectOrRemoveImage(imageItem, position)
+                                            } else {
+                                                (mActivity as MediaActivity).finishPickImages(
+                                                    arrayListOf(imageItem)
+                                                )
+                                            }
+                                        },
+                                        onDismissListener = {},
+                                        onCancelListener = {},
+                                    )
+                                }
                             }
                         }
                     )
@@ -223,8 +275,11 @@ class MediaFragment : Fragment() {
     fun showWarningDialog(
         title: String = "",
         positionButtonText: String = "",
+        negativeButtonText: String = "",
+        mDialogBuilder: MediaGallery.VideoValidationDialogBuilder = MediaGallery.VideoValidationDialogBuilder(),
         isCancelable: Boolean = true,
         positiveCallback: View.OnClickListener? = null,
+        negativeCallback: View.OnClickListener? = null,
         keyEventCallback: DialogInterface.OnKeyListener? = null,
         onDismissListener: DialogInterface.OnDismissListener? = null,
         onCancelListener: DialogInterface.OnCancelListener? = null,
@@ -236,37 +291,55 @@ class MediaFragment : Fragment() {
                 DialogWarningBinding.inflate(LayoutInflater.from(mActivity), null, false)
             dialogBinding.textViewTitle.text = title
             dialogBinding.textViewYes.text = positionButtonText
+            dialogBinding.textViewConfirm.text = negativeButtonText
             dialogBinding.textViewTitle.isVisible = title.isNotEmpty()
             dialogBinding.textViewYes.isVisible = positionButtonText.isNotEmpty()
+            dialogBinding.textViewConfirm.isVisible = negativeButtonText.isNotEmpty()
+            dialogBinding.view3.isVisible = negativeButtonText.isNotEmpty()
 
             dialogBinding.textViewTitle.setTextSize(
                 TypedValue.COMPLEX_UNIT_SP,
-                builder.videoValidationBuilder.videoValidationDialogBuilder.titleSize
+                mDialogBuilder.titleSize
             )
             dialogBinding.textViewTitle.setTextColor(
                 ContextCompat.getColor(
                     mActivity,
-                    builder.videoValidationBuilder.videoValidationDialogBuilder.titleColor
+                    mDialogBuilder.titleColor
                 )
             )
             dialogBinding.textViewTitle.typeface = ResourcesCompat.getFont(
                 mActivity,
-                builder.videoValidationBuilder.videoValidationDialogBuilder.titleFont
+                mDialogBuilder.titleFont
             )
 
             dialogBinding.textViewYes.setTextSize(
                 TypedValue.COMPLEX_UNIT_SP,
-                builder.videoValidationBuilder.videoValidationDialogBuilder.positiveSize
+                mDialogBuilder.positiveSize
             )
             dialogBinding.textViewYes.setTextColor(
                 ContextCompat.getColor(
                     mActivity,
-                    builder.videoValidationBuilder.videoValidationDialogBuilder.positiveColor
+                    mDialogBuilder.positiveColor
                 )
             )
             dialogBinding.textViewYes.typeface = ResourcesCompat.getFont(
                 mActivity,
-                builder.videoValidationBuilder.videoValidationDialogBuilder.positiveFont
+                mDialogBuilder.positiveFont
+            )
+
+            dialogBinding.textViewConfirm.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                mDialogBuilder.negativeSize
+            )
+            dialogBinding.textViewConfirm.setTextColor(
+                ContextCompat.getColor(
+                    mActivity,
+                    mDialogBuilder.negativeColor
+                )
+            )
+            dialogBinding.textViewConfirm.typeface = ResourcesCompat.getFont(
+                mActivity,
+                mDialogBuilder.negativeFont
             )
 
             dialogBuilder.setView(dialogBinding.root)
@@ -274,6 +347,7 @@ class MediaFragment : Fragment() {
             if (!mActivity.isDestroyed) if (alertDialog != null && !alertDialog!!.isShowing) alertDialog!!.show()
             alertDialog!!.setCancelable(isCancelable)
             dialogBinding.textViewYes.setOnClickListener(positiveCallback)
+            dialogBinding.textViewConfirm.setOnClickListener(negativeCallback)
             alertDialog!!.setOnDismissListener(onDismissListener)
             alertDialog!!.setOnCancelListener(onCancelListener)
             alertDialog!!.setOnKeyListener(keyEventCallback)

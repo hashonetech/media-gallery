@@ -24,7 +24,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
             allowAllMedia: Boolean,
             enableCropMode: Boolean = false,
             mediaGridCount: Int = 3,
-            videoValidationBuilder: VideoValidationBuilder = VideoValidationBuilder(),
+            videoValidationBuilder: VideoValidationBuilder = VideoValidationBuilder(checkFileSize = false, checkDuration = false, checkResolution = false),
             cameraActionTitle: String = getLocaleString(com.hashone.media.gallery.R.string.camera_action_title),
             block: Builder.() -> Unit
         ) = Builder(
@@ -58,7 +58,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
         val cameraActionTitle: String = getLocaleString(com.hashone.media.gallery.R.string.camera_action_title),
 
         //TODO: Video Validation Builder
-        val videoValidationBuilder: VideoValidationBuilder = VideoValidationBuilder(),
+        val videoValidationBuilder: VideoValidationBuilder = VideoValidationBuilder(checkFileSize = false, checkDuration = false, checkResolution = false),
 
         ) : Serializable {
         //TODO: Screen
@@ -218,19 +218,25 @@ open class MediaGallery(val builder: Builder) : Serializable {
     class VideoValidationBuilder(
         var checkValidation: Boolean = false,
         // TODO video Duration Limit in second
+        var checkDuration: Boolean,
         @IntRange
         var durationLimit: Int = 30,
         var durationLimitMessage: String = getLocaleString(com.hashone.media.gallery.R.string.duration_error),
+        val durationDialogBuilder: VideoValidationDialogBuilder = VideoValidationDialogBuilder(),
+
         // TODO video Size Limit in MB
+        var checkFileSize: Boolean,
         @IntRange
         var sizeLimit: Int = 100,
         var sizeLimitMessage: String = getLocaleString(com.hashone.media.gallery.R.string.file_size_error),
+        val sizeDialogBuilder: VideoValidationDialogBuilder = VideoValidationDialogBuilder(),
+
         // TODO video Resolution Size Limit px
+        var checkResolution: Boolean,
         @IntRange
         var maxResolution: Int = 1920,
         var maxResolutionMessage: String = getLocaleString(com.hashone.media.gallery.R.string.size_error),
-
-        val videoValidationDialogBuilder: VideoValidationDialogBuilder = VideoValidationDialogBuilder(),
+        val resolutionDialogBuilder: VideoValidationDialogBuilder = VideoValidationDialogBuilder(),
         ) : Serializable
 
     class VideoValidationDialogBuilder(
@@ -247,5 +253,13 @@ open class MediaGallery(val builder: Builder) : Serializable {
         var positiveFont: Int = R.font.roboto_regular,
         @FloatRange
         var positiveSize: Float = 16F,
+        var negativeText: String = "",
+        @ColorRes
+        var negativeColor: Int = R.color.black,
+        @FontRes
+        var negativeFont: Int = R.font.roboto_regular,
+        @FloatRange
+        var negativeSize: Float = 16F,
+
     ) : Serializable
 }
