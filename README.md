@@ -38,6 +38,7 @@ Table of contents
 * [Implementation](#implementation)
 * [Old Crop](#old-crop)
 * [New Crop](#new-crop)
+* [Screen Navigation](#screen-navigation)
 <!--te-->
 
 #### AndroidManifest
@@ -311,7 +312,18 @@ Table of contents
 	enableCropMode = true
 	isForceClose = true
    ```
+	
+### Screen Navigation
 
+   ```kotlin
+ //TODO: Bellow Builder pass only if you want to start any next activity after media select
+mediaCropBuilder = MediaGallery.MediaCropBuilder(
+		appPackageName = packageName,
+		cropClassName = "OldCropActivity",
+		projectDirectoryPath = getInternalFileDir(this@MainActivity).absolutePath
+)
+   ```
+		 
 ### License
 
 
