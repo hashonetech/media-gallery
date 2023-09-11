@@ -63,7 +63,6 @@ class MediaAdapter(
                     with(holder) {
                         with(mImagesList[position]) {
                             if (mIsMultipleMode) {
-
                                 val selectedIndex = (mContext as MediaActivity).selectedIndex(this)
                                 if (selectedIndex != -1) {
                                     mBinding.textViewImageCount.text = "${selectedIndex + 1}"
@@ -102,8 +101,8 @@ class MediaAdapter(
         try {
             with(holder) {
                 with(mImagesList[position]) {
-                    val selectedIndex = (mContext as MediaActivity).selectedIndex(this)
-                    val isSelected = mIsMultipleMode && selectedIndex != -1
+                    var selectedIndex = (mContext as MediaActivity).selectedIndex(this)
+                    var isSelected = mIsMultipleMode && selectedIndex != -1
 
                     Glide.with(mContext)
                         .load(Uri.fromFile(File(this.path)))
@@ -136,7 +135,9 @@ class MediaAdapter(
                         false
                     }
                     mBinding.root.setOnClickListener {
-                            if (builder.videoValidationBuilder.checkValidation && this.mediaType != MediaType.IMAGE && (mContext as MediaActivity).mSelectedImagesList.size < mMaxSize) {
+                         selectedIndex = (mContext as MediaActivity).selectedIndex(this)
+                         isSelected = mIsMultipleMode && selectedIndex != -1
+                            if (builder.videoValidationBuilder.checkValidation && this.mediaType != MediaType.IMAGE && (mContext as MediaActivity).mSelectedImagesList.size < mMaxSize && !isSelected) {
                                 val videoWidthHeight =
                                     getVideoWidthHeight(this.path, this.mediaResolution)
                                 val width = videoWidthHeight.first
@@ -169,7 +170,7 @@ class MediaAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun selectOrRemoveImage(image: MediaItem, position: Int) {
+    fun selectOrRemoveImage(image: MediaItem, position: Int) {
         if (mIsMultipleMode) {
             val selectedIndex = (mContext as MediaActivity).selectedIndex(image)
             if (selectedIndex != -1) {

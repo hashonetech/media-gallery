@@ -7,14 +7,15 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.ColorRes
-import androidx.annotation.FloatRange
-import androidx.annotation.FontRes
-import androidx.annotation.IntRange
+import androidx.core.view.get
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.hashone.commons.base.BaseActivity
 import com.hashone.commons.base.BetterActivityResult
@@ -34,17 +35,23 @@ import com.hashone.media.gallery.utils.REQUEST_CODE_CAMERA
 import com.hashone.media.gallery.utils.REQUEST_CODE_IMAGE
 import com.hashone.media.gallery.utils.REQUEST_CODE_IMAGE_VIDEO
 import com.hashone.media.gallery.utils.REQUEST_CODE_VIDEO
+import com.hashone.media.gallery.utils.isVideoFile
 import java.util.Locale
 
-class MainActivity : BaseActivity() {
+
+class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var mBinding: ActivityMainBinding
-
-
+    var mediaTypeNames = arrayOf("IMAGE", "VIDEO", "IMAGE & VIDEO")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
+//        mediaCount = ArrayList<OperatedSpinner>().apply {
+//            for (i in 1 until 51) {
+//                add(OperatedSpinner("qwqw"))
+//            }
+//        }
 
         mBinding.spCount.adapter = ArrayAdapter(mActivity,
             android.R.layout.simple_spinner_dropdown_item,
@@ -54,13 +61,69 @@ class MainActivity : BaseActivity() {
                 }
             })
 
-        mBinding.spFont.adapter = ArrayAdapter(
+        mBinding.spMediaType.adapter = ArrayAdapter(
             mActivity,
             android.R.layout.simple_spinner_dropdown_item,
-            arrayOf("Default", "Nunito Bold", "Roboto Medium", "Tinos Bold")
+            arrayOf("IMAGE", "VIDEO", "IMAGE & VIDEO")
         )
 
-        mBinding.image.setOnClickListener {
+        mBinding.switchNewCrop.setOnToggledListener { buttonView, isChecked ->
+            if (isChecked) {
+                mBinding.switchForceClose.isOn = true
+                mBinding.spMediaType.setSelection(0)
+                mBinding.spCount.setSelection(0)
+                mBinding.switchOldCrop.isOn = false
+
+            }
+            mBinding.spMediaType.selectedView.isEnabled =  !isChecked
+            mBinding.spCount.selectedView.isEnabled =  !isChecked
+            mBinding.spMediaType.isEnabled =  !isChecked
+            mBinding.spCount.isEnabled =  !isChecked
+
+            mBinding.lyNavigateToOther.isVisible = !isChecked
+            mBinding.textOldCrop.isVisible = !isChecked
+            mBinding.switchOldCrop.isVisible = !isChecked
+        }
+
+        mBinding.switchOldCrop.setOnToggledListener { buttonView, isChecked ->
+            if (isChecked) {
+                mBinding.switchForceClose.isOn = true
+                mBinding.spMediaType.setSelection(0)
+                mBinding.spCount.setSelection(0)
+                mBinding.spCount.setSelection(0)
+                mBinding.switchNewCrop.isOn = false
+
+            }
+
+            mBinding.spMediaType.selectedView.isEnabled =  !isChecked
+            mBinding.spCount.selectedView.isEnabled =  !isChecked
+            mBinding.spMediaType.isEnabled =  !isChecked
+            mBinding.spCount.isEnabled =  !isChecked
+
+            mBinding.textNewCrop.isVisible = !isChecked
+            mBinding.switchNewCrop.isVisible = !isChecked
+            mBinding.switchNavigateToOther.isVisible = !isChecked
+            mBinding.textNavigateToOther.isVisible = !isChecked
+        }
+
+        mBinding.switchNavigateToOther.setOnToggledListener { buttonView, isChecked ->
+            if (isChecked) {
+                mBinding.switchOldCrop.isOn = false
+                mBinding.switchNewCrop.isOn = false
+            }
+            mBinding.switchForceClose.isOn = !isChecked
+            mBinding.lyCrop.isVisible = !isChecked
+        }
+
+        mBinding.btnOpen.setOnClickListener {
+            openMediaGallery(when (mBinding.spMediaType.selectedItemPosition) {
+                0 -> REQUEST_CODE_IMAGE
+                1 -> REQUEST_CODE_VIDEO
+                2 -> REQUEST_CODE_IMAGE_VIDEO
+                else -> REQUEST_CODE_IMAGE
+            })
+        }
+      /*  mBinding.image.setOnClickListener {
             openMediaGallery(REQUEST_CODE_IMAGE)
         }
 
@@ -70,7 +133,17 @@ class MainActivity : BaseActivity() {
 
         mBinding.imageVideo.setOnClickListener {
             openMediaGallery(REQUEST_CODE_IMAGE_VIDEO)
-        }
+        }*/
+        Glide.with(this@MainActivity).load(com.hashone.media.gallery.test.R.drawable.hashone_device_wallpaper).into(mBinding.cropedImage)
+    }
+
+    //Performing action onItemSelected and onNothing selected
+    override fun onItemSelected(arg0: AdapterView<*>?, arg1: View?, position: Int, id: Long) {
+        Toast.makeText(applicationContext, mediaTypeNames.get(position), Toast.LENGTH_LONG).show()
+    }
+
+    override fun onNothingSelected(arg0: AdapterView<*>?) {
+        // TODO Auto-generated method stub
     }
 
     private fun openMediaGallery(requestCode: Int) {
@@ -89,7 +162,7 @@ class MainActivity : BaseActivity() {
                     allowCamera = true,
                     allowGooglePhotos = true,
                     allowAllMedia = true,
-                    enableCropMode = mBinding.switchIsCrop.isChecked,
+                    enableCropMode = mBinding.switchNewCrop.isOn,
                     mediaGridCount = 3,
                     //TODO video Duration Limit in second
                     videoValidationBuilder = MediaGallery.VideoValidationBuilder(
@@ -226,9 +299,9 @@ class MainActivity : BaseActivity() {
                     )
 
 
-                    isForceClose = mBinding.switchIsForceClose.isChecked
+                    isForceClose = mBinding.switchForceClose.isOn
 
-                    if (mBinding.switchIsOldCrop.isChecked || !mBinding.switchIsForceClose.isChecked) {
+                    if (mBinding.switchOldCrop.isOn || mBinding.switchNavigateToOther.isOn) {
                         mediaCropBuilder = MediaGallery.MediaCropBuilder(
                             appPackageName = packageName,
                             cropClassName = "OldCropActivity",
@@ -245,7 +318,12 @@ class MainActivity : BaseActivity() {
                                     intent.extras?.serializable<CropDataSaved>(
                                         CropActivity.KEY_RETURN_CROP_DATA
                                     )
-                                Glide.with(this@MainActivity).load(myCropDataSaved!!.cropImg)
+                                Toast.makeText(
+                                    mActivity,
+                                    "Croped: \n${myCropDataSaved!!.cropImg}",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                Glide.with(this@MainActivity).load(myCropDataSaved!!.cropImg).centerCrop()
                                     .into(mBinding.cropedImage)
                             } else if (intent.hasExtra(KEY_IMAGE_PATH)) {
                                 val filePath = intent.extras!!.getString(KEY_IMAGE_PATH)!!
@@ -253,7 +331,13 @@ class MainActivity : BaseActivity() {
                                     val originalImagePath =
                                         intent.extras!!.getString(KEY_IMAGE_ORIGINAL_PATH)!!
                                 }
-                                Glide.with(this@MainActivity).load(filePath)
+                                Toast.makeText(
+                                    mActivity,
+                                    "Selected: filePath:\n${filePath}",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                mBinding.videoPlayIcon.isVisible = isVideoFile(filePath)
+                                Glide.with(this@MainActivity).load(filePath).centerCrop()
                                     .into(mBinding.cropedImage)
                             } else if (intent.hasExtra(KEY_MEDIA_PATHS)) {
                                 val selectedMedia: ArrayList<MediaItem>? =
@@ -261,10 +345,12 @@ class MainActivity : BaseActivity() {
                                 selectedMedia?.let {
                                     Toast.makeText(
                                         mActivity,
-                                        "Selected: ${selectedMedia.size}",
+                                        "Selected File List Size: ${selectedMedia.size} \n filePath:${selectedMedia[0].path}",
                                         Toast.LENGTH_LONG
                                     ).show()
-                                    Glide.with(this@MainActivity).load(selectedMedia[0].path)
+                                    mBinding.videoPlayIcon.isVisible = isVideoFile(selectedMedia[0].path)
+
+                                    Glide.with(this@MainActivity).load(selectedMedia[0].path).centerCrop()
                                         .into(mBinding.cropedImage)
                                 }
                             } else {
@@ -361,4 +447,5 @@ class MainActivity : BaseActivity() {
                 onCancelListener = {})
         }
     }
+
 }

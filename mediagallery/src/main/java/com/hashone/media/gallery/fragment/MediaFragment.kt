@@ -230,24 +230,11 @@ class MediaFragment : Fragment() {
                                         negativeCallback = {
                                             alertDialog?.cancel()
                                             if (builder.mediaCount > 1) {
-                                                (mActivity as MediaActivity).addItem(imageItem)
-                                                (mActivity as MediaActivity).updateHeaderOptionsUI((mActivity as MediaActivity).mSelectedImagesList.size > 0)
-                                                (mActivity as MediaActivity).updateMediaCount()
-
-                                                (mActivity as MediaActivity).sendBroadcast(Intent().apply {
-                                                    action = ACTION_UPDATE_FOLDER_COUNT
-                                                    putExtra(KEY_BUCKET_ID, imageItem.bucketId)
-                                                    putExtra("add", true)
-                                                })
                                                 if (mBinding.recyclerViewImages.adapter != null) {
                                                     if (isSelected && (mActivity as MediaActivity).mSelectedImagesList.size >= builder.mediaCount){ mBinding.recyclerViewImages.adapter!!.notifyDataSetChanged()}else{
-                                                        mBinding.recyclerViewImages.adapter!!.notifyItemChanged(
-                                                            position,
-                                                            MediaAdapter.ImageSelectedOrUpdated()
-                                                        )
+                                                        (mBinding.recyclerViewImages.adapter!! as MediaAdapter).selectOrRemoveImage(imageItem, position)
                                                     }
                                                 }
-//                                                mBinding.recyclerViewImages.adapter.selectOrRemoveImage(imageItem, position)
                                             } else {
                                                 (mActivity as MediaActivity).finishPickImages(
                                                     arrayListOf(imageItem)

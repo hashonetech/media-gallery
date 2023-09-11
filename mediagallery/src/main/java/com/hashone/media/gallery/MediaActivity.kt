@@ -785,7 +785,8 @@ class MediaActivity : BaseActivity() {
                         }
                     })
             }
-        } else if (!builder.enableCropMode && /* && builder.mediaType == MediaType.IMAGE &&*/ builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
+        }
+        else if (!builder.enableCropMode && /* && builder.mediaType == MediaType.IMAGE &&*/ builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
             if (images.size > 0) {
                 val className =
                     Class.forName("${builder.mediaCropBuilder.appPackageName}.${builder.mediaCropBuilder.cropClassName}")
@@ -842,8 +843,7 @@ class MediaActivity : BaseActivity() {
                                                     false
                                                 }
                                             setResultData(
-
-                                                ArrayList(),
+                                                images,
                                                 null,
                                                 filePath,
                                                 originalImagePath,
@@ -860,7 +860,8 @@ class MediaActivity : BaseActivity() {
                         })
                 }
             }
-        } else if (builder.mediaType == MediaType.IMAGE && builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
+        }
+        else if (builder.mediaType == MediaType.IMAGE && builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
             if (images.size > 0) {
                 val className =
                     Class.forName("${builder.mediaCropBuilder.appPackageName}.${builder.mediaCropBuilder.cropClassName}")
@@ -918,7 +919,7 @@ class MediaActivity : BaseActivity() {
                                                 }
 
                                             setResultData(
-                                                ArrayList(),
+                                                images,
                                                 null,
                                                 filePath,
                                                 originalImagePath,
