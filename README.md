@@ -12,19 +12,35 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	}
   
 	dependencies {
-	        implementation 'com.github.hashonetech:media-gallery:v1.0.18'
+	        implementation 'com.github.hashonetech:media-gallery:v1.0.20'
 	}
  ```
 
-## 📸 Screenshot
+### 📸 Screenshot
 
 <div style="display:flex;">
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/e752f7c9-b0da-4e10-a982-53f230ed47c0" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/ef7c2008-e7be-43e8-ae54-1de2f6f7b3f6" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/104345897/338277c0-ca58-4b74-98ee-31e04ce32ec7" width="30%">
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/918eeffa-5a24-44e4-bcb9-cd4fbd15273c" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/05d357b4-1c04-4692-903a-215e13cff918" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/6b80a001-4e51-4b50-90c2-cafd4163a3de" width="30%">
+</div>
+<div style="display:flex;">
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/0ba275d2-4aae-48c1-a480-e98897f0ca2e" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/86dfe2b7-6aa0-410d-bdca-f061b41bd046" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/6eb78167-888b-40b5-a97a-a5eb9dc716e1" width="30%">
 </div>
 
-### AndroidManifest.xml 
+
+Table of contents
+=================
+
+<!--ts-->
+* [AndroidManifest](#androidmanifest)
+* [Implementation](#implementation)
+* [Old Crop](#old-crop)
+* [New Crop](#new-crop)
+<!--te-->
+
+#### AndroidManifest
 
 ```xml
     //TODO: When allow to use camera feature
@@ -74,7 +90,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	 </application>
 ```
 
-## Implementation
+### Implementation
 
    ```kotlin
 	if (checkPermissions()) {
@@ -248,34 +264,25 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
                     override fun onActivityResult(activityResult: ActivityResult) {
                         if (activityResult.resultCode == Activity.RESULT_OK) {
                             activityResult.data?.let { intent ->
-                                if (intent.hasExtra(KEY_MEDIA_PATHS)){
-                                    val selectedMedia: ArrayList<MediaItem>? =
-                                        intent.serializable(KEY_MEDIA_PATHS)
-                                    selectedMedia?.let {
-                                        Toast.makeText(
-                                            mActivity,
-                                            "Selected: ${selectedMedia.size}",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                        Glide.with(this@MainActivity).load(selectedMedia[0].path)
-                                            .into(mBinding.cropedImage)
-                                    }
-                                } else {
-                                    if (intent.hasExtra(CropActivity.KEY_RETURN_CROP_DATA)) {
-                                        val myCropDataSaved =
-                                            intent.extras?.serializable<CropDataSaved>(
-                                                CropActivity.KEY_RETURN_CROP_DATA
-                                            )
-                                        Glide.with(this@MainActivity).load(myCropDataSaved!!.cropImg)
-                                            .into(mBinding.cropedImage)
-                                    } else {
-                                        val filePath =
-                                            intent.extras!!.getString(KEY_IMAGE_PATH)!!
-                                        val originalImagePath =
-                                            intent.extras!!.getString(KEY_IMAGE_ORIGINAL_PATH)!!
-                                        Glide.with(this@MainActivity).load(filePath)
-                                            .into(mBinding.cropedImage)
-                                    }
+	            		//TODO: When Select media file orignal file path return
+                                if (intent.hasExtra(KEY_MEDIA_PATHS)) {
+	                                val selectedMedia: ArrayList<MediaItem>? =
+	                                    intent.serializable(KEY_MEDIA_PATHS)
+	                                selectedMedia?.let {
+	                                    mBinding.videoPlayIcon.isVisible = isVideoFile(selectedMedia[0].path)
+	                                    Glide.with(this@MainActivity).load(selectedMedia[0].path).centerCrop()
+	                                        .into(mBinding.cropedImage)
+	                                }
+	                            }
+	            		//TODO: When New Crop enable and crop image return crop data
+   				if (intent.hasExtra(CropActivity.KEY_RETURN_CROP_DATA)) {
+	                                val myCropDataSaved =
+	                                    intent.extras?.serializable<CropDataSaved>(
+	                                        CropActivity.KEY_RETURN_CROP_DATA
+	                                    )
+	                                Glide.with(this@MainActivity).load(myCropDataSaved!!.cropImg).centerCrop()
+	                                    .into(mBinding.cropedImage)
+	                            }
                                 }
                             }
                         }
@@ -285,7 +292,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
         }
 ```
 
-## Old Crop
+### Old Crop
 
    ```kotlin
 	enableCropMode = false
@@ -298,7 +305,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 
    ```
 	
-## New Crop
+### New Crop
 
    ```kotlin
 	enableCropMode = true
