@@ -16,7 +16,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	}
  ```
 
-### 📸 Screenshot
+## 📸 Screenshot
 
 <div style="display:flex;">
  <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/918eeffa-5a24-44e4-bcb9-cd4fbd15273c" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
@@ -35,13 +35,13 @@ Table of contents
 
 <!--ts-->
 * [AndroidManifest](#androidmanifest)
-* [Implementation](#implementation)
+* [Open Gallery](#open-gallery)
 * [Old Crop](#old-crop)
 * [New Crop](#new-crop)
 * [Screen Navigation](#screen-navigation)
 <!--te-->
 
-#### AndroidManifest
+## AndroidManifest
 
 ```xml
     //TODO: When allow to use camera feature
@@ -91,7 +91,7 @@ Table of contents
 	 </application>
 ```
 
-### Implementation
+## Open Gallery
 
    ```kotlin
 	if (checkPermissions()) {
@@ -265,7 +265,7 @@ Table of contents
                     override fun onActivityResult(activityResult: ActivityResult) {
                         if (activityResult.resultCode == Activity.RESULT_OK) {
                             activityResult.data?.let { intent ->
-	            		//TODO: When Select media file orignal file path return
+	            		//TODO: Returns Selected Media files data
                                 if (intent.hasExtra(KEY_MEDIA_PATHS)) {
 	                                val selectedMedia: ArrayList<MediaItem>? =
 	                                    intent.serializable(KEY_MEDIA_PATHS)
@@ -275,7 +275,7 @@ Table of contents
 	                                        .into(mBinding.cropedImage)
 	                                }
 	                            }
-	            		//TODO: When New Crop enable and crop image return crop data
+	            		//TODO: Returns New Crop module cropped Image file data
    				if (intent.hasExtra(CropActivity.KEY_RETURN_CROP_DATA)) {
 	                                val myCropDataSaved =
 	                                    intent.extras?.serializable<CropDataSaved>(
@@ -293,7 +293,7 @@ Table of contents
         }
 ```
 
-### Old Crop
+## Old Crop
 
    ```kotlin
 	enableCropMode = false
@@ -306,14 +306,14 @@ Table of contents
 
    ```
 	
-### New Crop
+## New Crop
 
    ```kotlin
 	enableCropMode = true
 	isForceClose = true
    ```
 	
-### Screen Navigation
+## Screen Navigation
 
    ```kotlin
  //TODO: Bellow Builder pass only if you want to start any next activity after media select
