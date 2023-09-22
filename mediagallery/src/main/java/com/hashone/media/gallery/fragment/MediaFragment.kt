@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hashone.commons.base.CoroutineAsyncTask
-import com.hashone.commons.extensions.getLocaleString
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.R
 import com.hashone.media.gallery.adapters.MediaAdapter
@@ -28,7 +27,6 @@ import com.hashone.media.gallery.databinding.DialogWarningBinding
 import com.hashone.media.gallery.databinding.FragmentImagesBinding
 import com.hashone.media.gallery.model.MediaItem
 import com.hashone.media.gallery.model.fetchMediaAsync
-import com.hashone.media.gallery.utils.ACTION_UPDATE_FOLDER_COUNT
 import com.hashone.media.gallery.utils.KEY_BUCKET_ID
 import com.hashone.media.gallery.utils.KEY_BUCKET_NAME
 import com.hashone.media.gallery.utils.KEY_BUCKET_PATH
@@ -51,16 +49,14 @@ class MediaFragment : Fragment() {
     private val mHandlerLoadingWait = Handler(Looper.getMainLooper())
     private val mRunnableLoadingWait =
         Runnable {
-            mBinding.textViewProgressMessage.text =
-                getLocaleString(R.string.photos_taking_long_time)
+            mBinding.textViewProgressMessage.text = "It is taking bit long."
             mIsHandled = 1
             mHandlerLoadingWait.postDelayed(mRunnableLoadingWait1, 7 * 1000L)
         }
     private val mRunnableLoadingWait1 =
         Runnable {
             mIsHandled = 2
-            mBinding.textViewProgressMessage.text =
-                getLocaleString(R.string.photos_taking_more_time)
+            mBinding.textViewProgressMessage.text = "Looks like you have too many photos!"
         }
 
     override fun onCreateView(
@@ -344,7 +340,7 @@ class MediaFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        (mActivity as MediaActivity).updateTitle(getLocaleString(R.string.label_gallery))
+        (mActivity as MediaActivity).updateTitle("Gallery")
         (mActivity as MediaActivity).updateGooglePhotosUI(true)
         if (mIsHandled == 0)
             mHandlerLoadingWait.removeCallbacks(mRunnableLoadingWait)

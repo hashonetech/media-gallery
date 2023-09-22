@@ -8,7 +8,6 @@ import androidx.annotation.FloatRange
 import androidx.annotation.FontRes
 import androidx.annotation.IntRange
 import com.hashone.commons.R
-import com.hashone.commons.extensions.getLocaleString
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.enums.MediaType
 import java.io.Serializable
@@ -24,8 +23,12 @@ open class MediaGallery(val builder: Builder) : Serializable {
             allowAllMedia: Boolean,
             enableCropMode: Boolean = false,
             mediaGridCount: Int = 3,
-            videoValidationBuilder: VideoValidationBuilder = VideoValidationBuilder(checkFileSize = false, checkDuration = false, checkResolution = false),
-            cameraActionTitle: String = getLocaleString(com.hashone.media.gallery.R.string.camera_action_title),
+            videoValidationBuilder: VideoValidationBuilder = VideoValidationBuilder(
+                checkFileSize = false,
+                checkDuration = false,
+                checkResolution = false
+            ),
+            cameraActionTitle: String = "Capture Image or Video",
             block: Builder.() -> Unit
         ) = Builder(
             mediaType,
@@ -55,10 +58,14 @@ open class MediaGallery(val builder: Builder) : Serializable {
         val enableCropMode: Boolean = false,
         @IntRange
         val mediaGridCount: Int = 3,
-        val cameraActionTitle: String = getLocaleString(com.hashone.media.gallery.R.string.camera_action_title),
+        val cameraActionTitle: String = "Capture Image or Video",
 
         //TODO: Video Validation Builder
-        val videoValidationBuilder: VideoValidationBuilder = VideoValidationBuilder(checkFileSize = false, checkDuration = false, checkResolution = false),
+        val videoValidationBuilder: VideoValidationBuilder = VideoValidationBuilder(
+            checkFileSize = false,
+            checkDuration = false,
+            checkResolution = false
+        ),
 
         ) : Serializable {
         //TODO: Screen
@@ -171,14 +178,14 @@ open class MediaGallery(val builder: Builder) : Serializable {
 
 
     class WarningUiBuilder(
-        var message: String = getLocaleString(R.string.allow_permission),
+        var message: String = "You need to allow access to storage permissions.",
         @ColorRes
         var messageColor: Int = R.color.black,
         @FontRes
         var messageFont: Int = R.font.roboto_regular,
         @FloatRange
         var messageSize: Float = 14F,
-        var settingText: String = getLocaleString(com.hashone.media.gallery.R.string.setting_text),
+        var settingText: String = "Update Now",
         @ColorRes
         var settingColor: Int = com.hashone.media.gallery.R.color.positive_blue,
         @FontRes
@@ -189,14 +196,14 @@ open class MediaGallery(val builder: Builder) : Serializable {
 
 
     class PermissionBuilder(
-        var message: String = getLocaleString(R.string.allow_permission),
+        var message: String = "You need to allow access to storage permissions.",
         @ColorRes
         var messageColor: Int = R.color.black,
         @FontRes
         var messageFont: Int = R.font.roboto_regular,
         @FloatRange
         var messageSize: Float = 14F,
-        var positiveText: String = getLocaleString(com.hashone.media.gallery.R.string.label_grant),
+        var positiveText: String = "Grant",
         @ColorRes
         var positiveColor: Int = R.color.black,
         @FontRes
@@ -204,7 +211,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
         @FloatRange
         var positiveSize: Float = 16F,
         var positiveIsCap: Boolean = true,
-        var negativeText: String = getLocaleString(com.hashone.media.gallery.R.string.label_cancel),
+        var negativeText: String = "Cancel",
         @ColorRes
         var negativeColor: Int = R.color.black,
         @FontRes
@@ -221,23 +228,23 @@ open class MediaGallery(val builder: Builder) : Serializable {
         var checkDuration: Boolean,
         @IntRange
         var durationLimit: Int = 30,
-        var durationLimitMessage: String = getLocaleString(com.hashone.media.gallery.R.string.duration_error),
+        var durationLimitMessage: String = "Oops! Please select a video that\\'s 30 seconds or shorter.",
         val durationDialogBuilder: VideoValidationDialogBuilder = VideoValidationDialogBuilder(),
 
         // TODO video Size Limit in MB
         var checkFileSize: Boolean,
         @IntRange
         var sizeLimit: Int = 100,
-        var sizeLimitMessage: String = getLocaleString(com.hashone.media.gallery.R.string.file_size_error),
+        var sizeLimitMessage: String = "Select the video under 100 MB for faster processing!",
         val sizeDialogBuilder: VideoValidationDialogBuilder = VideoValidationDialogBuilder(),
 
         // TODO video Resolution Size Limit px
         var checkResolution: Boolean,
         @IntRange
         var maxResolution: Int = 1920,
-        var maxResolutionMessage: String = getLocaleString(com.hashone.media.gallery.R.string.size_error),
+        var maxResolutionMessage: String = "Currently we support HD videos only. Want to convert your video to HD?.",
         val resolutionDialogBuilder: VideoValidationDialogBuilder = VideoValidationDialogBuilder(),
-        ) : Serializable
+    ) : Serializable
 
     class VideoValidationDialogBuilder(
         @ColorRes
@@ -246,7 +253,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
         var titleFont: Int = R.font.roboto_regular,
         @FloatRange
         var titleSize: Float = 14F,
-        var positiveText: String = getLocaleString(com.hashone.media.gallery.R.string.okay),
+        var positiveText: String = "Okay",
         @ColorRes
         var positiveColor: Int = R.color.black,
         @FontRes
@@ -261,5 +268,5 @@ open class MediaGallery(val builder: Builder) : Serializable {
         @FloatRange
         var negativeSize: Float = 16F,
 
-    ) : Serializable
+        ) : Serializable
 }

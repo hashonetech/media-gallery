@@ -7,19 +7,16 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.hashone.commons.base.BaseActivity
 import com.hashone.commons.base.BetterActivityResult
-import com.hashone.commons.extensions.getLocaleString
 import com.hashone.commons.extensions.isPermissionGranted
 import com.hashone.commons.extensions.serializable
 import com.hashone.cropper.CropActivity
@@ -47,11 +44,6 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-//        mediaCount = ArrayList<OperatedSpinner>().apply {
-//            for (i in 1 until 51) {
-//                add(OperatedSpinner("qwqw"))
-//            }
-//        }
 
         mBinding.spCount.adapter = ArrayAdapter(mActivity,
             android.R.layout.simple_spinner_dropdown_item,
@@ -170,21 +162,21 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                         //TODO video Duration Limit in second
                         checkDuration = true,
                         durationLimit = 30,
-                        durationLimitMessage = getLocaleString(R.string.duration_error),
+                        durationLimitMessage = getString(R.string.duration_error),
                         //TODO video Size Limit in MB
                         checkFileSize = true,
                         sizeLimit = 100,
-                        sizeLimitMessage = getLocaleString(R.string.file_size_error),
+                        sizeLimitMessage = getString(R.string.file_size_error),
                         //TODO video Resolution Size Limit px
                         checkResolution = true,
                         maxResolution = 1920,
-                        maxResolutionMessage = getLocaleString(R.string.size_error),
+                        maxResolutionMessage = getString(R.string.size_error),
                         //TODO video Validation Dialog UI
                         durationDialogBuilder = MediaGallery.VideoValidationDialogBuilder(
                             titleColor = com.hashone.commons.R.color.dark_gray,
                             titleFont = com.hashone.commons.R.font.roboto_regular,
                             titleSize = 14F,
-                            positiveText = getLocaleString(R.string.okay),
+                            positiveText = getString(R.string.okay),
                             positiveColor = com.hashone.commons.R.color.black,
                             positiveFont = com.hashone.commons.R.font.roboto_regular,
                             positiveSize = 16F,
@@ -194,7 +186,7 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                             titleColor = com.hashone.commons.R.color.dark_gray,
                             titleFont = com.hashone.commons.R.font.roboto_regular,
                             titleSize = 14F,
-                            positiveText = getLocaleString(R.string.okay),
+                            positiveText = getString(R.string.okay),
                             positiveColor = com.hashone.commons.R.color.black,
                             positiveFont = com.hashone.commons.R.font.roboto_regular,
                             positiveSize = 16F,
@@ -204,11 +196,11 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                             titleColor = com.hashone.commons.R.color.dark_gray,
                             titleFont = com.hashone.commons.R.font.roboto_regular,
                             titleSize = 14F,
-                            positiveText = getLocaleString(R.string.no),
+                            positiveText = getString(R.string.no),
                             positiveColor = com.hashone.commons.R.color.black,
                             positiveFont = com.hashone.commons.R.font.roboto_regular,
                             positiveSize = 16F,
-                            negativeText = getLocaleString(R.string.convert),
+                            negativeText = getString(R.string.convert),
                             negativeColor = com.hashone.commons.R.color.black,
                             negativeFont = com.hashone.commons.R.font.roboto_regular,
                             negativeSize = 16F,
@@ -216,7 +208,7 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                         )
 
                     ),
-                    cameraActionTitle = getLocaleString(com.hashone.media.gallery.R.string.camera_action_title),
+                    cameraActionTitle = getString(com.hashone.media.gallery.R.string.camera_action_title),
                 ) {
                     //TODO: Screen
                     screenBuilder = MediaGallery.ScreenBuilder(
@@ -242,11 +234,11 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
 
                     //TODO: Warning Ui
                     warningUiBuilder = MediaGallery.WarningUiBuilder(
-                        message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+                        message = getString(com.hashone.commons.R.string.allow_permission),
                         messageColor = com.hashone.commons.R.color.black,
                         messageFont = com.hashone.commons.R.font.roboto_regular,
                         messageSize = 14F,
-                        settingText = getLocaleString(R.string.setting_text),
+                        settingText = getString(R.string.setting_text),
                         settingColor = com.hashone.media.gallery.R.color.positive_blue,
                         settingFont = com.hashone.commons.R.font.roboto_bold,
                         settingSize = 16F,
@@ -254,16 +246,16 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
 
                     //TODO: Permission
                     permissionBuilder = MediaGallery.PermissionBuilder(
-                        message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+                        message = getString(com.hashone.commons.R.string.allow_permission),
                         messageColor = com.hashone.commons.R.color.black,
                         messageFont = com.hashone.commons.R.font.roboto_regular,
                         messageSize = 14F,
-                        positiveText = getLocaleString(R.string.label_grant),
+                        positiveText = getString(R.string.label_grant),
                         positiveColor = com.hashone.commons.R.color.black,
                         positiveFont = com.hashone.commons.R.font.roboto_bold,
                         positiveSize = 16F,
                         positiveIsCap = true,
-                        negativeText = getLocaleString(R.string.label_cancel),
+                        negativeText = getString(R.string.label_cancel),
                         negativeColor = com.hashone.commons.R.color.black,
                         negativeFont = com.hashone.commons.R.font.roboto_regular,
                         negativeSize = 16F,
@@ -427,9 +419,9 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
         if (isGranted) {
             openMediaGallery(mCurrentRequestCode)
         } else {
-            showCustomAlertDialog(message = getLocaleString(R.string.allow_permission),
-                negativeButtonText = getLocaleString(R.string.label_cancel).uppercase(Locale.getDefault()),
-                positionButtonText = getLocaleString(R.string.label_grant).uppercase(Locale.getDefault()),
+            showCustomAlertDialog(message = getString(R.string.allow_permission),
+                negativeButtonText = getString(R.string.label_cancel).uppercase(Locale.getDefault()),
+                positionButtonText = getString(R.string.label_grant).uppercase(Locale.getDefault()),
                 negativeCallback = {
                     alertDialog?.cancel()
                 },

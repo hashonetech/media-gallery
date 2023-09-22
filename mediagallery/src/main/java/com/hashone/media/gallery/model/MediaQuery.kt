@@ -5,8 +5,6 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import com.hashone.commons.extensions.getLocaleString
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.R
 import com.hashone.media.gallery.enums.MediaType
@@ -120,7 +118,7 @@ fun fetchMediaBucketsAsync(
             bucketList.add(
                 0, MediaBucketData(
                     -1L,
-                    getLocaleString(R.string.label_all),
+                    "All",
                     mediaList[0].path,
                     mediaList.size,
                     mediaType = mediaType

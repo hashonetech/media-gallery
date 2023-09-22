@@ -48,7 +48,6 @@ import com.hashone.commons.databinding.DialogConfirmationBinding
 import com.hashone.commons.extensions.applyTextStyle
 import com.hashone.commons.extensions.checkCameraHardware
 import com.hashone.commons.extensions.getColorCode
-import com.hashone.commons.extensions.getLocaleString
 import com.hashone.commons.extensions.hideSystemUI
 import com.hashone.commons.extensions.isGooglePhotosAppInstalled
 import com.hashone.commons.extensions.isPermissionGranted
@@ -245,7 +244,7 @@ class MediaActivity : BaseActivity() {
     private fun setToolbarUI() {
         mBinding.toolBarMedia.apply {
             setSupportActionBar(this)
-            navigationContentDescription = getLocaleString(R.string.label_back)
+            navigationContentDescription = "Back"
         }
         supportActionBar!!.apply {
             title = ""
@@ -330,7 +329,7 @@ class MediaActivity : BaseActivity() {
                 showSnackBar(
                     mActivity,
                     mBinding.layoutMediaParent,
-                    getLocaleString(R.string.google_photos_not_installed)
+                    "Google Photos is not installed"
                 )
             }
         }
@@ -351,11 +350,11 @@ class MediaActivity : BaseActivity() {
                 if (mSnackBar == null) {
                     Snackbar.make(
                         mBinding.layoutMediaParent,
-                        getLocaleString(R.string.google_photos_disable),
+                        "Google Photos is Disable",
                         Snackbar.LENGTH_LONG
                     ).apply {
                         setActionTextColor(Color.YELLOW)
-                        setAction(getLocaleString(R.string.label_enable)) { }
+                        setAction("Enable") { }
                         addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
                             override fun onShown(transientBottomBar: Snackbar?) {
                                 super.onShown(transientBottomBar)
@@ -1023,9 +1022,9 @@ class MediaActivity : BaseActivity() {
         if (isGranted) {
             openCamera()
         } else {
-            showGalleryCustomAlertDialog(message = getLocaleString(R.string.allow_camera_permission),
-                negativeButtonText = getLocaleString(R.string.label_cancel).uppercase(Locale.getDefault()),
-                positionButtonText = getLocaleString(R.string.label_grant).uppercase(Locale.getDefault()),
+            showGalleryCustomAlertDialog(message = "You need to allow access to camera permission.",
+                negativeButtonText = "Cancel".uppercase(Locale.getDefault()),
+                positionButtonText = "Grant".uppercase(Locale.getDefault()),
                 negativeCallback = {
                     galleryAlertDialog?.cancel()
                 },

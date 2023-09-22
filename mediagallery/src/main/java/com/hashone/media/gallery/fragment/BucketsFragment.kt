@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hashone.commons.base.CoroutineAsyncTask
-import com.hashone.commons.extensions.getLocaleString
 import com.hashone.commons.extensions.registerBroadCastReceiver
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.R
@@ -45,7 +44,7 @@ class BucketsFragment : Fragment() {
     private val mRunnableLoadingWait =
         Runnable {
             mBinding.textViewProgressMessage.text =
-                getLocaleString(R.string.photos_taking_long_time)
+                getString(R.string.photos_taking_long_time)
             mIsHandled = 1
             mHandlerLoadingWait.postDelayed(mRunnableLoadingWait1, 7 * 1000L)
         }
@@ -53,7 +52,7 @@ class BucketsFragment : Fragment() {
         Runnable {
             mIsHandled = 2
             mBinding.textViewProgressMessage.text =
-                getLocaleString(R.string.photos_taking_more_time)
+                getString(R.string.photos_taking_more_time)
         }
 
     private val mBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
