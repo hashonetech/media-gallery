@@ -12,7 +12,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	}
   
 	dependencies {
-	        implementation 'com.github.hashonetech:media-gallery:v1.0.21'
+	        implementation 'com.github.hashonetech:media-gallery:v1.0.22'
 	}
  ```
 
@@ -119,21 +119,21 @@ Table of contents
                         //TODO video Duration Limit in second
                         checkDuration = true,
                         durationLimit = 30,
-                        durationLimitMessage = getLocaleString(R.string.duration_error),
+                        durationLimitMessage = getString(R.string.duration_error),
                         //TODO video Size Limit in MB
                         checkFileSize = true,
                         sizeLimit = 100,
-                        sizeLimitMessage = getLocaleString(R.string.file_size_error),
+                        sizeLimitMessage = getString(R.string.file_size_error),
                         //TODO video Resolution Size Limit px
                         checkResolution = true,
                         maxResolution = 1920,
-                        maxResolutionMessage = getLocaleString(R.string.size_error),
+                        maxResolutionMessage = getString(R.string.size_error),
                         //TODO video Validation Dialog UI
                         durationDialogBuilder = MediaGallery.VideoValidationDialogBuilder(
                             titleColor = com.hashone.commons.R.color.dark_gray,
                             titleFont = com.hashone.commons.R.font.roboto_regular,
                             titleSize = 14F,
-                            positiveText = getLocaleString(R.string.okay),
+                            positiveText = getString(R.string.okay),
                             positiveColor = com.hashone.commons.R.color.black,
                             positiveFont = com.hashone.commons.R.font.roboto_regular,
                             positiveSize = 16F,
@@ -143,7 +143,7 @@ Table of contents
                             titleColor = com.hashone.commons.R.color.dark_gray,
                             titleFont = com.hashone.commons.R.font.roboto_regular,
                             titleSize = 14F,
-                            positiveText = getLocaleString(R.string.okay),
+                            positiveText = getString(R.string.okay),
                             positiveColor = com.hashone.commons.R.color.black,
                             positiveFont = com.hashone.commons.R.font.roboto_regular,
                             positiveSize = 16F,
@@ -153,11 +153,11 @@ Table of contents
                             titleColor = com.hashone.commons.R.color.dark_gray,
                             titleFont = com.hashone.commons.R.font.roboto_regular,
                             titleSize = 14F,
-                            positiveText = getLocaleString(R.string.no),
+                            positiveText = getString(R.string.no),
                             positiveColor = com.hashone.commons.R.color.black,
                             positiveFont = com.hashone.commons.R.font.roboto_regular,
                             positiveSize = 16F,
-                            negativeText = getLocaleString(R.string.convert),
+                            negativeText = getString(R.string.convert),
                             negativeColor = com.hashone.commons.R.color.black,
                             negativeFont = com.hashone.commons.R.font.roboto_regular,
                             negativeSize = 16F,
@@ -165,7 +165,7 @@ Table of contents
                         )
 
                     ),
-                    cameraActionTitle = getLocaleString(com.hashone.media.gallery.R.string.camera_action_title),
+                    cameraActionTitle = getString(com.hashone.media.gallery.R.string.camera_action_title),
                 ) {
                     //TODO: Screen
 	            screenBuilder = MediaGallery.ScreenBuilder(
@@ -193,11 +193,11 @@ Table of contents
 	
 	            //TODO: Warning Ui
 	            warningUiBuilder = MediaGallery.WarningUiBuilder(
-                        message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+                        message = getString(com.hashone.commons.R.string.allow_permission),
                         messageColor = com.hashone.commons.R.color.black,
                         messageFont = com.hashone.commons.R.font.roboto_regular,
                         messageSize = 14F,
-                        settingText = getLocaleString(R.string.setting_text),
+                        settingText = getString(R.string.setting_text),
                         settingColor = com.hashone.media.gallery.R.color.positive_blue,
                         settingFont = com.hashone.commons.R.font.roboto_bold,
                         settingSize = 16F,
@@ -205,16 +205,16 @@ Table of contents
 	
 	            //TODO: Permission
 	            permissionBuilder = MediaGallery.PermissionBuilder(
-                        message = getLocaleString(com.hashone.commons.R.string.allow_permission),
+                        message = getString(com.hashone.commons.R.string.allow_permission),
                         messageColor = com.hashone.commons.R.color.black,
                         messageFont = com.hashone.commons.R.font.roboto_regular,
                         messageSize = 14F,
-                        positiveText = getLocaleString(R.string.label_grant),
+                        positiveText = getString(R.string.label_grant),
                         positiveColor = com.hashone.commons.R.color.black,
                         positiveFont = com.hashone.commons.R.font.roboto_bold,
                         positiveSize = 16F,
                         positiveIsCap = true,
-                        negativeText = getLocaleString(R.string.label_cancel),
+                        negativeText = getString(R.string.label_cancel),
                         negativeColor = com.hashone.commons.R.color.black,
                         negativeFont = com.hashone.commons.R.font.roboto_regular,
                         negativeSize = 16F,
