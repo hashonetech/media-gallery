@@ -12,7 +12,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	}
   
 	dependencies {
-	        implementation 'com.github.hashonetech:media-gallery:v1.0.23'
+	        implementation 'com.github.hashonetech:media-gallery:v1.0.24'
 	}
  ```
 
@@ -112,7 +112,9 @@ Table of contents
    		//TODO: if you want to start new crop module
                     enableCropMode = true/false,
                     mediaGridCount = 3,
-		    
+		 	allMediaTitle = "All",
+			corruptedMediaMessage = "Corrupted media.",
+
       		//TODO video Duration Limit in second
                     videoValidationBuilder = MediaGallery.VideoValidationBuilder(
                         checkValidation = true,
