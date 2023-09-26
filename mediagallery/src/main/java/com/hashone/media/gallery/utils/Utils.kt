@@ -5,26 +5,33 @@ import java.net.URLConnection
 
 
 fun getVideoWidthHeight(imageUri: String, mediaResolution: String): Pair<Int, Int> {
-    if (mediaResolution.isEmpty()) {
-        val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(imageUri)
-        val width = Integer.valueOf(
-            retriever.extractMetadata(
-                MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH
-            )
-        )
-        val height = Integer.valueOf(
-            retriever.extractMetadata(
-                MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT
-            )
-        )
-        retriever.release()
+    try {
+        if (mediaResolution.isEmpty()) {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(imageUri)
+            retriever.release()
 
-        return Pair(width, height)
-    } else {
-        val width = mediaResolution.split("×").first()
-        val height = mediaResolution.split("×").last()
-        return Pair(width.toInt(), height.toInt())
+            return Pair(retriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH
+            )?.let {
+                Integer.valueOf(
+                    it
+                )
+            } ?: 0, retriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT
+            )?.let {
+                Integer.valueOf(
+                    it
+                )
+            } ?: 0)
+        } else {
+            val width = mediaResolution.split("×").first()
+            val height = mediaResolution.split("×").last()
+            return Pair(width.toInt(), height.toInt())
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return Pair(0, 0)
     }
 }
 

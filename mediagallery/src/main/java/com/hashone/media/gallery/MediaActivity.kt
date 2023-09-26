@@ -326,6 +326,7 @@ class MediaActivity : BaseActivity() {
                     showEnableGooglePhotosSnackBar()
                 }
             } else {
+                //TODO: Language translation require
                 showSnackBar(
                     mActivity,
                     mBinding.layoutMediaParent,
@@ -348,12 +349,14 @@ class MediaActivity : BaseActivity() {
         try {
             mBinding.layoutMediaParent.post {
                 if (mSnackBar == null) {
+                    //TODO: Language translation require
                     Snackbar.make(
                         mBinding.layoutMediaParent,
                         "Google Photos is Disable",
                         Snackbar.LENGTH_LONG
                     ).apply {
                         setActionTextColor(Color.YELLOW)
+                        //TODO: Language translation require
                         setAction("Enable") { }
                         addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
                             override fun onShown(transientBottomBar: Snackbar?) {
@@ -720,6 +723,7 @@ class MediaActivity : BaseActivity() {
             toolBarBuilder = Crop.ToolBarBuilder(
                 toolBarColor = com.hashone.cropper.R.color.white,
                 backIcon = com.hashone.cropper.R.drawable.ic_back,
+                //TODO: Language translation require
                 title = "Crop",
                 titleColor = com.hashone.cropper.R.color.black,
                 titleFont = com.hashone.cropper.R.font.roboto_medium,
@@ -743,6 +747,7 @@ class MediaActivity : BaseActivity() {
                 doneButtonBuilder = Crop.ButtonBuilder(
                     textColor = com.hashone.cropper.R.color.black,
                     icon = com.hashone.cropper.R.drawable.ic_check_croppy_selected,
+                    //TODO: Language translation require
                     buttonText = "Crop",
                     textFont = com.hashone.cropper.R.font.roboto_medium,
                     textSize = 16F,
@@ -750,6 +755,7 @@ class MediaActivity : BaseActivity() {
                 cancelButtonBuilder = Crop.ButtonBuilder(
                     textColor = com.hashone.cropper.R.color.black,
                     icon = com.hashone.cropper.R.drawable.ic_cancel,
+                    //TODO: Language translation require
                     buttonText = "Skip",
                     textFont = com.hashone.cropper.R.font.roboto_medium,
                     textSize = 16F,
@@ -1022,6 +1028,7 @@ class MediaActivity : BaseActivity() {
         if (isGranted) {
             openCamera()
         } else {
+            //TODO: Language translation require
             showGalleryCustomAlertDialog(message = "You need to allow access to camera permission.",
                 negativeButtonText = "Cancel".uppercase(Locale.getDefault()),
                 positionButtonText = "Grant".uppercase(Locale.getDefault()),

@@ -53,7 +53,13 @@ class BucketAdapter(
                         .into(mBinding.imageViewFolderItem)
 
                     mBinding.listItem.setBackgroundColor(mContext.getColorCode(builder.bucketBuilder.backgroundColor))
-                    mBinding.textViewFolderName.text = this.name
+
+                    mBinding.textViewFolderName.text =  if (this.bucketId == -1L) {
+                        builder.allMediaTitle
+                    } else {
+                        this.name
+                    }
+
                     mBinding.textViewFilesCount.text = "${this.mediaCount}"
                     mBinding.textViewSelectedCount.isVisible = this.selectedCount > 0
                     mBinding.textViewSelectedCount.text = "${this.selectedCount}"

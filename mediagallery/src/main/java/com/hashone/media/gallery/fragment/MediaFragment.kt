@@ -49,6 +49,7 @@ class MediaFragment : Fragment() {
     private val mHandlerLoadingWait = Handler(Looper.getMainLooper())
     private val mRunnableLoadingWait =
         Runnable {
+            //TODO: Language translation require
             mBinding.textViewProgressMessage.text = "It is taking bit long."
             mIsHandled = 1
             mHandlerLoadingWait.postDelayed(mRunnableLoadingWait1, 7 * 1000L)
@@ -56,6 +57,7 @@ class MediaFragment : Fragment() {
     private val mRunnableLoadingWait1 =
         Runnable {
             mIsHandled = 2
+            //TODO: Language translation require
             mBinding.textViewProgressMessage.text = "Looks like you have too many photos!"
         }
 
@@ -72,9 +74,6 @@ class MediaFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mActivity = requireActivity()
         builder = (mActivity as MediaActivity).builder
-
-        //mBinding.layoutContentLoading.visibility = View.VISIBLE
-        //mHandlerLoadingWait.postDelayed(mRunnableLoadingWait, 3 * 1000L)
 
         initViews()
     }

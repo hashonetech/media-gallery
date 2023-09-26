@@ -29,6 +29,8 @@ open class MediaGallery(val builder: Builder) : Serializable {
                 checkResolution = false
             ),
             cameraActionTitle: String = "Capture Image or Video",
+            allMediaTitle: String = "All",
+            corruptedMediaMessage: String = "Corrupted media.",
             block: Builder.() -> Unit
         ) = Builder(
             mediaType,
@@ -40,7 +42,9 @@ open class MediaGallery(val builder: Builder) : Serializable {
             enableCropMode,
             mediaGridCount,
             cameraActionTitle,
-            videoValidationBuilder
+            videoValidationBuilder,
+            allMediaTitle,
+            corruptedMediaMessage
         ).apply(block).build()
 
         fun open(activity: Activity, mediaGallery: MediaGallery): Intent =
@@ -66,6 +70,8 @@ open class MediaGallery(val builder: Builder) : Serializable {
             checkDuration = false,
             checkResolution = false
         ),
+        val allMediaTitle: String = "All",
+        val corruptedMediaMessage: String = "Corrupted media."
 
         ) : Serializable {
         //TODO: Screen

@@ -43,6 +43,7 @@ class BucketsFragment : Fragment() {
     private val mHandlerLoadingWait = Handler()
     private val mRunnableLoadingWait =
         Runnable {
+            //TODO: Language translation require
             mBinding.textViewProgressMessage.text =
                 getString(R.string.photos_taking_long_time)
             mIsHandled = 1

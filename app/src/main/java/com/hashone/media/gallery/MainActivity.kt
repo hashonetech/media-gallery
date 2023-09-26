@@ -156,6 +156,7 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                     allowAllMedia = true,
                     enableCropMode = mBinding.switchNewCrop.isOn,
                     mediaGridCount = 3,
+                    allMediaTitle = "All",
                     //TODO video Duration Limit in second
                     videoValidationBuilder = MediaGallery.VideoValidationBuilder(
                         checkValidation = true,
