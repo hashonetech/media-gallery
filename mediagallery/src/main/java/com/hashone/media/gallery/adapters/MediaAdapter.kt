@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +13,14 @@ import android.widget.AdapterView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.hashone.commons.extensions.getColorCode
 import com.hashone.commons.utils.showSnackBar
 import com.hashone.media.gallery.MediaActivity
@@ -101,7 +106,8 @@ class MediaAdapter(
                 with(mImagesList[position]) {
                     var selectedIndex = (mContext as MediaActivity).selectedIndex(this)
                     var isSelected = mIsMultipleMode && selectedIndex != -1
-
+                    var isLoadingFail = true
+                    mBinding.root.isEnabled = false
                     Glide.with(mContext)
                         .load(Uri.fromFile(File(this.path)))
                         .apply(
@@ -113,6 +119,31 @@ class MediaAdapter(
                                 .downsample(DownsampleStrategy.CENTER_INSIDE)
                         )
                         .error(R.drawable.ic_broken)
+                        .listener(object : RequestListener<Drawable?> {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable?>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                isLoadingFail = true
+                                mBinding.root.isEnabled = true
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable?>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                isLoadingFail = false
+                                mBinding.root.isEnabled = true
+                                return false
+                            }
+
+                        })
                         .into(mBinding.imageViewImageItem)
 
                     setupItemForeground(
@@ -154,7 +185,7 @@ class MediaAdapter(
                                 getVideoWidthHeight(this.path, this.mediaResolution)
                             val width = videoWidthHeight.first
                             val height = videoWidthHeight.second
-                            if (width > 0 && height > 0) {
+                            if (width > 0 && height > 0 && !isLoadingFail) {
                                 if (TimeUnit.MILLISECONDS.toSeconds(this.mediaDuration) > builder.videoValidationBuilder.durationLimit || byteToMB(
                                         mediaSize
                                     ) > builder.videoValidationBuilder.sizeLimit || width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution
