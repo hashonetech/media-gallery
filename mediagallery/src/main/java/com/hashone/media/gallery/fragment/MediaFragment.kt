@@ -2,7 +2,6 @@ package com.hashone.media.gallery.fragment
 
 import android.app.Activity
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hashone.commons.base.CoroutineAsyncTask
 import com.hashone.media.gallery.MediaActivity
-import com.hashone.media.gallery.R
 import com.hashone.media.gallery.adapters.MediaAdapter
 import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.callback.OnSelectionChangeListener
@@ -50,7 +48,8 @@ class MediaFragment : Fragment() {
     private val mRunnableLoadingWait =
         Runnable {
             //TODO: Language translation require
-            mBinding.textViewProgressMessage.text = "It is taking bit long."
+            mBinding.textViewProgressMessage.text =
+                builder.bucketProgressDialogBuilder.loadingLongTimeMessage
             mIsHandled = 1
             mHandlerLoadingWait.postDelayed(mRunnableLoadingWait1, 7 * 1000L)
         }
@@ -58,7 +57,8 @@ class MediaFragment : Fragment() {
         Runnable {
             mIsHandled = 2
             //TODO: Language translation require
-            mBinding.textViewProgressMessage.text = "Looks like you have too many photos!"
+            mBinding.textViewProgressMessage.text =
+                builder.bucketProgressDialogBuilder.loadingMoreTimeMessage
         }
 
     override fun onCreateView(
@@ -76,6 +76,26 @@ class MediaFragment : Fragment() {
         builder = (mActivity as MediaActivity).builder
 
         initViews()
+        setupLoadingUI()
+    }
+
+    private fun setupLoadingUI() {
+        mBinding.textViewProgressMessage.text = builder.bucketProgressDialogBuilder.loadingMessage
+
+        mBinding.textViewProgressMessage.setTextSize(
+            TypedValue.COMPLEX_UNIT_SP,
+            builder.bucketProgressDialogBuilder.messageSize
+        )
+        mBinding.textViewProgressMessage.typeface = ResourcesCompat.getFont(
+            mActivity,
+            builder.bucketProgressDialogBuilder.messageFont
+        )
+        mBinding.textViewProgressMessage.setTextColor(
+            ContextCompat.getColor(
+                mActivity,
+                builder.bucketProgressDialogBuilder.messageColor
+            )
+        )
     }
 
     private fun initViews() {
@@ -131,11 +151,11 @@ class MediaFragment : Fragment() {
         override fun onPostExecute(result: Void?) {
             super.onPostExecute(result)
             try {
+                mBinding.layoutContentLoading.visibility = View.GONE
                 if (mIsHandled == 0)
                     mHandlerLoadingWait.removeCallbacks(mRunnableLoadingWait)
                 else if (mIsHandled == 1)
                     mHandlerLoadingWait.removeCallbacks(mRunnableLoadingWait1)
-                mBinding.layoutContentLoading.visibility = View.GONE
                 setAdapter()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -154,6 +174,7 @@ class MediaFragment : Fragment() {
                         false
                     )
                 (mActivity as MediaActivity).let {
+                    mBinding.layoutContentLoading.isVisible = (mMediaList.size == 0)
                     val imageAdapter = MediaAdapter(
                         mActivity,
                         mMediaList,

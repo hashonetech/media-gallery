@@ -1,7 +1,11 @@
 package com.hashone.media.gallery.utils
 
+import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.util.Log
+import android.util.Size
+import java.io.File
+import java.io.FileInputStream
 import java.net.URLConnection
 
 
@@ -9,7 +13,33 @@ fun getVideoWidthHeight(imageUri: String, mediaResolution: String): Pair<Int, In
     try {
         if (mediaResolution.isEmpty()) {
             val retriever = MediaMetadataRetriever()
+
             retriever.setDataSource(imageUri)
+            val width =
+                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)!!.toInt()
+            val height =
+                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)!!.toInt()
+            retriever.release()
+
+            return  try {
+                var bmp: Bitmap? = null
+                var inputStream: FileInputStream? = null
+                val retrieverImage = MediaMetadataRetriever()
+                inputStream = FileInputStream(File(imageUri).absolutePath)
+                retrieverImage.setDataSource(inputStream.fd)
+                bmp = retrieverImage.frameAtTime
+                retrieverImage.release()
+                if (bmp!=null) {
+                    val mWidth = bmp.width
+                    val mHeight = bmp.height
+                    Pair(mWidth, mHeight)
+                } else  Pair(width, height)
+            }catch (e:Exception){
+                e.printStackTrace()
+                Pair(width, height)
+            }
+
+          /*  retriever.setDataSource(imageUri)
             val result = Pair(retriever.extractMetadata(
                 MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH
             )?.let {
@@ -20,7 +50,7 @@ fun getVideoWidthHeight(imageUri: String, mediaResolution: String): Pair<Int, In
                 it.toInt()
             } ?: 0)
             retriever.release()
-            return result
+            return result*/
         } else {
             val width = mediaResolution.split("×").first()
             val height = mediaResolution.split("×").last()

@@ -89,6 +89,9 @@ open class MediaGallery(val builder: Builder) : Serializable {
         //TODO: Bucket Contents
         var bucketBuilder = BucketBuilder()
 
+        //TODO: Bucket Progress
+        var bucketProgressDialogBuilder = BucketProgressDialogBuilder()
+
         //TODO: Action button
         var actionButtonBuilder = ActionButtonBuilder()
 
@@ -105,6 +108,20 @@ open class MediaGallery(val builder: Builder) : Serializable {
         var appPackageName: String = "",
         var cropClassName: String = "",
         var projectDirectoryPath: String = ""
+    ) : Serializable
+
+    class BucketProgressDialogBuilder(
+        var loadingMessage: String = "Loading photos.",
+        var loadingLongTimeMessage: String = "It is taking bit long.",
+        var loadingMoreTimeMessage: String = "Looks like you have too many photos!",
+
+        @ColorRes
+        var messageColor: Int = R.color.pure_black,
+        @FontRes
+        var messageFont: Int = R.font.roboto_medium,
+        @FloatRange
+        var messageSize: Float = 16F,
+
     ) : Serializable
 
     class BucketBuilder(

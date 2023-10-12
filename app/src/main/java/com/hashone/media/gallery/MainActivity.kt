@@ -13,6 +13,9 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.ColorRes
+import androidx.annotation.FloatRange
+import androidx.annotation.FontRes
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.hashone.commons.base.BaseActivity
@@ -278,6 +281,16 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                         countSize = 14F,
                         //TODO: Media Content
                         countBackgroundRes = R.drawable.ic_photo_count
+                    )
+
+                    //TODO: Bucket Progress
+                    bucketProgressDialogBuilder = MediaGallery.BucketProgressDialogBuilder(
+                        loadingMessage = "Loading photos.",
+                        loadingLongTimeMessage = "It is taking bit long.",
+                        loadingMoreTimeMessage = "Looks like you have too many photos!",
+                        messageColor = com.hashone.commons.R.color.pure_black,
+                        messageFont = com.hashone.commons.R.font.roboto_medium,
+                        messageSize = 16F,
                     )
 
                     //TODO: Action button

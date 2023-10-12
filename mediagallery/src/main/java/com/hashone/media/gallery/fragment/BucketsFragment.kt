@@ -8,16 +8,19 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hashone.commons.base.CoroutineAsyncTask
 import com.hashone.commons.extensions.registerBroadCastReceiver
 import com.hashone.media.gallery.MediaActivity
-import com.hashone.media.gallery.R
 import com.hashone.media.gallery.adapters.BucketAdapter
 import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.databinding.GalleryFoldersBinding
@@ -45,7 +48,8 @@ class BucketsFragment : Fragment() {
         Runnable {
             //TODO: Language translation require
             mBinding.textViewProgressMessage.text =
-                getString(R.string.photos_taking_long_time)
+                builder.bucketProgressDialogBuilder.loadingLongTimeMessage
+
             mIsHandled = 1
             mHandlerLoadingWait.postDelayed(mRunnableLoadingWait1, 7 * 1000L)
         }
@@ -53,7 +57,7 @@ class BucketsFragment : Fragment() {
         Runnable {
             mIsHandled = 2
             mBinding.textViewProgressMessage.text =
-                getString(R.string.photos_taking_more_time)
+                builder.bucketProgressDialogBuilder.loadingMoreTimeMessage
         }
 
     private val mBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -100,10 +104,30 @@ class BucketsFragment : Fragment() {
         builder = (mActivity as MediaActivity).builder
 
         initViews()
+        setupLoadingUI()
         mActivity.registerBroadCastReceiver(
             mBroadcastReceiver, IntentFilter().apply {
                 addAction(ACTION_UPDATE_FOLDER_COUNT)
             }
+        )
+    }
+
+    private fun setupLoadingUI() {
+        mBinding.textViewProgressMessage.text = builder.bucketProgressDialogBuilder.loadingMessage
+
+        mBinding.textViewProgressMessage.setTextSize(
+            TypedValue.COMPLEX_UNIT_SP,
+            builder.bucketProgressDialogBuilder.messageSize
+        )
+        mBinding.textViewProgressMessage.typeface = ResourcesCompat.getFont(
+            mActivity,
+            builder.bucketProgressDialogBuilder.messageFont
+        )
+        mBinding.textViewProgressMessage.setTextColor(
+            ContextCompat.getColor(
+                mActivity,
+                builder.bucketProgressDialogBuilder.messageColor
+            )
         )
     }
 
@@ -142,11 +166,11 @@ class BucketsFragment : Fragment() {
         override fun onPostExecute(result: Void?) {
             super.onPostExecute(result)
             try {
+                mBinding.layoutContentLoading.visibility = View.GONE
                 if (mIsHandled == 0)
                     mHandlerLoadingWait.removeCallbacks(mRunnableLoadingWait)
                 else if (mIsHandled == 1)
                     mHandlerLoadingWait.removeCallbacks(mRunnableLoadingWait1)
-                mBinding.layoutContentLoading.visibility = View.GONE
                 setAdapter()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -160,6 +184,7 @@ class BucketsFragment : Fragment() {
                 layoutManager =
                     LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
                 setHasFixedSize(true)
+                mBinding.layoutContentLoading.isVisible = (mBucketsList.size == 0)
 
                 mFolderAdapter = BucketAdapter(
                     mActivity, builder, mBucketsList
