@@ -240,7 +240,17 @@ Table of contents
 	                //TODO: Media Content
 	                countBackgroundRes = R.drawable.ic_photo_count
 	            )
-	
+
+			//TODO: Bucket Loading
+                    bucketProgressDialogBuilder = MediaGallery.BucketProgressDialogBuilder(
+                        loadingMessage = "Loading photos.",
+                        loadingLongTimeMessage = "It is taking bit long.",
+                        loadingMoreTimeMessage = "Looks like you have too many photos!",
+                        messageColor = com.hashone.commons.R.color.pure_black,
+                        messageFont = com.hashone.commons.R.font.roboto_medium,
+                        messageSize = 16F,
+                    )
+
 	            //TODO: Action button
 	            actionButtonBuilder = MediaGallery.ActionButtonBuilder(
 	                backgroundColor = com.hashone.commons.R.color.black,
