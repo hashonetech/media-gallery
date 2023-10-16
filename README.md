@@ -19,14 +19,14 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 ## 📸 Screenshot
 
 <div style="display:flex;">
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/918eeffa-5a24-44e4-bcb9-cd4fbd15273c" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/05d357b4-1c04-4692-903a-215e13cff918" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/6b80a001-4e51-4b50-90c2-cafd4163a3de" width="30%">
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/blob/master/screenshots/Screenshot_1.png" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/blob/master/screenshots/Screenshot_2.png" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/blob/master/screenshots/Screenshot_3.png" width="30%">
 </div>
 <div style="display:flex;">
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/0ba275d2-4aae-48c1-a480-e98897f0ca2e" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/86dfe2b7-6aa0-410d-bdca-f061b41bd046" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/assets/103554796/6eb78167-888b-40b5-a97a-a5eb9dc716e1" width="30%">
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/blob/master/screenshots/Screenshot_rtl_1.png" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/blob/master/screenshots/Screenshot_rtl_2.png" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+ <img alt="App image" src="https://github.com/hashonetech/media-gallery/blob/master/screenshots/Screenshot_rtl_3.png" width="30%">
 </div>
 
 
