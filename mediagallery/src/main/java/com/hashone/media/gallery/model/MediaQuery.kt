@@ -2,11 +2,12 @@ package com.hashone.media.gallery.model
 
 import android.content.ContentResolver
 import android.content.Context
+import android.database.Cursor.FIELD_TYPE_NULL
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import com.hashone.media.gallery.MediaActivity
-import com.hashone.media.gallery.R
 import com.hashone.media.gallery.enums.MediaType
 
 fun fetchMediaBucketsAsync(
@@ -167,7 +168,7 @@ fun fetchMediaAsync(
                                 "(${MediaStore.Files.FileColumns.MEDIA_TYPE}='${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}' OR ${MediaStore.Files.FileColumns.MEDIA_TYPE}='${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}')"
                             }
                         }
-                        + " AND ${MediaStore.Files.FileColumns.SIZE}>0"
+                        + " AND ${MediaStore.Files.FileColumns.SIZE}>0 "
             )
             putString(
                 ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
@@ -187,18 +188,22 @@ fun fetchMediaAsync(
             val mediaTypeIndex = cursor.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE)
             val mediaResolution = cursor.getColumnIndex(MediaStore.Files.FileColumns.RESOLUTION)
             do {
-                mediaList.add(
-                    MediaItem(
-                        mediaId = cursor.getLong(mediaIdIndex),
-                        bucketId = bucketId,
-                        name = cursor.getString(mediaNameIndex),
-                        path = cursor.getString(mediaDataIndex),
-                        mediaSize = cursor.getLong(mediaSizeIndex),
-                        mediaDuration = cursor.getLong(mediaDurationIndex),
-                        mediaType = if (cursor.getInt(mediaTypeIndex) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) MediaType.VIDEO else MediaType.IMAGE,
-                        mediaResolution = if (mediaResolution != -1) cursor.getString(mediaResolution) else ""
+                if (cursor.getType(mediaIdIndex) != FIELD_TYPE_NULL && cursor.getType(mediaNameIndex) != FIELD_TYPE_NULL && cursor.getType(mediaDataIndex) != FIELD_TYPE_NULL && cursor.getType(mediaSizeIndex) != FIELD_TYPE_NULL) {
+                    mediaList.add(
+                        MediaItem(
+                            mediaId = cursor.getLong(mediaIdIndex),
+                            bucketId = bucketId,
+                            name = cursor.getString(mediaNameIndex),
+                            path = cursor.getString(mediaDataIndex),
+                            mediaSize = cursor.getLong(mediaSizeIndex),
+                            mediaDuration = cursor.getLong(mediaDurationIndex),
+                            mediaType = if (cursor.getInt(mediaTypeIndex) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) MediaType.VIDEO else MediaType.IMAGE,
+                            mediaResolution = if (mediaResolution != -1) cursor.getString(
+                                mediaResolution
+                            ) else ""
+                        )
                     )
-                )
+                }
             } while (cursor.moveToNext())
         }
     }
