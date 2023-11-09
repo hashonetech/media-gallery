@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -19,7 +20,6 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
@@ -31,7 +31,6 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.ui.text.font.Typeface
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -49,7 +48,6 @@ import com.hashone.commons.extensions.applyTextStyle
 import com.hashone.commons.extensions.checkCameraHardware
 import com.hashone.commons.extensions.getColorCode
 import com.hashone.commons.extensions.hideSystemUI
-import com.hashone.commons.extensions.isGooglePhotosAppInstalled
 import com.hashone.commons.extensions.isPermissionGranted
 import com.hashone.commons.extensions.navigationUI
 import com.hashone.commons.extensions.onClick
@@ -95,11 +93,14 @@ import com.hashone.media.gallery.utils.file.FileOperationRequest
 import com.hashone.media.gallery.utils.file.StorageType
 import com.hashone.media.gallery.utils.getApplicationInfoCompat
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 
@@ -308,7 +309,7 @@ class MediaActivity : BaseActivity() {
         mBinding.fabGooglePhotos.setImageResource(builder.screenBuilder.googlePhotosIcon)
 
         mBinding.fabGooglePhotos.onClick {
-            if (isGooglePhotosAppInstalled(PACKAGE_NAME_GOOGLE_PHOTOS)) {
+            if (isAppInstalled(mActivity, PACKAGE_NAME_GOOGLE_PHOTOS)) {
                 if (packageManager.getApplicationInfoCompat(
                         PACKAGE_NAME_GOOGLE_PHOTOS, 0
                     ).enabled
@@ -334,6 +335,18 @@ class MediaActivity : BaseActivity() {
                 )
             }
         }
+    }
+
+    fun isAppInstalled(context: Context, packageName: String): Boolean {
+        return isPackageInstalled(context, packageName)
+    }
+
+    private fun isPackageInstalled(context: Context, packageName: String?): Boolean {
+        val packageManager = context.packageManager
+        val intent = packageManager.getLaunchIntentForPackage(packageName!!) ?: return false
+        val list =
+            packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        return list.isNotEmpty()
     }
 
     fun updateGooglePhotosUI(isVisible: Boolean) {
@@ -435,13 +448,14 @@ class MediaActivity : BaseActivity() {
                             MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT
                         )
                     )
-                    val time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                    val time =
+                        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
                     timeInSec = TimeUnit.MILLISECONDS.toSeconds(time!!.toLong())
                     retriever.release()
                     fileSizeMB = byteToMB(File(resultFile).length())
 
 
-                } catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
 
@@ -463,7 +477,7 @@ class MediaActivity : BaseActivity() {
                         if (builder.videoValidationBuilder.checkDuration && (timeInSec > builder.videoValidationBuilder.durationLimit)) {
                             dialogBuilder = builder.videoValidationBuilder.durationDialogBuilder
                             message = builder.videoValidationBuilder.durationLimitMessage
-                        } else if ( builder.videoValidationBuilder.checkFileSize && (fileSizeMB > builder.videoValidationBuilder.sizeLimit)) {
+                        } else if (builder.videoValidationBuilder.checkFileSize && (fileSizeMB > builder.videoValidationBuilder.sizeLimit)) {
                             dialogBuilder = builder.videoValidationBuilder.sizeDialogBuilder
                             message = builder.videoValidationBuilder.sizeLimitMessage
                         } else if (builder.videoValidationBuilder.checkResolution && (width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution)) {
@@ -515,15 +529,32 @@ class MediaActivity : BaseActivity() {
 
         }
 
+        private var mAtomicInteger: AtomicInteger = AtomicInteger(0)
+
+        private fun getNextUniqueValue(): Int {
+            return (System.currentTimeMillis() + mAtomicInteger.incrementAndGet()).toInt()
+        }
+
         fun createCopyAndReturnRealPath(context: Context, uri: Uri?): String? {
             val contentResolver = context.contentResolver ?: return null
 
-            var fileName = if (uri!!.toString().startsWith("file:", ignoreCase = true)) {
-                val splitString = uri.encodedPath!!.split("/")
-                splitString[splitString.size - 1]
-            } else {
-                uri.toFilePath(activity = mActivity)
-            }
+            val inputStream =
+                (if (uri!!.toString().contains("$PACKAGE_NAME_GOOGLE_PHOTOS.contentprovider")) {
+                    val ff = contentResolver.openFileDescriptor(uri!!, "r")
+                    FileInputStream(ff?.fileDescriptor)
+                } else {
+                    contentResolver.openInputStream(uri!!)
+                }) ?: return null
+
+            var fileName =
+                if (uri!!.toString().contains("$PACKAGE_NAME_GOOGLE_PHOTOS.contentprovider")) {
+                    "google_photos_" + System.currentTimeMillis() + "_" + abs(getNextUniqueValue()) + ".jpg"
+                } else if (uri!!.toString().startsWith("file:", ignoreCase = true)) {
+                    val splitString = uri.encodedPath!!.split("/")
+                    splitString[splitString.size - 1]
+                } else {
+                    uri.toFilePath(activity = mActivity)
+                }
             fileName = fileName.substring(fileName.lastIndexOf("/") + 1)
             // Create file path inside app's data dir
             val filePath = (context.applicationInfo.dataDir.toString() + File.separator + fileName)
@@ -533,7 +564,7 @@ class MediaActivity : BaseActivity() {
                 file.createNewFile()
             }
             try {
-                val inputStream = contentResolver.openInputStream(uri) ?: return null
+                //val inputStream = contentResolver.openInputStream(uri) ?: return null
                 val outputStream: OutputStream = FileOutputStream(file)
                 val buf = ByteArray(1024)
                 var len: Int
@@ -790,8 +821,7 @@ class MediaActivity : BaseActivity() {
                         }
                     })
             }
-        }
-        else if (!builder.enableCropMode && /* && builder.mediaType == MediaType.IMAGE &&*/ builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
+        } else if (!builder.enableCropMode && /* && builder.mediaType == MediaType.IMAGE &&*/ builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
             if (images.size > 0) {
                 val className =
                     Class.forName("${builder.mediaCropBuilder.appPackageName}.${builder.mediaCropBuilder.cropClassName}")
@@ -865,8 +895,7 @@ class MediaActivity : BaseActivity() {
                         })
                 }
             }
-        }
-        else if (builder.mediaType == MediaType.IMAGE && builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
+        } else if (builder.mediaType == MediaType.IMAGE && builder.mediaCropBuilder.cropClassName.isNotEmpty() && builder.mediaCropBuilder.appPackageName.isNotEmpty()) {
             if (images.size > 0) {
                 val className =
                     Class.forName("${builder.mediaCropBuilder.appPackageName}.${builder.mediaCropBuilder.cropClassName}")
@@ -1061,7 +1090,10 @@ class MediaActivity : BaseActivity() {
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
                 takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0) //Low Quality
-                takeVideoIntent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, (builder.videoValidationBuilder.sizeLimit * 1048576L))  //builder.videoValidationBuilder.sizeLimit MB
+                takeVideoIntent.putExtra(
+                    MediaStore.EXTRA_SIZE_LIMIT,
+                    (builder.videoValidationBuilder.sizeLimit * 1048576L)
+                )  //builder.videoValidationBuilder.sizeLimit MB
                 takeVideoIntent.putExtra(
                     MediaStore.EXTRA_DURATION_LIMIT,
                     builder.videoValidationBuilder.durationLimit
@@ -1259,7 +1291,8 @@ class MediaActivity : BaseActivity() {
         onCancelListener: DialogInterface.OnCancelListener? = null
     ) {
         try {
-            val alertBuilder = AlertDialog.Builder(mActivity, com.hashone.commons.R.style.CustomAlertDialog)
+            val alertBuilder =
+                AlertDialog.Builder(mActivity, com.hashone.commons.R.style.CustomAlertDialog)
             val dialogBinding =
                 DialogConfirmationBinding.inflate(LayoutInflater.from(mActivity), null, false)
             dialogBinding.textViewTitle.text = title
@@ -1294,14 +1327,32 @@ class MediaActivity : BaseActivity() {
             dialogBinding.textViewNeutral.isVisible = neutralButtonText.isNotEmpty()
 
 
-            dialogBinding.textViewYes.typeface = ResourcesCompat.getFont(mActivity, builder.permissionBuilder.positiveFont)
-            dialogBinding.textViewYes.setTextColor(ContextCompat.getColor(mActivity, builder.permissionBuilder.positiveColor))
-            dialogBinding.textViewYes.setTextSize(TypedValue.COMPLEX_UNIT_SP, builder.permissionBuilder.positiveSize)
+            dialogBinding.textViewYes.typeface =
+                ResourcesCompat.getFont(mActivity, builder.permissionBuilder.positiveFont)
+            dialogBinding.textViewYes.setTextColor(
+                ContextCompat.getColor(
+                    mActivity,
+                    builder.permissionBuilder.positiveColor
+                )
+            )
+            dialogBinding.textViewYes.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                builder.permissionBuilder.positiveSize
+            )
             dialogBinding.textViewYes.isAllCaps = builder.permissionBuilder.positiveIsCap
 
-            dialogBinding.textViewNo.typeface = ResourcesCompat.getFont(mActivity, builder.permissionBuilder.negativeFont)
-            dialogBinding.textViewNo.setTextColor(ContextCompat.getColor(mActivity, builder.permissionBuilder.negativeColor))
-            dialogBinding.textViewNo.setTextSize(TypedValue.COMPLEX_UNIT_SP, builder.permissionBuilder.negativeSize)
+            dialogBinding.textViewNo.typeface =
+                ResourcesCompat.getFont(mActivity, builder.permissionBuilder.negativeFont)
+            dialogBinding.textViewNo.setTextColor(
+                ContextCompat.getColor(
+                    mActivity,
+                    builder.permissionBuilder.negativeColor
+                )
+            )
+            dialogBinding.textViewNo.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                builder.permissionBuilder.negativeSize
+            )
             dialogBinding.textViewNo.isAllCaps = builder.permissionBuilder.negativeIsCap
 
             alertBuilder.setView(dialogBinding.root)
