@@ -458,7 +458,6 @@ class MediaActivity : BaseActivity() {
             val uriSplits = URLDecoder.decode(uri.path,"UTF-8").split("/NONE/")
 
             val isVideo = uriSplits[1].startsWith("video", ignoreCase = true)
-
             if (isVideo) {
                 prepareGooglePhotosLoadingDialog()
                 showGooglePhotosLoadingDialog()
