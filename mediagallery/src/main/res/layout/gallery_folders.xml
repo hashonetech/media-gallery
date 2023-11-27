@@ -47,7 +47,7 @@
             android:layout_marginTop="4dp"
             android:fontFamily="@font/outfit_regular"
             android:gravity="center"
-            android:text="@string/loading_photos"
+            android:text="@string/media_gallery_loading_photos"
             android:textColor="@color/black"
             android:textSize="14sp" />
     </androidx.appcompat.widget.LinearLayoutCompat>

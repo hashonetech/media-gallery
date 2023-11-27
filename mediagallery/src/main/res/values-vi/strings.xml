@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Mặt sau</string>
+    <string name="media_gallery_google_photos_not_installed">Google Photos chưa được cài đặt</string>
+    <string name="media_gallery_google_photos_disable">Google Photos bị vô hiệu hóa</string>
+    <string name="media_gallery_label_enable">Cho phép</string>
+    <string name="media_gallery_label_photos">Ảnh</string>
+    <string name="media_gallery_google_photos">Google Ảnh</string>
+    <string name="media_gallery_photos_taking_long_time">Nó mất một chút thời gian.</string>
+    <string name="media_gallery_photos_taking_more_time">Có vẻ như bạn có quá nhiều ảnh!</string>
+    <string name="media_gallery_loading_photos">Đang tải ảnh.</string>
+    <string name="media_gallery_allow_camera_permission">Bạn cần cấp quyền truy cập vào quyền của máy ảnh.</string>
+    <string name="media_gallery_label_grant">Khoản trợ cấp</string>
+    <string name="media_gallery_label_cancel">Hủy bỏ</string>
+    <string name="media_gallery_label_camera">Máy ảnh</string>
+    <string name="media_gallery_label_all">Tất cả</string>
+    <string name="media_gallery_label_gallery">Phòng trưng bày</string>
+    <string name="media_gallery_label_done">Xong</string>
+    <string name="media_gallery_allow_permission">Bạn cần cho phép truy cập vào quyền lưu trữ.</string>
+    <string name="media_gallery_setting_text">Cập nhật bây giờ</string>
+    <string name="media_gallery_camera_action_title">Chụp ảnh hoặc quay video</string>
+    <string name="media_gallery_duration_error">Ối! Vui lòng chọn video có thời lượng từ 30 giây trở xuống.</string>
+    <string name="media_gallery_file_size_error">Hãy chọn video dưới 100 MB để xử lý nhanh hơn nhé!</string>
+    <string name="media_gallery_size_error">Hiện tại chúng tôi chỉ hỗ trợ video HD. Bạn muốn chuyển đổi video của mình sang HD?.</string>
+    <string name="media_gallery_okay">Đồng ý</string>
+    <string name="media_gallery_no">KHÔNG</string>
+    <string name="media_gallery_convert">Chuyển thành</string>
+    <string name="media_gallery_capture_image_video">Chụp ảnh hoặc quay video</string>
+    <string name="media_gallery_corrupted_media">Phương tiện truyền thông bị hỏng.</string>
+    <string name="crop_label_crop">Mùa vụ</string>
+    <string name="crop_label_skip">Nhảy</string>
+</resources>

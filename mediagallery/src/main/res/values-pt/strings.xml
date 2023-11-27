@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Voltar</string>
+    <string name="media_gallery_google_photos_not_installed">O Google Fotos não está instalado</string>
+    <string name="media_gallery_google_photos_disable">Google Fotos está desativado</string>
+    <string name="media_gallery_label_enable">Habilitar</string>
+    <string name="media_gallery_label_photos">Fotos</string>
+    <string name="media_gallery_google_photos">Google Fotos</string>
+    <string name="media_gallery_photos_taking_long_time">Está demorando um pouco.</string>
+    <string name="media_gallery_photos_taking_more_time">Parece que você tem muitas fotos!</string>
+    <string name="media_gallery_loading_photos">Carregando fotos.</string>
+    <string name="media_gallery_allow_camera_permission">Você precisa permitir o acesso à permissão da câmera.</string>
+    <string name="media_gallery_label_grant">Conceder</string>
+    <string name="media_gallery_label_cancel">Cancelar</string>
+    <string name="media_gallery_label_camera">Câmera</string>
+    <string name="media_gallery_label_all">Todos</string>
+    <string name="media_gallery_label_gallery">Galeria</string>
+    <string name="media_gallery_label_done">Feito</string>
+    <string name="media_gallery_allow_permission">Você precisa permitir acesso às permissões de armazenamento.</string>
+    <string name="media_gallery_setting_text">Atualizar agora</string>
+    <string name="media_gallery_camera_action_title">Capturar imagem ou vídeo</string>
+    <string name="media_gallery_duration_error">Ops! Selecione um vídeo com 30 segundos ou menos.</string>
+    <string name="media_gallery_file_size_error">Selecione o vídeo com menos de 100 MB para processamento mais rápido!</string>
+    <string name="media_gallery_size_error">Atualmente oferecemos suporte apenas a vídeos HD. Quer converter seu vídeo para HD?.</string>
+    <string name="media_gallery_okay">OK</string>
+    <string name="media_gallery_no">Não</string>
+    <string name="media_gallery_convert">Converter</string>
+    <string name="media_gallery_capture_image_video">Capturar imagem ou vídeo</string>
+    <string name="media_gallery_corrupted_media">Mídia corrompida.</string>
+    <string name="crop_label_crop">Cortar</string>
+    <string name="crop_label_skip">Pular</string>
+</resources>

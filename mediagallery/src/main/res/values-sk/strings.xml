@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">späť</string>
+    <string name="media_gallery_google_photos_not_installed">Fotky Google nie sú nainštalované</string>
+    <string name="media_gallery_google_photos_disable">Fotky Google sú vypnuté</string>
+    <string name="media_gallery_label_enable">Povoliť</string>
+    <string name="media_gallery_label_photos">Fotografie</string>
+    <string name="media_gallery_google_photos">Fotky Google</string>
+    <string name="media_gallery_photos_taking_long_time">Trvá to trochu dlho.</string>
+    <string name="media_gallery_photos_taking_more_time">Zdá sa, že máte príliš veľa fotiek!</string>
+    <string name="media_gallery_loading_photos">Načítavajú sa fotografie.</string>
+    <string name="media_gallery_allow_camera_permission">Musíte povoliť prístup k fotoaparátu.</string>
+    <string name="media_gallery_label_grant">Grant</string>
+    <string name="media_gallery_label_cancel">Zrušiť</string>
+    <string name="media_gallery_label_camera">fotoaparát</string>
+    <string name="media_gallery_label_all">Všetky</string>
+    <string name="media_gallery_label_gallery">Galéria</string>
+    <string name="media_gallery_label_done">hotový</string>
+    <string name="media_gallery_allow_permission">Musíte povoliť prístup k povoleniam úložiska.</string>
+    <string name="media_gallery_setting_text">Teraz aktualizovať</string>
+    <string name="media_gallery_camera_action_title">Nasnímať obrázok alebo video</string>
+    <string name="media_gallery_duration_error">Ojoj! Vyberte video, ktoré má 30 sekúnd alebo menej.</string>
+    <string name="media_gallery_file_size_error">Vyberte video do 100 MB pre rýchlejšie spracovanie!</string>
+    <string name="media_gallery_size_error">V súčasnosti podporujeme iba HD videá. Chcete previesť svoje video do HD?.</string>
+    <string name="media_gallery_okay">Dobre</string>
+    <string name="media_gallery_no">Nie</string>
+    <string name="media_gallery_convert">Konvertovať</string>
+    <string name="media_gallery_capture_image_video">Nasnímať obrázok alebo video</string>
+    <string name="media_gallery_corrupted_media">Pokazené médiá.</string>
+    <string name="crop_label_crop">Plodina</string>
+    <string name="crop_label_skip">Preskočiť</string>
+</resources>

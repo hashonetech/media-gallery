@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hashone.commons.base.CoroutineAsyncTask
 import com.hashone.commons.extensions.registerBroadCastReceiver
 import com.hashone.media.gallery.MediaActivity
+import com.hashone.media.gallery.R
 import com.hashone.media.gallery.adapters.BucketAdapter
 import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.databinding.GalleryFoldersBinding
@@ -48,7 +49,9 @@ class BucketsFragment : Fragment() {
         Runnable {
             //TODO: Language translation require
             mBinding.textViewProgressMessage.text =
-                builder.bucketProgressDialogBuilder.loadingLongTimeMessage
+                builder.bucketProgressDialogBuilder.loadingLongTimeMessage.ifEmpty {
+                    getString(R.string.media_gallery_photos_taking_long_time)
+                }
 
             mIsHandled = 1
             mHandlerLoadingWait.postDelayed(mRunnableLoadingWait1, 7 * 1000L)
@@ -57,7 +60,9 @@ class BucketsFragment : Fragment() {
         Runnable {
             mIsHandled = 2
             mBinding.textViewProgressMessage.text =
-                builder.bucketProgressDialogBuilder.loadingMoreTimeMessage
+                builder.bucketProgressDialogBuilder.loadingMoreTimeMessage.ifEmpty {
+                    getString(R.string.media_gallery_photos_taking_more_time)
+                }
         }
 
     private val mBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -113,7 +118,9 @@ class BucketsFragment : Fragment() {
     }
 
     private fun setupLoadingUI() {
-        mBinding.textViewProgressMessage.text = builder.bucketProgressDialogBuilder.loadingMessage
+        mBinding.textViewProgressMessage.text = builder.bucketProgressDialogBuilder.loadingMessage.ifEmpty {
+            getString(R.string.media_gallery_loading_photos)
+        }
 
         mBinding.textViewProgressMessage.setTextSize(
             TypedValue.COMPLEX_UNIT_SP,

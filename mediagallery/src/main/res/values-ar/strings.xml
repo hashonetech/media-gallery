@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">خلف</string>
+    <string name="media_gallery_google_photos_not_installed">لم يتم تثبيت صور Google</string>
+    <string name="media_gallery_google_photos_disable">تم تعطيل صور Google</string>
+    <string name="media_gallery_label_enable">يُمكَِن</string>
+    <string name="media_gallery_label_photos">الصور</string>
+    <string name="media_gallery_google_photos">صور جوجل</string>
+    <string name="media_gallery_photos_taking_long_time">يستغرق وقتا طويلا بعض الشيء.</string>
+    <string name="media_gallery_photos_taking_more_time">يبدو أن لديك الكثير من الصور!</string>
+    <string name="media_gallery_loading_photos">جارٍ تحميل الصور.</string>
+    <string name="media_gallery_allow_camera_permission">تحتاج إلى السماح بالوصول إلى إذن الكاميرا.</string>
+    <string name="media_gallery_label_grant">منحة</string>
+    <string name="media_gallery_label_cancel">يلغي</string>
+    <string name="media_gallery_label_camera">آلة تصوير</string>
+    <string name="media_gallery_label_all">الجميع</string>
+    <string name="media_gallery_label_gallery">صالة عرض</string>
+    <string name="media_gallery_label_done">منتهي</string>
+    <string name="media_gallery_allow_permission">تحتاج إلى السماح بالوصول إلى أذونات التخزين.</string>
+    <string name="media_gallery_setting_text">تحديث الان</string>
+    <string name="media_gallery_camera_action_title">التقاط صورة أو فيديو</string>
+    <string name="media_gallery_duration_error">أُووبس! الرجاء تحديد فيديو مدته 30 ثانية أو أقل.</string>
+    <string name="media_gallery_file_size_error">حدد الفيديو الذي يقل حجمه عن 100 ميجابايت لمعالجة أسرع!</string>
+    <string name="media_gallery_size_error">نحن ندعم حاليًا مقاطع الفيديو عالية الدقة فقط. هل تريد تحويل الفيديو الخاص بك إلى HD؟.</string>
+    <string name="media_gallery_okay">تمام</string>
+    <string name="media_gallery_no">لا</string>
+    <string name="media_gallery_convert">يتحول</string>
+    <string name="media_gallery_capture_image_video">التقاط صورة أو فيديو</string>
+    <string name="media_gallery_corrupted_media">وسائل الإعلام الفاسدة.</string>
+    <string name="crop_label_crop">اقتصاص</string>
+    <string name="crop_label_skip">يتخطى</string>
+</resources>

@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.hashone.commons.extensions.applyTextStyle
 import com.hashone.commons.extensions.getColorCode
 import com.hashone.commons.extensions.onClick
+import com.hashone.media.gallery.R
 import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.databinding.GalleryItemFolderBinding
 import com.hashone.media.gallery.model.MediaBucketData
@@ -55,7 +56,9 @@ class BucketAdapter(
                     mBinding.listItem.setBackgroundColor(mContext.getColorCode(builder.bucketBuilder.backgroundColor))
 
                     mBinding.textViewFolderName.text =  if (this.bucketId == -1L) {
-                        builder.allMediaTitle
+                        builder.allMediaTitle.ifEmpty {
+                            mContext.getString(R.string.media_gallery_label_all)
+                        }
                     } else {
                         this.name
                     }

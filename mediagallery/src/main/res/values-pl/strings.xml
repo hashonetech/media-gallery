@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Z powrotem</string>
+    <string name="media_gallery_google_photos_not_installed">Zdjęcia Google nie są zainstalowane</string>
+    <string name="media_gallery_google_photos_disable">Zdjęcia Google są wyłączone</string>
+    <string name="media_gallery_label_enable">Włączać</string>
+    <string name="media_gallery_label_photos">Zdjęcia</string>
+    <string name="media_gallery_google_photos">Zdjęcia Google</string>
+    <string name="media_gallery_photos_taking_long_time">Trochę to trwa.</string>
+    <string name="media_gallery_photos_taking_more_time">Wygląda na to, że masz za dużo zdjęć!</string>
+    <string name="media_gallery_loading_photos">Ładowanie zdjęć.</string>
+    <string name="media_gallery_allow_camera_permission">Musisz zezwolić na dostęp do uprawnień kamery.</string>
+    <string name="media_gallery_label_grant">Dotacja</string>
+    <string name="media_gallery_label_cancel">Anulować</string>
+    <string name="media_gallery_label_camera">Kamera</string>
+    <string name="media_gallery_label_all">Wszystko</string>
+    <string name="media_gallery_label_gallery">Galeria</string>
+    <string name="media_gallery_label_done">Zrobione</string>
+    <string name="media_gallery_allow_permission">Musisz zezwolić na dostęp do uprawnień do przechowywania.</string>
+    <string name="media_gallery_setting_text">Aktualizuj teraz</string>
+    <string name="media_gallery_camera_action_title">Przechwytywanie obrazu lub wideo</string>
+    <string name="media_gallery_duration_error">Ups! Wybierz film trwający 30 sekund lub krócej.</string>
+    <string name="media_gallery_file_size_error">Wybierz film poniżej 100 MB, aby przyspieszyć przetwarzanie!</string>
+    <string name="media_gallery_size_error">Obecnie obsługujemy tylko filmy HD. Chcesz przekonwertować swój film na HD?.</string>
+    <string name="media_gallery_okay">Dobra</string>
+    <string name="media_gallery_no">NIE</string>
+    <string name="media_gallery_convert">Konwertować</string>
+    <string name="media_gallery_capture_image_video">Przechwytywanie obrazu lub wideo</string>
+    <string name="media_gallery_corrupted_media">Uszkodzone media.</string>
+    <string name="crop_label_crop">Przyciąć</string>
+    <string name="crop_label_skip">Pominąć</string>
+</resources>

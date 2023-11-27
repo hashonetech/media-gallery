@@ -6,7 +6,6 @@ import android.database.Cursor.FIELD_TYPE_NULL
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.enums.MediaType
 
@@ -119,7 +118,7 @@ fun fetchMediaBucketsAsync(
             bucketList.add(
                 0, MediaBucketData(
                     -1L,
-                    "All",
+                    "",
                     mediaList[0].path,
                     mediaList.size,
                     mediaType = mediaType

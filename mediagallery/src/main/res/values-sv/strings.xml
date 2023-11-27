@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Tillbaka</string>
+    <string name="media_gallery_google_photos_not_installed">Google Foto är inte installerat</string>
+    <string name="media_gallery_google_photos_disable">Google Foto är inaktiverat</string>
+    <string name="media_gallery_label_enable">Gör det möjligt</string>
+    <string name="media_gallery_label_photos">Foton</string>
+    <string name="media_gallery_google_photos">Google Foton</string>
+    <string name="media_gallery_photos_taking_long_time">Det tar lite lång tid.</string>
+    <string name="media_gallery_photos_taking_more_time">Du verkar ha för många bilder!</string>
+    <string name="media_gallery_loading_photos">Laddar foton.</string>
+    <string name="media_gallery_allow_camera_permission">Du måste ge åtkomst till kamerabehörighet.</string>
+    <string name="media_gallery_label_grant">Bevilja</string>
+    <string name="media_gallery_label_cancel">Annullera</string>
+    <string name="media_gallery_label_camera">Kamera</string>
+    <string name="media_gallery_label_all">Allt</string>
+    <string name="media_gallery_label_gallery">Galleri</string>
+    <string name="media_gallery_label_done">Gjort</string>
+    <string name="media_gallery_allow_permission">Du måste tillåta åtkomst till lagringsbehörigheter.</string>
+    <string name="media_gallery_setting_text">Uppdatera nu</string>
+    <string name="media_gallery_camera_action_title">Ta bild eller video</string>
+    <string name="media_gallery_duration_error">hoppsan! Välj en video som är 30 sekunder eller kortare.</string>
+    <string name="media_gallery_file_size_error">Välj videon under 100 MB för snabbare bearbetning!</string>
+    <string name="media_gallery_size_error">För närvarande stöder vi endast HD-videor. Vill du konvertera din video till HD?</string>
+    <string name="media_gallery_okay">Okej</string>
+    <string name="media_gallery_no">Nej</string>
+    <string name="media_gallery_convert">Konvertera</string>
+    <string name="media_gallery_capture_image_video">Ta bild eller video</string>
+    <string name="media_gallery_corrupted_media">Skadade media.</string>
+    <string name="crop_label_crop">Beskära</string>
+    <string name="crop_label_skip">Hoppa</string>
+</resources>

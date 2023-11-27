@@ -2,6 +2,7 @@ package com.hashone.media.gallery
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.DialogInterface
@@ -32,6 +33,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
@@ -57,6 +59,7 @@ import com.hashone.commons.extensions.saveToFile
 import com.hashone.commons.extensions.serializable
 import com.hashone.commons.extensions.setStatusBarColor
 import com.hashone.commons.extensions.toFilePath
+import com.hashone.commons.languages.LocaleManager
 import com.hashone.commons.utils.EXTENSION_PNG
 import com.hashone.commons.utils.PACKAGE_NAME_GOOGLE_PHOTOS
 import com.hashone.commons.utils.dpToPx
@@ -67,6 +70,7 @@ import com.hashone.cropper.builder.Crop
 import com.hashone.cropper.model.CropDataSaved
 import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.databinding.ActivityMediaBinding
+import com.hashone.media.gallery.databinding.DialogMediaGalleryPhotosLoadingBinding
 import com.hashone.media.gallery.databinding.DialogWarningBinding
 import com.hashone.media.gallery.enums.MediaType
 import com.hashone.media.gallery.fragment.BucketsFragment
@@ -97,6 +101,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.net.URLDecoder
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
@@ -181,12 +186,16 @@ class MediaActivity : BaseActivity() {
     }
 
     private fun WarningScreenUi() {
-        mBinding.permissionMessage.text = builder.warningUiBuilder.message
+        mBinding.permissionMessage.text = builder.warningUiBuilder.message.ifEmpty {
+            getString(R.string.media_gallery_allow_permission)
+        }
         mBinding.permissionMessage.applyTextStyle(
             getColorCode(builder.warningUiBuilder.messageColor),
             builder.warningUiBuilder.messageFont, builder.warningUiBuilder.messageSize
         )
-        mBinding.settingText.text = builder.warningUiBuilder.settingText
+        mBinding.settingText.text = builder.warningUiBuilder.settingText.ifEmpty {
+            getString(R.string.media_gallery_setting_text)
+        }
         mBinding.settingText.applyTextStyle(
             getColorCode(builder.warningUiBuilder.settingColor),
             builder.warningUiBuilder.settingFont, builder.warningUiBuilder.settingSize
@@ -262,7 +271,9 @@ class MediaActivity : BaseActivity() {
             builder.toolBarBuilder.backIconDescription
 
         if (builder.toolBarBuilder.title.isNotEmpty()) mBinding.textViewTitle.text =
-            builder.toolBarBuilder.title
+            builder.toolBarBuilder.title.ifEmpty {
+                getString(R.string.media_gallery_label_gallery)
+            }
         if (builder.toolBarBuilder.titleColor != -1) mBinding.textViewTitle.setTextColor(
             getColorCode(builder.toolBarBuilder.titleColor)
         )
@@ -279,6 +290,12 @@ class MediaActivity : BaseActivity() {
         mBinding.textViewTitle.text = title
     }
 
+    override fun onStart() {
+        val currentLocale = LocaleManager.getAppLocale()
+        super.onStart()
+        isContains = LocaleManager.isLocaleContains(currentLocale)
+    }
+
     override fun onResume() {
         updateHeaderOptionsUI(mSelectedImagesList.size > 0)
         if (isFromSetting) {
@@ -288,6 +305,10 @@ class MediaActivity : BaseActivity() {
             }
         }
         super.onResume()
+        if (!isContains) {
+            ActivityCompat.recreate(mActivity)
+            return
+        }
     }
 
     fun updateHeaderOptionsUI(isVisible: Boolean) {
@@ -331,7 +352,7 @@ class MediaActivity : BaseActivity() {
                 showSnackBar(
                     mActivity,
                     mBinding.layoutMediaParent,
-                    "Google Photos is not installed"
+                    getString(R.string.media_gallery_google_photos_not_installed)
                 )
             }
         }
@@ -365,12 +386,12 @@ class MediaActivity : BaseActivity() {
                     //TODO: Language translation require
                     Snackbar.make(
                         mBinding.layoutMediaParent,
-                        "Google Photos is Disable",
+                        getString(R.string.media_gallery_google_photos_disable),
                         Snackbar.LENGTH_LONG
                     ).apply {
                         setActionTextColor(Color.YELLOW)
                         //TODO: Language translation require
-                        setAction("Enable") { }
+                        setAction(getString(R.string.media_gallery_label_enable)) { }
                         addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
                             override fun onShown(transientBottomBar: Snackbar?) {
                                 super.onShown(transientBottomBar)
@@ -432,6 +453,18 @@ class MediaActivity : BaseActivity() {
         private var timeInSec: Long = 0
         private var fileSizeMB: Long = 0
 
+        override fun onPreExecute() {
+            super.onPreExecute()
+            val uriSplits = URLDecoder.decode(uri.path,"UTF-8").split("/NONE/")
+
+            val isVideo = uriSplits[1].startsWith("video", ignoreCase = true)
+
+            if (isVideo) {
+                prepareGooglePhotosLoadingDialog()
+                showGooglePhotosLoadingDialog()
+            }
+        }
+
         override fun doInBackground(vararg params: Void?): String? {
             try {
                 val resultFile = createCopyAndReturnRealPath(context, uri)
@@ -469,6 +502,7 @@ class MediaActivity : BaseActivity() {
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
             try {
+                dismissGooglePhotosLoadingDialog()
                 if (result != null) {
                     if (fileSizeMB.toInt() != 0 && builder.videoValidationBuilder.checkValidation && builder.mediaType != MediaType.IMAGE) {
                         var message = ""
@@ -476,14 +510,20 @@ class MediaActivity : BaseActivity() {
                         var dialogBuilder = builder.videoValidationBuilder.durationDialogBuilder
                         if (builder.videoValidationBuilder.checkDuration && (timeInSec > builder.videoValidationBuilder.durationLimit)) {
                             dialogBuilder = builder.videoValidationBuilder.durationDialogBuilder
-                            message = builder.videoValidationBuilder.durationLimitMessage
+                            message = builder.videoValidationBuilder.durationLimitMessage.ifEmpty {
+                                getString(R.string.media_gallery_duration_error)
+                            }
                         } else if (builder.videoValidationBuilder.checkFileSize && (fileSizeMB > builder.videoValidationBuilder.sizeLimit)) {
                             dialogBuilder = builder.videoValidationBuilder.sizeDialogBuilder
-                            message = builder.videoValidationBuilder.sizeLimitMessage
+                            message = builder.videoValidationBuilder.sizeLimitMessage.ifEmpty {
+                                getString(R.string.media_gallery_file_size_error)
+                            }
                         } else if (builder.videoValidationBuilder.checkResolution && (width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution)) {
                             isLargeResolution = true
                             dialogBuilder = builder.videoValidationBuilder.resolutionDialogBuilder
-                            message = builder.videoValidationBuilder.maxResolutionMessage
+                            message = builder.videoValidationBuilder.maxResolutionMessage.ifEmpty {
+                                getString(R.string.media_gallery_size_error)
+                            }
                         } else {
                             val imageItem = MediaItem().apply {
                                 path = File(result).absolutePath
@@ -496,7 +536,9 @@ class MediaActivity : BaseActivity() {
 
                         if (message.isNotEmpty()) {
                             showWarningDialog(title = message,
-                                positionButtonText = dialogBuilder.positiveText,
+                                positionButtonText = dialogBuilder.positiveText.ifEmpty {
+                                    getString(R.string.media_gallery_okay)
+                                },
                                 negativeButtonText = if (isLargeResolution) dialogBuilder.negativeText else "",
                                 positiveCallback = {
                                     alertDialog?.cancel()
@@ -538,6 +580,10 @@ class MediaActivity : BaseActivity() {
         fun createCopyAndReturnRealPath(context: Context, uri: Uri?): String? {
             val contentResolver = context.contentResolver ?: return null
 
+            val uriSplits = URLDecoder.decode(uri!!.path,"UTF-8").split("/NONE/")
+
+            var isVideo = uriSplits[1].startsWith("video", ignoreCase = true)
+
             val inputStream =
                 (if (uri!!.toString().contains("$PACKAGE_NAME_GOOGLE_PHOTOS.contentprovider")) {
                     val ff = contentResolver.openFileDescriptor(uri!!, "r")
@@ -548,13 +594,15 @@ class MediaActivity : BaseActivity() {
 
             var fileName =
                 if (uri!!.toString().contains("$PACKAGE_NAME_GOOGLE_PHOTOS.contentprovider")) {
-                    "google_photos_" + System.currentTimeMillis() + "_" + abs(getNextUniqueValue()) + ".jpg"
+                    "google_photos_" + System.currentTimeMillis() + "_" + abs(getNextUniqueValue()) +
+                            (if (isVideo) ".mp4" else ".jpg")
                 } else if (uri!!.toString().startsWith("file:", ignoreCase = true)) {
                     val splitString = uri.encodedPath!!.split("/")
                     splitString[splitString.size - 1]
                 } else {
                     uri.toFilePath(activity = mActivity)
                 }
+
             fileName = fileName.substring(fileName.lastIndexOf("/") + 1)
             // Create file path inside app's data dir
             val filePath = (context.applicationInfo.dataDir.toString() + File.separator + fileName)
@@ -755,7 +803,7 @@ class MediaActivity : BaseActivity() {
                 toolBarColor = com.hashone.cropper.R.color.white,
                 backIcon = com.hashone.cropper.R.drawable.ic_back,
                 //TODO: Language translation require
-                title = "Crop",
+                title = getString(R.string.crop_label_crop),
                 titleColor = com.hashone.cropper.R.color.black,
                 titleFont = com.hashone.cropper.R.font.roboto_medium,
                 titleSize = 16F,
@@ -779,7 +827,7 @@ class MediaActivity : BaseActivity() {
                     textColor = com.hashone.cropper.R.color.black,
                     icon = com.hashone.cropper.R.drawable.ic_check_croppy_selected,
                     //TODO: Language translation require
-                    buttonText = "Crop",
+                    buttonText = getString(R.string.crop_label_crop),
                     textFont = com.hashone.cropper.R.font.roboto_medium,
                     textSize = 16F,
                 ),
@@ -787,7 +835,7 @@ class MediaActivity : BaseActivity() {
                     textColor = com.hashone.cropper.R.color.black,
                     icon = com.hashone.cropper.R.drawable.ic_cancel,
                     //TODO: Language translation require
-                    buttonText = "Skip",
+                    buttonText = getString(R.string.crop_label_skip),
                     textFont = com.hashone.cropper.R.font.roboto_medium,
                     textSize = 16F,
                 ),
@@ -1058,9 +1106,9 @@ class MediaActivity : BaseActivity() {
             openCamera()
         } else {
             //TODO: Language translation require
-            showGalleryCustomAlertDialog(message = "You need to allow access to camera permission.",
-                negativeButtonText = "Cancel".uppercase(Locale.getDefault()),
-                positionButtonText = "Grant".uppercase(Locale.getDefault()),
+            showGalleryCustomAlertDialog(message = getString(R.string.media_gallery_allow_camera_permission),
+                negativeButtonText = getString(R.string.media_gallery_label_cancel).uppercase(Locale.getDefault()),
+                positionButtonText = getString(R.string.media_gallery_label_grant).uppercase(Locale.getDefault()),
                 negativeCallback = {
                     galleryAlertDialog?.cancel()
                 },
@@ -1100,7 +1148,9 @@ class MediaActivity : BaseActivity() {
                 ) //30Seconds
                 val chooserIntent = Intent.createChooser(
                     if (builder.mediaType == MediaType.IMAGE) takePictureIntent else if (builder.mediaType == MediaType.VIDEO) takeVideoIntent else takePictureIntent,
-                    builder.cameraActionTitle
+                    builder.cameraActionTitle.ifEmpty {
+                        getString(R.string.media_gallery_camera_action_title)
+                    }
                 )
                 if (builder.mediaType == MediaType.IMAGE_VIDEO) {
                     chooserIntent.putExtra(
@@ -1240,9 +1290,15 @@ class MediaActivity : BaseActivity() {
         if (isGranted) {
             initViews()
         } else {
-            showGalleryCustomAlertDialog(message = builder.permissionBuilder.message,
-                negativeButtonText = builder.permissionBuilder.negativeText.uppercase(Locale.getDefault()),
-                positionButtonText = builder.permissionBuilder.positiveText.uppercase(Locale.getDefault()),
+            showGalleryCustomAlertDialog(message = builder.permissionBuilder.message.ifEmpty {
+                getString(R.string.media_gallery_allow_permission)
+            },
+                negativeButtonText = builder.permissionBuilder.negativeText.ifEmpty {
+                    getString(R.string.media_gallery_label_cancel)
+                }.uppercase(Locale.getDefault()),
+                positionButtonText = builder.permissionBuilder.positiveText.ifEmpty {
+                    getString(R.string.media_gallery_label_grant)
+                }.uppercase(Locale.getDefault()),
                 negativeCallback = {
                     noPermission()
                     galleryAlertDialog?.cancel()
@@ -1365,6 +1421,38 @@ class MediaActivity : BaseActivity() {
             galleryAlertDialog!!.setOnDismissListener(onDismissListener)
             galleryAlertDialog!!.setOnCancelListener(onCancelListener)
             galleryAlertDialog!!.setOnKeyListener(keyEventCallback)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private var googlePhotosLoadingDialog: Dialog? = null
+
+    fun prepareGooglePhotosLoadingDialog() {
+        googlePhotosLoadingDialog = Dialog(mActivity, R.style.MediaGalleryTransparentDialog).apply {
+            window!!.requestFeature(Window.FEATURE_NO_TITLE)
+            setContentView(DialogMediaGalleryPhotosLoadingBinding.inflate(LayoutInflater.from(mActivity)).root)
+            setCancelable(false)
+            setCanceledOnTouchOutside(false)
+        }
+    }
+
+    fun showGooglePhotosLoadingDialog() {
+        if (googlePhotosLoadingDialog != null && !googlePhotosLoadingDialog!!.isShowing) {
+            if (!mActivity.isDestroyed) googlePhotosLoadingDialog!!.show()
+        }
+    }
+
+    fun isGooglePhotosLoadingDialogShown(): Boolean {
+        return (googlePhotosLoadingDialog != null && googlePhotosLoadingDialog!!.isShowing)
+    }
+
+    fun dismissGooglePhotosLoadingDialog() {
+        try {
+            if (googlePhotosLoadingDialog != null && googlePhotosLoadingDialog!!.isShowing) {
+                googlePhotosLoadingDialog!!.dismiss()
+                googlePhotosLoadingDialog = null
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

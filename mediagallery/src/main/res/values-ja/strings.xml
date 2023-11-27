@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">戻る</string>
+    <string name="media_gallery_google_photos_not_installed">Googleフォトがインストールされていない</string>
+    <string name="media_gallery_google_photos_disable">Google フォトが無効になっています</string>
+    <string name="media_gallery_label_enable">有効にする</string>
+    <string name="media_gallery_label_photos">写真</string>
+    <string name="media_gallery_google_photos">Googleフォト</string>
+    <string name="media_gallery_photos_taking_long_time">少し時間がかかります。</string>
+    <string name="media_gallery_photos_taking_more_time">写真が多すぎるようです！</string>
+    <string name="media_gallery_loading_photos">写真を読み込んでいます。</string>
+    <string name="media_gallery_allow_camera_permission">カメラ権限へのアクセスを許可する必要があります。</string>
+    <string name="media_gallery_label_grant">付与</string>
+    <string name="media_gallery_label_cancel">キャンセル</string>
+    <string name="media_gallery_label_camera">カメラ</string>
+    <string name="media_gallery_label_all">全て</string>
+    <string name="media_gallery_label_gallery">ギャラリー</string>
+    <string name="media_gallery_label_done">終わり</string>
+    <string name="media_gallery_allow_permission">ストレージ権限へのアクセスを許可する必要があります。</string>
+    <string name="media_gallery_setting_text">今すぐアップデート</string>
+    <string name="media_gallery_camera_action_title">画像またはビデオをキャプチャする</string>
+    <string name="media_gallery_duration_error">おっとっと！ 30 秒以下の動画を選択してください。</string>
+    <string name="media_gallery_file_size_error">より高速に処理するには、100 MB 未満のビデオを選択してください。</string>
+    <string name="media_gallery_size_error">現在、HD ビデオのみをサポートしています。ビデオを HD に変換したいですか?</string>
+    <string name="media_gallery_okay">わかった</string>
+    <string name="media_gallery_no">いいえ</string>
+    <string name="media_gallery_convert">変換する</string>
+    <string name="media_gallery_capture_image_video">画像またはビデオをキャプチャする</string>
+    <string name="media_gallery_corrupted_media">破損したメディア。</string>
+    <string name="crop_label_crop">作物</string>
+    <string name="crop_label_skip">スキップ</string>
+</resources>

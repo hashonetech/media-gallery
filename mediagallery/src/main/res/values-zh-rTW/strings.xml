@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">後退</string>
+    <string name="media_gallery_google_photos_not_installed">未安裝 Google 相冊</string>
+    <string name="media_gallery_google_photos_disable">Google 照片已停用</string>
+    <string name="media_gallery_label_enable">使能夠</string>
+    <string name="media_gallery_label_photos">相片</string>
+    <string name="media_gallery_google_photos">Google照片</string>
+    <string name="media_gallery_photos_taking_long_time">需要的時間有點長。</string>
+    <string name="media_gallery_photos_taking_more_time">看來你的照片太多了！</string>
+    <string name="media_gallery_loading_photos">正在加載照片。</string>
+    <string name="media_gallery_allow_camera_permission">您需要允許存取相機權限。</string>
+    <string name="media_gallery_label_grant">授予</string>
+    <string name="media_gallery_label_cancel">取消</string>
+    <string name="media_gallery_label_camera">相機</string>
+    <string name="media_gallery_label_all">全部</string>
+    <string name="media_gallery_label_gallery">畫廊</string>
+    <string name="media_gallery_label_done">完畢</string>
+    <string name="media_gallery_allow_permission">您需要允許存取儲存權限。</string>
+    <string name="media_gallery_setting_text">現在更新</string>
+    <string name="media_gallery_camera_action_title">捕捉影像或視頻</string>
+    <string name="media_gallery_duration_error">哎呀！請選擇一個時長不超過 30 秒的影片。</string>
+    <string name="media_gallery_file_size_error">選擇 100 MB 以下的影片以加快處理速度！</string>
+    <string name="media_gallery_size_error">目前我們僅支援高清視訊。想要將您的影片轉換為高清影片嗎？</string>
+    <string name="media_gallery_okay">好的</string>
+    <string name="media_gallery_no">不</string>
+    <string name="media_gallery_convert">轉變</string>
+    <string name="media_gallery_capture_image_video">捕捉影像或視頻</string>
+    <string name="media_gallery_corrupted_media">損壞的媒體。</string>
+    <string name="crop_label_crop">莊稼</string>
+    <string name="crop_label_skip">跳過</string>
+</resources>

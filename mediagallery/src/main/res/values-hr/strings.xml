@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">leđa</string>
+    <string name="media_gallery_google_photos_not_installed">Google fotografije nisu instalirane</string>
+    <string name="media_gallery_google_photos_disable">Google fotografije su onemogućene</string>
+    <string name="media_gallery_label_enable">Omogućiti</string>
+    <string name="media_gallery_label_photos">Fotografije</string>
+    <string name="media_gallery_google_photos">Google fotografije</string>
+    <string name="media_gallery_photos_taking_long_time">Malo dugo traje.</string>
+    <string name="media_gallery_photos_taking_more_time">Čini se da imate previše fotografija!</string>
+    <string name="media_gallery_loading_photos">Učitavanje fotografija.</string>
+    <string name="media_gallery_allow_camera_permission">Morate dopustiti pristup dopuštenju kamere.</string>
+    <string name="media_gallery_label_grant">Grant</string>
+    <string name="media_gallery_label_cancel">Otkazati</string>
+    <string name="media_gallery_label_camera">Fotoaparat</string>
+    <string name="media_gallery_label_all">svi</string>
+    <string name="media_gallery_label_gallery">Galerija</string>
+    <string name="media_gallery_label_done">Gotovo</string>
+    <string name="media_gallery_allow_permission">Morate dopustiti pristup dozvolama za pohranu.</string>
+    <string name="media_gallery_setting_text">Ažurirati sada</string>
+    <string name="media_gallery_camera_action_title">Snimite sliku ili video</string>
+    <string name="media_gallery_duration_error">Ups! Odaberite videozapis koji traje 30 sekundi ili kraći.</string>
+    <string name="media_gallery_file_size_error">Odaberite video ispod 100 MB za bržu obradu!</string>
+    <string name="media_gallery_size_error">Trenutno podržavamo samo HD videozapise. Želite pretvoriti svoj video u HD?.</string>
+    <string name="media_gallery_okay">u redu</string>
+    <string name="media_gallery_no">Ne</string>
+    <string name="media_gallery_convert">Pretvoriti</string>
+    <string name="media_gallery_capture_image_video">Snimite sliku ili video</string>
+    <string name="media_gallery_corrupted_media">Oštećeni mediji.</string>
+    <string name="crop_label_crop">Usjev</string>
+    <string name="crop_label_skip">Preskočiti</string>
+</resources>

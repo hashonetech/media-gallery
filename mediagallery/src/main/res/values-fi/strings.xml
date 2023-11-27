@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Takaisin</string>
+    <string name="media_gallery_google_photos_not_installed">Google-kuvia ei ole asennettu</string>
+    <string name="media_gallery_google_photos_disable">Google Kuvat on poistettu käytöstä</string>
+    <string name="media_gallery_label_enable">ota käyttöön</string>
+    <string name="media_gallery_label_photos">Kuvat</string>
+    <string name="media_gallery_google_photos">Google-kuvat</string>
+    <string name="media_gallery_photos_taking_long_time">Se kestää vähän kauan.</string>
+    <string name="media_gallery_photos_taking_more_time">Sinulla näyttää olevan liikaa kuvia!</string>
+    <string name="media_gallery_loading_photos">Ladataan kuvia.</string>
+    <string name="media_gallery_allow_camera_permission">Sinun on annettava kameran käyttöoikeus.</string>
+    <string name="media_gallery_label_grant">Myöntää</string>
+    <string name="media_gallery_label_cancel">Peruuttaa</string>
+    <string name="media_gallery_label_camera">Kamera</string>
+    <string name="media_gallery_label_all">Kaikki</string>
+    <string name="media_gallery_label_gallery">Galleria</string>
+    <string name="media_gallery_label_done">Tehty</string>
+    <string name="media_gallery_allow_permission">Sinun on sallittava tallennustilan käyttöoikeudet.</string>
+    <string name="media_gallery_setting_text">Päivitä nyt</string>
+    <string name="media_gallery_camera_action_title">Ota kuva tai video</string>
+    <string name="media_gallery_duration_error">Oho! Valitse video, joka on 30 sekuntia tai lyhyempi.</string>
+    <string name="media_gallery_file_size_error">Valitse alle 100 Mt video nopeuttaaksesi käsittelyä!</string>
+    <string name="media_gallery_size_error">Tällä hetkellä tuemme vain HD-videoita. Haluatko muuntaa videosi HD:ksi?.</string>
+    <string name="media_gallery_okay">Okei</string>
+    <string name="media_gallery_no">Ei</string>
+    <string name="media_gallery_convert">Muuntaa</string>
+    <string name="media_gallery_capture_image_video">Ota kuva tai video</string>
+    <string name="media_gallery_corrupted_media">Vioittunut media.</string>
+    <string name="crop_label_crop">Rajaa</string>
+    <string name="crop_label_skip">Ohita</string>
+</resources>

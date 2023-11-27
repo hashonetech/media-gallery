@@ -2,8 +2,6 @@ package com.hashone.media.gallery.utils
 
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
-import android.util.Log
-import android.util.Size
 import java.io.File
 import java.io.FileInputStream
 import java.net.URLConnection

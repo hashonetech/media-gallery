@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2022 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- English -->
+    <locale android:name="en" />
+    <!-- Bangla - Bangladesh -->
+    <locale android:name="bn" />
+    <!-- Deutsch - German -->
+    <locale android:name="de" />
+    <!-- Spanisch - Spanish -->
+    <locale android:name="es" />
+    <!-- Filipino -->
+    <locale android:name="fil" />
+    <!-- French (Standard) -->
+    <locale android:name="fr" />
+    <!-- bahasa Indonesia -->
+    <locale android:name="in" />
+    <!-- Italian -->
+    <locale android:name="it" />
+    <!-- portuguese -->
+    <locale android:name="pt" />
+    <!-- Russian -->
+    <locale android:name="ru" />
+    <!-- Turkish -->
+    <locale android:name="tr" />
+    <!-- Ukrainian -->
+    <locale android:name="uk" />
+    <!-- Chinese in Simplified Script -->
+    <locale android:name="zh-Hans" />
+    <!-- Chinese (Taiwan) in Traditional Script -->
+    <locale android:name="zh-Hant" />
+    <!-- Chinese (Hong Kong) in Traditional Script -->
+    <locale android:name="zh-Hant-MO" />
+
+    <locale android:name="ar" />
+    <locale android:name="bg" />
+    <locale android:name="cs" />
+    <locale android:name="da" />
+    <locale android:name="el" />
+    <locale android:name="fa" />
+    <locale android:name="fi" />
+    <locale android:name="hi" />
+    <locale android:name="hr" />
+    <locale android:name="hu" />
+    <locale android:name="id" />
+    <locale android:name="ja" />
+    <locale android:name="km" />
+    <locale android:name="ko" />
+    <locale android:name="ms" />
+    <locale android:name="nb" />
+    <locale android:name="nl" />
+    <locale android:name="pl" />
+    <locale android:name="ro" />
+    <locale android:name="sk" />
+    <locale android:name="sv" />
+    <locale android:name="th" />
+    <locale android:name="vi" />
+</locale-config>

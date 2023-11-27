@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Zurück</string>
+    <string name="media_gallery_google_photos_not_installed">Google Fotos ist nicht installiert</string>
+    <string name="media_gallery_google_photos_disable">Google Fotos ist deaktiviert</string>
+    <string name="media_gallery_label_enable">Aktivieren</string>
+    <string name="media_gallery_label_photos">Fotos</string>
+    <string name="media_gallery_google_photos">Google Fotos</string>
+    <string name="media_gallery_photos_taking_long_time">Es dauert etwas lange.</string>
+    <string name="media_gallery_photos_taking_more_time">Sieht aus, als hättest du zu viele Fotos!</string>
+    <string name="media_gallery_loading_photos">Fotos werden geladen.</string>
+    <string name="media_gallery_allow_camera_permission">Sie müssen den Zugriff auf die Kamera erlauben.</string>
+    <string name="media_gallery_label_grant">Gewähren</string>
+    <string name="media_gallery_label_cancel">Stornieren</string>
+    <string name="media_gallery_label_camera">Kamera</string>
+    <string name="media_gallery_label_all">Alle</string>
+    <string name="media_gallery_label_gallery">Galerie</string>
+    <string name="media_gallery_label_done">Erledigt</string>
+    <string name="media_gallery_allow_permission">Sie müssen den Zugriff auf Speicherberechtigungen zulassen.</string>
+    <string name="media_gallery_setting_text">Jetzt aktualisieren</string>
+    <string name="media_gallery_camera_action_title">Nehmen Sie ein Bild oder Video auf</string>
+    <string name="media_gallery_duration_error">Hoppla! Bitte wählen Sie ein Video aus, das 30 Sekunden oder kürzer ist.</string>
+    <string name="media_gallery_file_size_error">Wählen Sie das Video unter 100 MB für eine schnellere Verarbeitung aus!</string>
+    <string name="media_gallery_size_error">Derzeit unterstützen wir nur HD-Videos. Möchten Sie Ihr Video in HD konvertieren?</string>
+    <string name="media_gallery_okay">Okay</string>
+    <string name="media_gallery_no">NEIN</string>
+    <string name="media_gallery_convert">Konvertieren</string>
+    <string name="media_gallery_capture_image_video">Nehmen Sie ein Bild oder Video auf</string>
+    <string name="media_gallery_corrupted_media">Beschädigte Medien.</string>
+    <string name="crop_label_crop">Ernte</string>
+    <string name="crop_label_skip">Überspringen</string>
+</resources>

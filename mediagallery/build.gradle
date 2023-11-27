@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.hashone'
-version = '1.0.30'
+version = '1.0.31'
 
 android {
     namespace 'com.hashone.media.gallery'
@@ -16,6 +16,8 @@ android {
         targetSdk 33
         consumerProguardFiles "consumer-rules.pro"
         multiDexEnabled true
+
+        resourceConfigurations += ["af", "ar", "bg", "bn", "cs", "da", "de", "el", "en", "es", "fa", "fi", "fil", "fr", "hi", "hr", "hu", "id", "in", "it", "ja", "km", "ko", "ms", "nb", "nl", "pl", "pt", "ro", "ru", "sk", "sv", "th", "tr", "uk", "vi", "zh-rCN", "zh-rTW", "b+zh+Hant+MO"]
     }
 
     libraryVariants.all { variant ->
@@ -66,7 +68,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.hashone'
                 artifactId = 'media-gallery'
-                version = '1.0.30'
+                version = '1.0.31'
             }
         }
     }

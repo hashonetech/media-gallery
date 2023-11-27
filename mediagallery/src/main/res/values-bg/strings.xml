@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">обратно</string>
+    <string name="media_gallery_google_photos_not_installed">Google Photos не е инсталиран</string>
+    <string name="media_gallery_google_photos_disable">Google Photos е деактивиран</string>
+    <string name="media_gallery_label_enable">Активиране</string>
+    <string name="media_gallery_label_photos">Снимки</string>
+    <string name="media_gallery_google_photos">Google Снимки</string>
+    <string name="media_gallery_photos_taking_long_time">Отнема малко време.</string>
+    <string name="media_gallery_photos_taking_more_time">Изглежда, че имате твърде много снимки!</string>
+    <string name="media_gallery_loading_photos">Зареждат се снимки.</string>
+    <string name="media_gallery_allow_camera_permission">Трябва да разрешите достъп до разрешение за камера.</string>
+    <string name="media_gallery_label_grant">Грант</string>
+    <string name="media_gallery_label_cancel">Отказ</string>
+    <string name="media_gallery_label_camera">Камера</string>
+    <string name="media_gallery_label_all">всичко</string>
+    <string name="media_gallery_label_gallery">Галерия</string>
+    <string name="media_gallery_label_done">Свършен</string>
+    <string name="media_gallery_allow_permission">Трябва да разрешите достъп до разрешения за съхранение.</string>
+    <string name="media_gallery_setting_text">Актуализирайте сега</string>
+    <string name="media_gallery_camera_action_title">Заснемане на изображение или видео</string>
+    <string name="media_gallery_duration_error">Опа! Моля, изберете видеоклип, който е 30 секунди или по-кратък.</string>
+    <string name="media_gallery_file_size_error">Изберете видеоклип под 100 MB за по-бърза обработка!</string>
+    <string name="media_gallery_size_error">В момента поддържаме само HD видеоклипове. Искате ли да конвертирате вашето видео в HD?.</string>
+    <string name="media_gallery_okay">добре</string>
+    <string name="media_gallery_no">Не</string>
+    <string name="media_gallery_convert">Преобразуване</string>
+    <string name="media_gallery_capture_image_video">Заснемане на изображение или видео</string>
+    <string name="media_gallery_corrupted_media">Повредена медия.</string>
+    <string name="crop_label_crop">реколта</string>
+    <string name="crop_label_skip">Пропускане</string>
+</resources>

@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Bumalik</string>
+    <string name="media_gallery_google_photos_not_installed">Hindi naka-install ang Google Photos</string>
+    <string name="media_gallery_google_photos_disable">Hindi Paganahin ang Google Photos</string>
+    <string name="media_gallery_label_enable">Paganahin</string>
+    <string name="media_gallery_label_photos">Mga larawan</string>
+    <string name="media_gallery_google_photos">Google Photos</string>
+    <string name="media_gallery_photos_taking_long_time">Medyo nagtatagal.</string>
+    <string name="media_gallery_photos_taking_more_time">Mukhang napakarami mong larawan!</string>
+    <string name="media_gallery_loading_photos">Naglo-load ng mga larawan.</string>
+    <string name="media_gallery_allow_camera_permission">Kailangan mong payagan ang pag-access sa pahintulot sa camera.</string>
+    <string name="media_gallery_label_grant">Grant</string>
+    <string name="media_gallery_label_cancel">Kanselahin</string>
+    <string name="media_gallery_label_camera">Camera</string>
+    <string name="media_gallery_label_all">Lahat</string>
+    <string name="media_gallery_label_gallery">Gallery</string>
+    <string name="media_gallery_label_done">Tapos na</string>
+    <string name="media_gallery_allow_permission">Kailangan mong payagan ang pag-access sa mga pahintulot sa storage.</string>
+    <string name="media_gallery_setting_text">Update Ngayon</string>
+    <string name="media_gallery_camera_action_title">Kumuha ng Larawan o Video</string>
+    <string name="media_gallery_duration_error">Oops! Mangyaring pumili ng video na 30 segundo o mas maikli.</string>
+    <string name="media_gallery_file_size_error">Piliin ang video na wala pang 100 MB para sa mas mabilis na pagproseso!</string>
+    <string name="media_gallery_size_error">Sa kasalukuyan, sinusuportahan lang namin ang mga HD na video. Gusto mong i-convert ang iyong video sa HD?.</string>
+    <string name="media_gallery_okay">Sige</string>
+    <string name="media_gallery_no">Hindi</string>
+    <string name="media_gallery_convert">Magbalik-loob</string>
+    <string name="media_gallery_capture_image_video">Kumuha ng Larawan o Video</string>
+    <string name="media_gallery_corrupted_media">Sirang media.</string>
+    <string name="crop_label_crop">I-crop</string>
+    <string name="crop_label_skip">Laktawan</string>
+</resources>

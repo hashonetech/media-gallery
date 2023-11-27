@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">ត្រឡប់មកវិញ</string>
+    <string name="media_gallery_google_photos_not_installed">Google រូបថតមិនត្រូវបានដំឡើងទេ។</string>
+    <string name="media_gallery_google_photos_disable">Google រូបថតត្រូវបានបិទ</string>
+    <string name="media_gallery_label_enable">បើក</string>
+    <string name="media_gallery_label_photos">រូបថត</string>
+    <string name="media_gallery_google_photos">Google រូបថត</string>
+    <string name="media_gallery_photos_taking_long_time">វាចំណាយពេលយូរបន្តិច។</string>
+    <string name="media_gallery_photos_taking_more_time">មើលទៅអ្នកមានរូបថតច្រើនពេកហើយ!</string>
+    <string name="media_gallery_loading_photos">កំពុងផ្ទុករូបថត។</string>
+    <string name="media_gallery_allow_camera_permission">អ្នកត្រូវអនុញ្ញាតឱ្យចូលប្រើការអនុញ្ញាតកាមេរ៉ា។</string>
+    <string name="media_gallery_label_grant">ជំនួយ</string>
+    <string name="media_gallery_label_cancel">បោះបង់</string>
+    <string name="media_gallery_label_camera">កាមេរ៉ា</string>
+    <string name="media_gallery_label_all">ទាំងអស់។</string>
+    <string name="media_gallery_label_gallery">វិចិត្រសាល</string>
+    <string name="media_gallery_label_done">រួចរាល់</string>
+    <string name="media_gallery_allow_permission">អ្នកត្រូវអនុញ្ញាតឱ្យចូលប្រើការអនុញ្ញាតការផ្ទុក។</string>
+    <string name="media_gallery_setting_text">ធ្វើបច្ចុប្បន្នភាពឥឡូវនេះ</string>
+    <string name="media_gallery_camera_action_title">ចាប់យករូបភាព ឬវីដេអូ</string>
+    <string name="media_gallery_duration_error">ឱ! សូមជ្រើសរើសវីដេអូដែលមានរយៈពេល 30 វិនាទី ឬខ្លីជាងនេះ។</string>
+    <string name="media_gallery_file_size_error">ជ្រើសរើសវីដេអូក្រោម 100 MB សម្រាប់ដំណើរការលឿនជាងមុន!</string>
+    <string name="media_gallery_size_error">បច្ចុប្បន្ន យើង​គាំទ្រ​តែ​វីដេអូ HD ប៉ុណ្ណោះ។ ចង់បំប្លែងវីដេអូរបស់អ្នកទៅជា HD មែនទេ?</string>
+    <string name="media_gallery_okay">យល់ព្រម</string>
+    <string name="media_gallery_no">ទេ</string>
+    <string name="media_gallery_convert">បម្លែង</string>
+    <string name="media_gallery_capture_image_video">ចាប់យករូបភាព ឬវីដេអូ</string>
+    <string name="media_gallery_corrupted_media">ប្រព័ន្ធផ្សព្វផ្សាយខូច។</string>
+    <string name="crop_label_crop">ដំណាំ</string>
+    <string name="crop_label_skip">រំលង</string>
+</resources>

@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Tilbage</string>
+    <string name="media_gallery_google_photos_not_installed">Google Fotos er ikke installeret</string>
+    <string name="media_gallery_google_photos_disable">Google Fotos er deaktiveret</string>
+    <string name="media_gallery_label_enable">Aktiver</string>
+    <string name="media_gallery_label_photos">Fotos</string>
+    <string name="media_gallery_google_photos">Google Fotos</string>
+    <string name="media_gallery_photos_taking_long_time">Det tager lidt lang tid.</string>
+    <string name="media_gallery_photos_taking_more_time">Det ser ud til, at du har for mange billeder!</string>
+    <string name="media_gallery_loading_photos">Indlæser billeder.</string>
+    <string name="media_gallery_allow_camera_permission">Du skal give adgang til kameratilladelse.</string>
+    <string name="media_gallery_label_grant">Give</string>
+    <string name="media_gallery_label_cancel">Afbestille</string>
+    <string name="media_gallery_label_camera">Kamera</string>
+    <string name="media_gallery_label_all">Alle</string>
+    <string name="media_gallery_label_gallery">Galleri</string>
+    <string name="media_gallery_label_done">Færdig</string>
+    <string name="media_gallery_allow_permission">Du skal give adgang til lagertilladelser.</string>
+    <string name="media_gallery_setting_text">Opdatere nu</string>
+    <string name="media_gallery_camera_action_title">Tag billede eller video</string>
+    <string name="media_gallery_duration_error">Ups! Vælg en video, der er 30 sekunder eller kortere.</string>
+    <string name="media_gallery_file_size_error">Vælg videoen under 100 MB for hurtigere behandling!</string>
+    <string name="media_gallery_size_error">I øjeblikket understøtter vi kun HD-videoer. Vil du konvertere din video til HD?.</string>
+    <string name="media_gallery_okay">okay</string>
+    <string name="media_gallery_no">Ingen</string>
+    <string name="media_gallery_convert">Konvertere</string>
+    <string name="media_gallery_capture_image_video">Tag billede eller video</string>
+    <string name="media_gallery_corrupted_media">Ødelagte medier.</string>
+    <string name="crop_label_crop">Afgrøde</string>
+    <string name="crop_label_skip">Springe</string>
+</resources>

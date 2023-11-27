@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Atrás</string>
+    <string name="media_gallery_google_photos_not_installed">Google Fotos no está instalado</string>
+    <string name="media_gallery_google_photos_disable">Google Fotos está desactivado</string>
+    <string name="media_gallery_label_enable">Permitir</string>
+    <string name="media_gallery_label_photos">Fotos</string>
+    <string name="media_gallery_google_photos">Fotos de Google</string>
+    <string name="media_gallery_photos_taking_long_time">Está tardando un poco.</string>
+    <string name="media_gallery_photos_taking_more_time">¡Parece que tienes demasiadas fotos!</string>
+    <string name="media_gallery_loading_photos">Cargando fotos.</string>
+    <string name="media_gallery_allow_camera_permission">Debe permitir el acceso al permiso de la cámara.</string>
+    <string name="media_gallery_label_grant">Conceder</string>
+    <string name="media_gallery_label_cancel">Cancelar</string>
+    <string name="media_gallery_label_camera">Cámara</string>
+    <string name="media_gallery_label_all">Todo</string>
+    <string name="media_gallery_label_gallery">Galería</string>
+    <string name="media_gallery_label_done">Hecho</string>
+    <string name="media_gallery_allow_permission">Debe permitir el acceso a los permisos de almacenamiento.</string>
+    <string name="media_gallery_setting_text">Actualizar ahora</string>
+    <string name="media_gallery_camera_action_title">Capturar imagen o vídeo</string>
+    <string name="media_gallery_duration_error">¡Ups! Seleccione un vídeo que dure 30 segundos o menos.</string>
+    <string name="media_gallery_file_size_error">¡Seleccione el video de menos de 100 MB para un procesamiento más rápido!</string>
+    <string name="media_gallery_size_error">Actualmente solo admitimos videos HD. ¿Quieres convertir tu video a HD?</string>
+    <string name="media_gallery_okay">Bueno</string>
+    <string name="media_gallery_no">No</string>
+    <string name="media_gallery_convert">Convertir</string>
+    <string name="media_gallery_capture_image_video">Capturar imagen o vídeo</string>
+    <string name="media_gallery_corrupted_media">Medios corruptos.</string>
+    <string name="crop_label_crop">Cultivo</string>
+    <string name="crop_label_skip">Saltar</string>
+</resources>

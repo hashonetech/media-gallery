@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Rug</string>
+    <string name="media_gallery_google_photos_not_installed">Google Foto\'s is niet geïnstalleerd</string>
+    <string name="media_gallery_google_photos_disable">Google Foto\'s is uitgeschakeld</string>
+    <string name="media_gallery_label_enable">Inschakelen</string>
+    <string name="media_gallery_label_photos">Foto\'s</string>
+    <string name="media_gallery_google_photos">Google Foto\'s</string>
+    <string name="media_gallery_photos_taking_long_time">Het duurt een beetje lang.</string>
+    <string name="media_gallery_photos_taking_more_time">Het lijkt erop dat je te veel foto\'s hebt!</string>
+    <string name="media_gallery_loading_photos">Foto\'s laden.</string>
+    <string name="media_gallery_allow_camera_permission">U moet toegang verlenen tot cameratoestemming.</string>
+    <string name="media_gallery_label_grant">Studiebeurs</string>
+    <string name="media_gallery_label_cancel">Annuleren</string>
+    <string name="media_gallery_label_camera">Camera</string>
+    <string name="media_gallery_label_all">Alle</string>
+    <string name="media_gallery_label_gallery">Galerij</string>
+    <string name="media_gallery_label_done">Klaar</string>
+    <string name="media_gallery_allow_permission">U moet toegang tot opslagrechten toestaan.</string>
+    <string name="media_gallery_setting_text">Update nu</string>
+    <string name="media_gallery_camera_action_title">Leg een afbeelding of video vast</string>
+    <string name="media_gallery_duration_error">Oeps! Selecteer een video van 30 seconden of korter.</string>
+    <string name="media_gallery_file_size_error">Selecteer de video kleiner dan 100 MB voor snellere verwerking!</string>
+    <string name="media_gallery_size_error">Momenteel ondersteunen we alleen HD-video\'s. Wilt u uw video naar HD converteren?</string>
+    <string name="media_gallery_okay">Oké</string>
+    <string name="media_gallery_no">Nee</string>
+    <string name="media_gallery_convert">Overzetten</string>
+    <string name="media_gallery_capture_image_video">Leg een afbeelding of video vast</string>
+    <string name="media_gallery_corrupted_media">Corrupte media.</string>
+    <string name="crop_label_crop">Bijsnijden</string>
+    <string name="crop_label_skip">Overslaan</string>
+</resources>

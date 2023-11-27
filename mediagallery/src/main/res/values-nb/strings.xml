@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Tilbake</string>
+    <string name="media_gallery_google_photos_not_installed">Google Foto er ikke installert</string>
+    <string name="media_gallery_google_photos_disable">Google Foto er deaktivert</string>
+    <string name="media_gallery_label_enable">Muliggjøre</string>
+    <string name="media_gallery_label_photos">Bilder</string>
+    <string name="media_gallery_google_photos">Google Foto</string>
+    <string name="media_gallery_photos_taking_long_time">Det tar litt lang tid.</string>
+    <string name="media_gallery_photos_taking_more_time">Ser ut som du har for mange bilder!</string>
+    <string name="media_gallery_loading_photos">Laster inn bilder.</string>
+    <string name="media_gallery_allow_camera_permission">Du må gi tilgang til kameratillatelse.</string>
+    <string name="media_gallery_label_grant">Stipend</string>
+    <string name="media_gallery_label_cancel">Avbryt</string>
+    <string name="media_gallery_label_camera">Kamera</string>
+    <string name="media_gallery_label_all">Alle</string>
+    <string name="media_gallery_label_gallery">Galleri</string>
+    <string name="media_gallery_label_done">Ferdig</string>
+    <string name="media_gallery_allow_permission">Du må tillate tilgang til lagringstillatelser.</string>
+    <string name="media_gallery_setting_text">Oppdater nå</string>
+    <string name="media_gallery_camera_action_title">Ta bilde eller video</string>
+    <string name="media_gallery_duration_error">Oops! Velg en video som er 30 sekunder eller kortere.</string>
+    <string name="media_gallery_file_size_error">Velg videoen under 100 MB for raskere behandling!</string>
+    <string name="media_gallery_size_error">Foreløpig støtter vi kun HD-videoer. Vil du konvertere videoen din til HD?.</string>
+    <string name="media_gallery_okay">Greit</string>
+    <string name="media_gallery_no">Nei</string>
+    <string name="media_gallery_convert">Konvertere</string>
+    <string name="media_gallery_capture_image_video">Ta bilde eller video</string>
+    <string name="media_gallery_corrupted_media">Ødelagte medier.</string>
+    <string name="crop_label_crop">Avling</string>
+    <string name="crop_label_skip">Hopp over</string>
+</resources>

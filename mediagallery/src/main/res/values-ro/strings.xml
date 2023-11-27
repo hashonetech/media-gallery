@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Înapoi</string>
+    <string name="media_gallery_google_photos_not_installed">Google Foto nu este instalat</string>
+    <string name="media_gallery_google_photos_disable">Google Foto este Dezactivat</string>
+    <string name="media_gallery_label_enable">Permite</string>
+    <string name="media_gallery_label_photos">Fotografii</string>
+    <string name="media_gallery_google_photos">Google Foto</string>
+    <string name="media_gallery_photos_taking_long_time">Durează puțin.</string>
+    <string name="media_gallery_photos_taking_more_time">Se pare că ai prea multe fotografii!</string>
+    <string name="media_gallery_loading_photos">Se încarcă fotografii.</string>
+    <string name="media_gallery_allow_camera_permission">Trebuie să permiteți accesul la permisiunea camerei.</string>
+    <string name="media_gallery_label_grant">Acorda</string>
+    <string name="media_gallery_label_cancel">Anulare</string>
+    <string name="media_gallery_label_camera">aparat foto</string>
+    <string name="media_gallery_label_all">Toate</string>
+    <string name="media_gallery_label_gallery">Galerie</string>
+    <string name="media_gallery_label_done">Terminat</string>
+    <string name="media_gallery_allow_permission">Trebuie să permiteți accesul la permisiunile de stocare.</string>
+    <string name="media_gallery_setting_text">Actualizează acum</string>
+    <string name="media_gallery_camera_action_title">Capturați imagine sau videoclip</string>
+    <string name="media_gallery_duration_error">Hopa! Vă rugăm să selectați un videoclip de 30 de secunde sau mai scurt.</string>
+    <string name="media_gallery_file_size_error">Selectați videoclipul sub 100 MB pentru o procesare mai rapidă!</string>
+    <string name="media_gallery_size_error">În prezent acceptăm doar videoclipuri HD. Doriți să vă convertiți videoclipul în HD?.</string>
+    <string name="media_gallery_okay">Bine</string>
+    <string name="media_gallery_no">Nu</string>
+    <string name="media_gallery_convert">Convertit</string>
+    <string name="media_gallery_capture_image_video">Capturați imagine sau videoclip</string>
+    <string name="media_gallery_corrupted_media">Media coruptă.</string>
+    <string name="crop_label_crop">A decupa</string>
+    <string name="crop_label_skip">Ocolire</string>
+</resources>

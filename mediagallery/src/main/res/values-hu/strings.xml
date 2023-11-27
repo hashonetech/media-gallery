@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Vissza</string>
+    <string name="media_gallery_google_photos_not_installed">A Google Fotók nincs telepítve</string>
+    <string name="media_gallery_google_photos_disable">A Google Fotók le van tiltva</string>
+    <string name="media_gallery_label_enable">Engedélyezze</string>
+    <string name="media_gallery_label_photos">Fényképek</string>
+    <string name="media_gallery_google_photos">Google Fotók</string>
+    <string name="media_gallery_photos_taking_long_time">Kicsit sokáig tart.</string>
+    <string name="media_gallery_photos_taking_more_time">Úgy tűnik, túl sok fényképed van!</string>
+    <string name="media_gallery_loading_photos">Fényképek betöltése.</string>
+    <string name="media_gallery_allow_camera_permission">Engedélyeznie kell a kameraengedélyt.</string>
+    <string name="media_gallery_label_grant">Grant</string>
+    <string name="media_gallery_label_cancel">Megszünteti</string>
+    <string name="media_gallery_label_camera">Kamera</string>
+    <string name="media_gallery_label_all">Minden</string>
+    <string name="media_gallery_label_gallery">Képtár</string>
+    <string name="media_gallery_label_done">Kész</string>
+    <string name="media_gallery_allow_permission">Engedélyeznie kell a tárolási engedélyekhez való hozzáférést.</string>
+    <string name="media_gallery_setting_text">Frissítse most</string>
+    <string name="media_gallery_camera_action_title">Kép vagy videó rögzítése</string>
+    <string name="media_gallery_duration_error">Hoppá! Kérjük, válasszon egy 30 másodperces vagy rövidebb videót.</string>
+    <string name="media_gallery_file_size_error">A gyorsabb feldolgozás érdekében válaszd ki a 100 MB alatti videót!</string>
+    <string name="media_gallery_size_error">Jelenleg csak a HD videókat támogatjuk. HD-re szeretné konvertálni a videót?</string>
+    <string name="media_gallery_okay">oké</string>
+    <string name="media_gallery_no">Nem</string>
+    <string name="media_gallery_convert">Alakítani</string>
+    <string name="media_gallery_capture_image_video">Kép vagy videó rögzítése</string>
+    <string name="media_gallery_corrupted_media">Sérült média.</string>
+    <string name="crop_label_crop">Vág</string>
+    <string name="crop_label_skip">Kihagyás</string>
+</resources>

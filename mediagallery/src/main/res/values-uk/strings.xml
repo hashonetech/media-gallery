@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Назад</string>
+    <string name="media_gallery_google_photos_not_installed">Google Photos не встановлено</string>
+    <string name="media_gallery_google_photos_disable">Google Фото вимкнено</string>
+    <string name="media_gallery_label_enable">Увімкнути</string>
+    <string name="media_gallery_label_photos">Фотографії</string>
+    <string name="media_gallery_google_photos">Google Фото</string>
+    <string name="media_gallery_photos_taking_long_time">Це займає трохи часу.</string>
+    <string name="media_gallery_photos_taking_more_time">Схоже, у вас забагато фотографій!</string>
+    <string name="media_gallery_loading_photos">Завантаження фотографій.</string>
+    <string name="media_gallery_allow_camera_permission">Потрібно надати дозвіл на доступ до камери.</string>
+    <string name="media_gallery_label_grant">Грант</string>
+    <string name="media_gallery_label_cancel">Скасувати</string>
+    <string name="media_gallery_label_camera">Камера</string>
+    <string name="media_gallery_label_all">всі</string>
+    <string name="media_gallery_label_gallery">Галерея</string>
+    <string name="media_gallery_label_done">Готово</string>
+    <string name="media_gallery_allow_permission">Потрібно надати доступ до дозволів на зберігання.</string>
+    <string name="media_gallery_setting_text">Оновити зараз</string>
+    <string name="media_gallery_camera_action_title">Захоплення зображення або відео</string>
+    <string name="media_gallery_duration_error">Ой! Виберіть відео тривалістю 30 секунд або менше.</string>
+    <string name="media_gallery_file_size_error">Виберіть відео до 100 МБ для швидшої обробки!</string>
+    <string name="media_gallery_size_error">Наразі ми підтримуємо лише HD-відео. Хочете конвертувати відео у HD?.</string>
+    <string name="media_gallery_okay">Гаразд</string>
+    <string name="media_gallery_no">Немає</string>
+    <string name="media_gallery_convert">конвертувати</string>
+    <string name="media_gallery_capture_image_video">Захоплення зображення або відео</string>
+    <string name="media_gallery_corrupted_media">Пошкоджені медіа.</string>
+    <string name="crop_label_crop">Урожай</string>
+    <string name="crop_label_skip">Пропустити</string>
+</resources>

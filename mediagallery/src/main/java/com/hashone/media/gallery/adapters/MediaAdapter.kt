@@ -193,7 +193,9 @@ class MediaAdapter(
                                     mOnSelectionChangeListener!!.onNotValidVideo(this, position)
                                 } else selectOrRemoveImage(this, position)
                             } else {
-                                showSnackBar(mContext, mBinding.root, builder.corruptedMediaMessage)
+                                showSnackBar(mContext, mBinding.root, builder.corruptedMediaMessage.ifEmpty {
+                                    mContext.getString(R.string.media_gallery_corrupted_media)
+                                })
                             }
                         } else selectOrRemoveImage(this, position)
                     }

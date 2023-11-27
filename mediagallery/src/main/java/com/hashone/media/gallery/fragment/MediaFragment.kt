@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hashone.commons.base.CoroutineAsyncTask
 import com.hashone.media.gallery.MediaActivity
+import com.hashone.media.gallery.R
 import com.hashone.media.gallery.adapters.MediaAdapter
 import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.callback.OnSelectionChangeListener
@@ -49,7 +50,9 @@ class MediaFragment : Fragment() {
         Runnable {
             //TODO: Language translation require
             mBinding.textViewProgressMessage.text =
-                builder.bucketProgressDialogBuilder.loadingLongTimeMessage
+                builder.bucketProgressDialogBuilder.loadingLongTimeMessage.ifEmpty {
+                    getString(R.string.media_gallery_photos_taking_long_time)
+                }
             mIsHandled = 1
             mHandlerLoadingWait.postDelayed(mRunnableLoadingWait1, 7 * 1000L)
         }
@@ -58,7 +61,9 @@ class MediaFragment : Fragment() {
             mIsHandled = 2
             //TODO: Language translation require
             mBinding.textViewProgressMessage.text =
-                builder.bucketProgressDialogBuilder.loadingMoreTimeMessage
+                builder.bucketProgressDialogBuilder.loadingMoreTimeMessage.ifEmpty {
+                    getString(R.string.media_gallery_photos_taking_more_time)
+                }
         }
 
     override fun onCreateView(
@@ -80,7 +85,10 @@ class MediaFragment : Fragment() {
     }
 
     private fun setupLoadingUI() {
-        mBinding.textViewProgressMessage.text = builder.bucketProgressDialogBuilder.loadingMessage
+        mBinding.textViewProgressMessage.text =
+            builder.bucketProgressDialogBuilder.loadingMessage.ifEmpty {
+                getString(R.string.media_gallery_loading_photos)
+            }
 
         mBinding.textViewProgressMessage.setTextSize(
             TypedValue.COMPLEX_UNIT_SP,
@@ -218,26 +226,43 @@ class MediaFragment : Fragment() {
                                 ) {
                                     dialogBuilder =
                                         builder.videoValidationBuilder.durationDialogBuilder
-                                    message = builder.videoValidationBuilder.durationLimitMessage
+                                    message =
+                                        builder.videoValidationBuilder.durationLimitMessage.ifEmpty {
+                                            getString(R.string.media_gallery_duration_error)
+                                        }
                                 } else if (builder.videoValidationBuilder.checkFileSize && (byteToMB(
                                         imageItem.mediaSize
                                     ) > builder.videoValidationBuilder.sizeLimit)
                                 ) {
                                     dialogBuilder = builder.videoValidationBuilder.sizeDialogBuilder
-                                    message = builder.videoValidationBuilder.sizeLimitMessage
+                                    message =
+                                        builder.videoValidationBuilder.sizeLimitMessage.ifEmpty {
+                                            getString(R.string.media_gallery_file_size_error)
+                                        }
                                 } else if (builder.videoValidationBuilder.checkResolution && (width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution)) {
                                     isLargeResolution = true
                                     dialogBuilder =
                                         builder.videoValidationBuilder.resolutionDialogBuilder
-                                    message = builder.videoValidationBuilder.maxResolutionMessage
+                                    message =
+                                        builder.videoValidationBuilder.maxResolutionMessage.ifEmpty {
+                                            getString(R.string.media_gallery_size_error)
+                                        }
                                 } else {
-                                    "${builder.videoValidationBuilder.durationLimitMessage}\n${builder.videoValidationBuilder.sizeLimitMessage}\n${builder.videoValidationBuilder.maxResolutionMessage}"
+                                    "${builder.videoValidationBuilder.durationLimitMessage.ifEmpty { 
+                                        getString(R.string.media_gallery_duration_error)
+                                    }}\n${builder.videoValidationBuilder.sizeLimitMessage.ifEmpty { 
+                                        getString(R.string.media_gallery_file_size_error)
+                                    }}\n${builder.videoValidationBuilder.maxResolutionMessage.ifEmpty { 
+                                        getString(R.string.media_gallery_size_error)
+                                    }}"
                                 }
 
                                 if (message.isNotEmpty()) {
                                     showWarningDialog(
                                         title = message,
-                                        positionButtonText = dialogBuilder.positiveText,
+                                        positionButtonText = dialogBuilder.positiveText.ifEmpty {
+                                            getString(R.string.media_gallery_okay)
+                                        },
                                         negativeButtonText = if (isLargeResolution) dialogBuilder.negativeText else "",
                                         dialogBuilder,
                                         positiveCallback = {
@@ -247,8 +272,13 @@ class MediaFragment : Fragment() {
                                             alertDialog?.cancel()
                                             if (builder.mediaCount > 1) {
                                                 if (mBinding.recyclerViewImages.adapter != null) {
-                                                    if (isSelected && (mActivity as MediaActivity).mSelectedImagesList.size >= builder.mediaCount){ mBinding.recyclerViewImages.adapter!!.notifyDataSetChanged()}else{
-                                                        (mBinding.recyclerViewImages.adapter!! as MediaAdapter).selectOrRemoveImage(imageItem, position)
+                                                    if (isSelected && (mActivity as MediaActivity).mSelectedImagesList.size >= builder.mediaCount) {
+                                                        mBinding.recyclerViewImages.adapter!!.notifyDataSetChanged()
+                                                    } else {
+                                                        (mBinding.recyclerViewImages.adapter!! as MediaAdapter).selectOrRemoveImage(
+                                                            imageItem,
+                                                            position
+                                                        )
                                                     }
                                                 }
                                             } else {
@@ -360,7 +390,7 @@ class MediaFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        (mActivity as MediaActivity).updateTitle("Gallery")
+        (mActivity as MediaActivity).updateTitle(getString(R.string.media_gallery_label_gallery))
         (mActivity as MediaActivity).updateGooglePhotosUI(true)
         if (mIsHandled == 0)
             mHandlerLoadingWait.removeCallbacks(mRunnableLoadingWait)

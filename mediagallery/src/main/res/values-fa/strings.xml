@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">بازگشت</string>
+    <string name="media_gallery_google_photos_not_installed">Google Photos نصب نشده است</string>
+    <string name="media_gallery_google_photos_disable">Google Photos غیرفعال است</string>
+    <string name="media_gallery_label_enable">فعال کنید</string>
+    <string name="media_gallery_label_photos">عکس ها</string>
+    <string name="media_gallery_google_photos">Google Photos</string>
+    <string name="media_gallery_photos_taking_long_time">کمی طول می کشد.</string>
+    <string name="media_gallery_photos_taking_more_time">به نظر می رسد عکس های زیادی دارید!</string>
+    <string name="media_gallery_loading_photos">در حال بارگذاری عکس ها</string>
+    <string name="media_gallery_allow_camera_permission">باید اجازه دسترسی به مجوز دوربین را بدهید.</string>
+    <string name="media_gallery_label_grant">اعطا کردن</string>
+    <string name="media_gallery_label_cancel">لغو کنید</string>
+    <string name="media_gallery_label_camera">دوربین</string>
+    <string name="media_gallery_label_all">همه</string>
+    <string name="media_gallery_label_gallery">آلبوم عکس</string>
+    <string name="media_gallery_label_done">انجام شده</string>
+    <string name="media_gallery_allow_permission">باید اجازه دسترسی به مجوزهای ذخیره سازی را بدهید.</string>
+    <string name="media_gallery_setting_text">اکنون به روز رسانی کنید</string>
+    <string name="media_gallery_camera_action_title">گرفتن تصویر یا ویدیو</string>
+    <string name="media_gallery_duration_error">اوه! لطفاً ویدیویی را انتخاب کنید که 30 ثانیه یا کمتر باشد.</string>
+    <string name="media_gallery_file_size_error">برای پردازش سریعتر ویدیوی زیر 100 مگابایت را انتخاب کنید!</string>
+    <string name="media_gallery_size_error">در حال حاضر ما فقط از ویدیوهای HD پشتیبانی می کنیم. آیا می خواهید ویدیوی خود را به HD تبدیل کنید؟</string>
+    <string name="media_gallery_okay">باشه</string>
+    <string name="media_gallery_no">خیر</string>
+    <string name="media_gallery_convert">تبدیل</string>
+    <string name="media_gallery_capture_image_video">گرفتن تصویر یا ویدیو</string>
+    <string name="media_gallery_corrupted_media">رسانه های فاسد</string>
+    <string name="crop_label_crop">برش</string>
+    <string name="crop_label_skip">پرش کنید</string>
+</resources>

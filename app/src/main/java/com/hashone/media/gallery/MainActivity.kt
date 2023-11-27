@@ -13,15 +13,14 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.ColorRes
-import androidx.annotation.FloatRange
-import androidx.annotation.FontRes
+import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.hashone.commons.base.BaseActivity
 import com.hashone.commons.base.BetterActivityResult
 import com.hashone.commons.extensions.isPermissionGranted
 import com.hashone.commons.extensions.serializable
+import com.hashone.commons.languages.LocaleManager
 import com.hashone.cropper.CropActivity
 import com.hashone.cropper.model.CropDataSaved
 import com.hashone.media.gallery.builder.MediaGallery
@@ -132,6 +131,20 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
         Glide.with(this@MainActivity).load(com.hashone.media.gallery.test.R.drawable.hashone_device_wallpaper).into(mBinding.cropedImage)
     }
 
+    override fun onStart() {
+        val currentLocale = LocaleManager.getAppLocale()
+        super.onStart()
+        isContains = LocaleManager.isLocaleContains(currentLocale)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!isContains) {
+            ActivityCompat.recreate(mActivity)
+            return
+        }
+    }
+
     //Performing action onItemSelected and onNothing selected
     override fun onItemSelected(arg0: AdapterView<*>?, arg1: View?, position: Int, id: Long) {
         Toast.makeText(applicationContext, mediaTypeNames.get(position), Toast.LENGTH_LONG).show()
@@ -159,28 +172,28 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                     allowAllMedia = true,
                     enableCropMode = mBinding.switchNewCrop.isOn,
                     mediaGridCount = 3,
-                    allMediaTitle = "All",
+                    allMediaTitle = "",
                     //TODO video Duration Limit in second
                     videoValidationBuilder = MediaGallery.VideoValidationBuilder(
                         checkValidation = true,
                         //TODO video Duration Limit in second
                         checkDuration = true,
                         durationLimit = 30,
-                        durationLimitMessage = getString(R.string.duration_error),
+                        durationLimitMessage = getString(R.string.media_gallery_duration_error),
                         //TODO video Size Limit in MB
                         checkFileSize = true,
                         sizeLimit = 100,
-                        sizeLimitMessage = getString(R.string.file_size_error),
+                        sizeLimitMessage = getString(R.string.media_gallery_file_size_error),
                         //TODO video Resolution Size Limit px
                         checkResolution = true,
                         maxResolution = 1920,
-                        maxResolutionMessage = getString(R.string.size_error),
+                        maxResolutionMessage = getString(R.string.media_gallery_size_error),
                         //TODO video Validation Dialog UI
                         durationDialogBuilder = MediaGallery.VideoValidationDialogBuilder(
                             titleColor = com.hashone.commons.R.color.dark_gray,
                             titleFont = com.hashone.commons.R.font.roboto_regular,
                             titleSize = 14F,
-                            positiveText = getString(R.string.okay),
+                            positiveText = getString(R.string.media_gallery_okay),
                             positiveColor = com.hashone.commons.R.color.black,
                             positiveFont = com.hashone.commons.R.font.roboto_regular,
                             positiveSize = 16F,
@@ -190,7 +203,7 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                             titleColor = com.hashone.commons.R.color.dark_gray,
                             titleFont = com.hashone.commons.R.font.roboto_regular,
                             titleSize = 14F,
-                            positiveText = getString(R.string.okay),
+                            positiveText = getString(R.string.media_gallery_okay),
                             positiveColor = com.hashone.commons.R.color.black,
                             positiveFont = com.hashone.commons.R.font.roboto_regular,
                             positiveSize = 16F,
@@ -200,11 +213,11 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                             titleColor = com.hashone.commons.R.color.dark_gray,
                             titleFont = com.hashone.commons.R.font.roboto_regular,
                             titleSize = 14F,
-                            positiveText = getString(R.string.no),
+                            positiveText = getString(R.string.media_gallery_no),
                             positiveColor = com.hashone.commons.R.color.black,
                             positiveFont = com.hashone.commons.R.font.roboto_regular,
                             positiveSize = 16F,
-                            negativeText = getString(R.string.convert),
+                            negativeText = getString(R.string.media_gallery_convert),
                             negativeColor = com.hashone.commons.R.color.black,
                             negativeFont = com.hashone.commons.R.font.roboto_regular,
                             negativeSize = 16F,
@@ -212,7 +225,7 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                         )
 
                     ),
-                    cameraActionTitle = getString(com.hashone.media.gallery.R.string.camera_action_title),
+                    cameraActionTitle = getString(com.hashone.media.gallery.R.string.media_gallery_camera_action_title),
                 ) {
                     //TODO: Screen
                     screenBuilder = MediaGallery.ScreenBuilder(
@@ -238,11 +251,11 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
 
                     //TODO: Warning Ui
                     warningUiBuilder = MediaGallery.WarningUiBuilder(
-                        message = getString(com.hashone.commons.R.string.allow_permission),
+                        message = getString(R.string.media_gallery_allow_permission),
                         messageColor = com.hashone.commons.R.color.black,
                         messageFont = com.hashone.commons.R.font.roboto_regular,
                         messageSize = 14F,
-                        settingText = getString(R.string.setting_text),
+                        settingText = getString(R.string.media_gallery_setting_text),
                         settingColor = com.hashone.media.gallery.R.color.positive_blue,
                         settingFont = com.hashone.commons.R.font.roboto_bold,
                         settingSize = 16F,
@@ -250,16 +263,16 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
 
                     //TODO: Permission
                     permissionBuilder = MediaGallery.PermissionBuilder(
-                        message = getString(com.hashone.commons.R.string.allow_permission),
+                        message = getString(R.string.media_gallery_allow_permission),
                         messageColor = com.hashone.commons.R.color.black,
                         messageFont = com.hashone.commons.R.font.roboto_regular,
                         messageSize = 14F,
-                        positiveText = getString(R.string.label_grant),
+                        positiveText = getString(R.string.media_gallery_label_grant),
                         positiveColor = com.hashone.commons.R.color.black,
                         positiveFont = com.hashone.commons.R.font.roboto_bold,
                         positiveSize = 16F,
                         positiveIsCap = true,
-                        negativeText = getString(R.string.label_cancel),
+                        negativeText = getString(R.string.media_gallery_label_cancel),
                         negativeColor = com.hashone.commons.R.color.black,
                         negativeFont = com.hashone.commons.R.font.roboto_regular,
                         negativeSize = 16F,
@@ -285,9 +298,9 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
 
                     //TODO: Bucket Progress
                     bucketProgressDialogBuilder = MediaGallery.BucketProgressDialogBuilder(
-                        loadingMessage = "Loading photos.",
-                        loadingLongTimeMessage = "It is taking bit long.",
-                        loadingMoreTimeMessage = "Looks like you have too many photos!",
+                        loadingMessage = "",
+                        loadingLongTimeMessage = "",
+                        loadingMoreTimeMessage = "",
                         messageColor = com.hashone.commons.R.color.pure_black,
                         messageFont = com.hashone.commons.R.font.roboto_medium,
                         messageSize = 16F,
@@ -433,9 +446,9 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
         if (isGranted) {
             openMediaGallery(mCurrentRequestCode)
         } else {
-            showCustomAlertDialog(message = getString(R.string.allow_permission),
-                negativeButtonText = getString(R.string.label_cancel).uppercase(Locale.getDefault()),
-                positionButtonText = getString(R.string.label_grant).uppercase(Locale.getDefault()),
+            showCustomAlertDialog(message = getString(R.string.media_gallery_allow_permission),
+                negativeButtonText = getString(R.string.media_gallery_label_cancel).uppercase(Locale.getDefault()),
+                positionButtonText = getString(R.string.media_gallery_label_grant).uppercase(Locale.getDefault()),
                 negativeCallback = {
                     alertDialog?.cancel()
                 },

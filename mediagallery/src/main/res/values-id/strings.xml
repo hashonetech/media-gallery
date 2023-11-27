@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Kembali</string>
+    <string name="media_gallery_google_photos_not_installed">Google Foto tidak diinstal</string>
+    <string name="media_gallery_google_photos_disable">Foto Google Dinonaktifkan</string>
+    <string name="media_gallery_label_enable">Memungkinkan</string>
+    <string name="media_gallery_label_photos">Foto</string>
+    <string name="media_gallery_google_photos">Foto Google</string>
+    <string name="media_gallery_photos_taking_long_time">Ini memakan waktu agak lama.</string>
+    <string name="media_gallery_photos_taking_more_time">Sepertinya Anda punya terlalu banyak foto!</string>
+    <string name="media_gallery_loading_photos">Memuat foto.</string>
+    <string name="media_gallery_allow_camera_permission">Anda harus mengizinkan akses ke izin kamera.</string>
+    <string name="media_gallery_label_grant">Menganugerahkan</string>
+    <string name="media_gallery_label_cancel">Membatalkan</string>
+    <string name="media_gallery_label_camera">Kamera</string>
+    <string name="media_gallery_label_all">Semua</string>
+    <string name="media_gallery_label_gallery">Galeri</string>
+    <string name="media_gallery_label_done">Selesai</string>
+    <string name="media_gallery_allow_permission">Anda perlu mengizinkan akses ke izin penyimpanan.</string>
+    <string name="media_gallery_setting_text">Memperbarui sekarang</string>
+    <string name="media_gallery_camera_action_title">Ambil Gambar atau Video</string>
+    <string name="media_gallery_duration_error">Ups! Silakan pilih video yang berdurasi 30 detik atau lebih pendek.</string>
+    <string name="media_gallery_file_size_error">Pilih video di bawah 100 MB untuk pemrosesan lebih cepat!</string>
+    <string name="media_gallery_size_error">Saat ini kami hanya mendukung video HD. Ingin mengkonversi video Anda ke HD?.</string>
+    <string name="media_gallery_okay">Oke</string>
+    <string name="media_gallery_no">TIDAK</string>
+    <string name="media_gallery_convert">Mengubah</string>
+    <string name="media_gallery_capture_image_video">Ambil Gambar atau Video</string>
+    <string name="media_gallery_corrupted_media">Media yang rusak.</string>
+    <string name="crop_label_crop">Tanaman</string>
+    <string name="crop_label_skip">Melewati</string>
+</resources>

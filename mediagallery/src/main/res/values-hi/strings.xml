@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">पीछे</string>
+    <string name="media_gallery_google_photos_not_installed">Google फ़ोटो इंस्टॉल नहीं है</string>
+    <string name="media_gallery_google_photos_disable">Google फ़ोटो अक्षम है</string>
+    <string name="media_gallery_label_enable">सक्षम</string>
+    <string name="media_gallery_label_photos">तस्वीरें</string>
+    <string name="media_gallery_google_photos">गूगल फ़ोटो</string>
+    <string name="media_gallery_photos_taking_long_time">इसमें थोड़ा अधिक समय लग रहा है.</string>
+    <string name="media_gallery_photos_taking_more_time">ऐसा लगता है कि आपके पास बहुत सारी तस्वीरें हैं!</string>
+    <string name="media_gallery_loading_photos">फ़ोटो लोड हो रहे हैं.</string>
+    <string name="media_gallery_allow_camera_permission">आपको कैमरे तक पहुंच की अनुमति देनी होगी.</string>
+    <string name="media_gallery_label_grant">अनुदान</string>
+    <string name="media_gallery_label_cancel">रद्द करना</string>
+    <string name="media_gallery_label_camera">कैमरा</string>
+    <string name="media_gallery_label_all">सभी</string>
+    <string name="media_gallery_label_gallery">गैलरी</string>
+    <string name="media_gallery_label_done">हो गया</string>
+    <string name="media_gallery_allow_permission">आपको भंडारण अनुमतियों तक पहुंच की अनुमति देनी होगी.</string>
+    <string name="media_gallery_setting_text">अभी अद्यतन करें</string>
+    <string name="media_gallery_camera_action_title">छवि या वीडियो कैप्चर करें</string>
+    <string name="media_gallery_duration_error">उफ़! कृपया ऐसा वीडियो चुनें जो 30 सेकंड या उससे छोटा हो।</string>
+    <string name="media_gallery_file_size_error">तेज़ प्रोसेसिंग के लिए 100 एमबी से कम का वीडियो चुनें!</string>
+    <string name="media_gallery_size_error">वर्तमान में हम केवल एचडी वीडियो का समर्थन करते हैं। क्या आप अपने वीडियो को एचडी में बदलना चाहते हैं?</string>
+    <string name="media_gallery_okay">ठीक है</string>
+    <string name="media_gallery_no">नहीं</string>
+    <string name="media_gallery_convert">बदलना</string>
+    <string name="media_gallery_capture_image_video">छवि या वीडियो कैप्चर करें</string>
+    <string name="media_gallery_corrupted_media">भ्रष्ट मीडिया.</string>
+    <string name="crop_label_crop">काटना</string>
+    <string name="crop_label_skip">छोडना</string>
+</resources>

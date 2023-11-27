@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Zadní</string>
+    <string name="media_gallery_google_photos_not_installed">Fotky Google nejsou nainstalovány</string>
+    <string name="media_gallery_google_photos_disable">Fotky Google jsou zakázány</string>
+    <string name="media_gallery_label_enable">Umožnit</string>
+    <string name="media_gallery_label_photos">Fotky</string>
+    <string name="media_gallery_google_photos">Fotky Google</string>
+    <string name="media_gallery_photos_taking_long_time">Trvá to trochu dlouho.</string>
+    <string name="media_gallery_photos_taking_more_time">Zdá se, že máte příliš mnoho fotek!</string>
+    <string name="media_gallery_loading_photos">Načítání fotek.</string>
+    <string name="media_gallery_allow_camera_permission">Musíte povolit přístup ke kameře.</string>
+    <string name="media_gallery_label_grant">Grant</string>
+    <string name="media_gallery_label_cancel">zrušení</string>
+    <string name="media_gallery_label_camera">Fotoaparát</string>
+    <string name="media_gallery_label_all">Všechno</string>
+    <string name="media_gallery_label_gallery">Galerie</string>
+    <string name="media_gallery_label_done">Hotovo</string>
+    <string name="media_gallery_allow_permission">Musíte povolit přístup k oprávněním úložiště.</string>
+    <string name="media_gallery_setting_text">Nyní aktualizovat</string>
+    <string name="media_gallery_camera_action_title">Pořídit snímek nebo video</string>
+    <string name="media_gallery_duration_error">Jejda! Vyberte prosím video, které má 30 sekund nebo kratší.</string>
+    <string name="media_gallery_file_size_error">Vyberte video do 100 MB pro rychlejší zpracování!</string>
+    <string name="media_gallery_size_error">V současné době podporujeme pouze HD videa. Chcete převést video do HD?.</string>
+    <string name="media_gallery_okay">dobře</string>
+    <string name="media_gallery_no">Ne</string>
+    <string name="media_gallery_convert">Konvertovat</string>
+    <string name="media_gallery_capture_image_video">Pořídit snímek nebo video</string>
+    <string name="media_gallery_corrupted_media">Zkorumpovaná média.</string>
+    <string name="crop_label_crop">Oříznutí</string>
+    <string name="crop_label_skip">Přeskočit</string>
+</resources>

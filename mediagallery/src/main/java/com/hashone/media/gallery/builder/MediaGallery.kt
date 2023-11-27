@@ -28,9 +28,9 @@ open class MediaGallery(val builder: Builder) : Serializable {
                 checkDuration = false,
                 checkResolution = false
             ),
-            cameraActionTitle: String = "Capture Image or Video",
-            allMediaTitle: String = "All",
-            corruptedMediaMessage: String = "Corrupted media.",
+            cameraActionTitle: String = "",
+            allMediaTitle: String = "",
+            corruptedMediaMessage: String = "",
             block: Builder.() -> Unit
         ) = Builder(
             mediaType,
@@ -62,7 +62,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
         val enableCropMode: Boolean = false,
         @IntRange
         val mediaGridCount: Int = 3,
-        val cameraActionTitle: String = "Capture Image or Video",
+        val cameraActionTitle: String = "",
 
         //TODO: Video Validation Builder
         val videoValidationBuilder: VideoValidationBuilder = VideoValidationBuilder(
@@ -70,8 +70,8 @@ open class MediaGallery(val builder: Builder) : Serializable {
             checkDuration = false,
             checkResolution = false
         ),
-        val allMediaTitle: String = "All",
-        val corruptedMediaMessage: String = "Corrupted media."
+        val allMediaTitle: String = "",
+        val corruptedMediaMessage: String = ""
 
         ) : Serializable {
         //TODO: Screen
@@ -111,9 +111,9 @@ open class MediaGallery(val builder: Builder) : Serializable {
     ) : Serializable
 
     class BucketProgressDialogBuilder(
-        var loadingMessage: String = "Loading photos.",
-        var loadingLongTimeMessage: String = "It is taking bit long.",
-        var loadingMoreTimeMessage: String = "Looks like you have too many photos!",
+        var loadingMessage: String = "",
+        var loadingLongTimeMessage: String = "",
+        var loadingMoreTimeMessage: String = "",
 
         @ColorRes
         var messageColor: Int = R.color.pure_black,
@@ -201,14 +201,14 @@ open class MediaGallery(val builder: Builder) : Serializable {
 
 
     class WarningUiBuilder(
-        var message: String = "You need to allow access to storage permissions.",
+        var message: String = "",
         @ColorRes
         var messageColor: Int = R.color.black,
         @FontRes
         var messageFont: Int = R.font.roboto_regular,
         @FloatRange
         var messageSize: Float = 14F,
-        var settingText: String = "Update Now",
+        var settingText: String = "",
         @ColorRes
         var settingColor: Int = com.hashone.media.gallery.R.color.positive_blue,
         @FontRes
@@ -219,14 +219,14 @@ open class MediaGallery(val builder: Builder) : Serializable {
 
 
     class PermissionBuilder(
-        var message: String = "You need to allow access to storage permissions.",
+        var message: String = "",
         @ColorRes
         var messageColor: Int = R.color.black,
         @FontRes
         var messageFont: Int = R.font.roboto_regular,
         @FloatRange
         var messageSize: Float = 14F,
-        var positiveText: String = "Grant",
+        var positiveText: String = "",
         @ColorRes
         var positiveColor: Int = R.color.black,
         @FontRes
@@ -234,7 +234,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
         @FloatRange
         var positiveSize: Float = 16F,
         var positiveIsCap: Boolean = true,
-        var negativeText: String = "Cancel",
+        var negativeText: String = "",
         @ColorRes
         var negativeColor: Int = R.color.black,
         @FontRes
@@ -251,21 +251,21 @@ open class MediaGallery(val builder: Builder) : Serializable {
         var checkDuration: Boolean,
         @IntRange
         var durationLimit: Int = 30,
-        var durationLimitMessage: String = "Oops! Please select a video that\\'s 30 seconds or shorter.",
+        var durationLimitMessage: String = "",
         val durationDialogBuilder: VideoValidationDialogBuilder = VideoValidationDialogBuilder(),
 
         // TODO video Size Limit in MB
         var checkFileSize: Boolean,
         @IntRange
         var sizeLimit: Int = 100,
-        var sizeLimitMessage: String = "Select the video under 100 MB for faster processing!",
+        var sizeLimitMessage: String = "",
         val sizeDialogBuilder: VideoValidationDialogBuilder = VideoValidationDialogBuilder(),
 
         // TODO video Resolution Size Limit px
         var checkResolution: Boolean,
         @IntRange
         var maxResolution: Int = 1920,
-        var maxResolutionMessage: String = "Currently we support HD videos only. Want to convert your video to HD?.",
+        var maxResolutionMessage: String = "",
         val resolutionDialogBuilder: VideoValidationDialogBuilder = VideoValidationDialogBuilder(),
     ) : Serializable
 
@@ -276,7 +276,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
         var titleFont: Int = R.font.roboto_regular,
         @FloatRange
         var titleSize: Float = 14F,
-        var positiveText: String = "Okay",
+        var positiveText: String = "",
         @ColorRes
         var positiveColor: Int = R.color.black,
         @FontRes

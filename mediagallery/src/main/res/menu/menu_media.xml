@@ -6,6 +6,6 @@
         android:enabled="true"
         android:icon="@drawable/ic_camera_media_gallery"
         android:orderInCategory="0"
-        android:title="@string/label_camera"
+        android:title="@string/media_gallery_label_camera"
         app:showAsAction="always" />
 </menu>

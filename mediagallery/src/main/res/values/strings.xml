@@ -1,31 +1,35 @@
 <resources>
-    <string name="label_back">Back</string>
-    <string name="google_photos_not_installed">Google Photos is not installed</string>
-    <string name="google_photos_disable">Google Photos is Disable</string>
-    <string name="label_enable">Enable</string>
-    <string name="label_photos">Photos</string>
-    <string name="google_photos">Google Photos</string>
-    <string name="photos_taking_long_time">It is taking bit long.</string>
-    <string name="photos_taking_more_time">Looks like you have too many photos!</string>
-    <string name="loading_photos">Loading photos.</string>
+    <string name="media_gallery_label_back">Back</string>
+    <string name="media_gallery_google_photos_not_installed">Google Photos is not installed</string>
+    <string name="media_gallery_google_photos_disable">Google Photos is Disable</string>
+    <string name="media_gallery_label_enable">Enable</string>
+    <string name="media_gallery_label_photos">Photos</string>
+    <string name="media_gallery_google_photos">Google Photos</string>
+    <string name="media_gallery_photos_taking_long_time">It is taking bit long.</string>
+    <string name="media_gallery_photos_taking_more_time">Looks like you have too many photos!</string>
+    <string name="media_gallery_loading_photos">Loading photos.</string>
 
-    <string name="allow_camera_permission">You need to allow access to camera permission.</string>
-    <string name="label_grant">Grant</string>
-    <string name="label_cancel">Cancel</string>
-    <string name="label_camera">Camera</string>
+    <string name="media_gallery_allow_camera_permission">You need to allow access to camera permission.</string>
+    <string name="media_gallery_label_grant">Grant</string>
+    <string name="media_gallery_label_cancel">Cancel</string>
+    <string name="media_gallery_label_camera">Camera</string>
 
-    <string name="label_all">All</string>
-    <string name="label_gallery">Gallery</string>
-    <string name="label_done">Done</string>
+    <string name="media_gallery_label_all">All</string>
+    <string name="media_gallery_label_gallery">Gallery</string>
+    <string name="media_gallery_label_done">Done</string>
 
-    <string name="allow_permission">You need to allow access to storage permissions.</string>
-    <string name="setting_text">Update Now</string>
-    <string name="camera_action_title">Capture Image or Video</string>
-    <string name="duration_error">Oops! Please select a video that\'s 30 seconds or shorter.</string>
-    <string name="file_size_error">Select the video under 100 MB for faster processing!</string>
-<!--    <string name="size_error">Oops! Please select a video that\'s width and height 1920 or less.</string>-->
-    <string name="size_error">Currently we support HD videos only. Want to convert your video to HD?.</string>
-    <string name="okay">Okay</string>
-    <string name="no">No</string>
-    <string name="convert">Convert</string>
+    <string name="media_gallery_allow_permission">You need to allow access to storage permissions.</string>
+    <string name="media_gallery_setting_text">Update Now</string>
+    <string name="media_gallery_camera_action_title">Capture Image or Video</string>
+    <string name="media_gallery_duration_error">Oops! Please select a video that\'s 30 seconds or shorter.</string>
+    <string name="media_gallery_file_size_error">Select the video under 100 MB for faster processing!</string>
+    <string name="media_gallery_size_error">Currently we support HD videos only. Want to convert your video to HD?.</string>
+    <string name="media_gallery_okay">Okay</string>
+    <string name="media_gallery_no">No</string>
+    <string name="media_gallery_convert">Convert</string>
+    <string name="media_gallery_capture_image_video">Capture Image or Video</string>
+    <string name="media_gallery_corrupted_media">Corrupted media.</string>
+
+    <string name="crop_label_crop">Crop</string>
+    <string name="crop_label_skip">Skip</string>
 </resources>

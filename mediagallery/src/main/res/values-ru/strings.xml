@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Назад</string>
+    <string name="media_gallery_google_photos_not_installed">Google Фото не установлено.</string>
+    <string name="media_gallery_google_photos_disable">Google Фото отключено</string>
+    <string name="media_gallery_label_enable">Давать возможность</string>
+    <string name="media_gallery_label_photos">Фото</string>
+    <string name="media_gallery_google_photos">Google Фото</string>
+    <string name="media_gallery_photos_taking_long_time">Это занимает немного много времени.</string>
+    <string name="media_gallery_photos_taking_more_time">Похоже, у вас слишком много фотографий!</string>
+    <string name="media_gallery_loading_photos">Загрузка фотографий.</string>
+    <string name="media_gallery_allow_camera_permission">Вам необходимо разрешить доступ к разрешению камеры.</string>
+    <string name="media_gallery_label_grant">Грант</string>
+    <string name="media_gallery_label_cancel">Отмена</string>
+    <string name="media_gallery_label_camera">Камера</string>
+    <string name="media_gallery_label_all">Все</string>
+    <string name="media_gallery_label_gallery">Галерея</string>
+    <string name="media_gallery_label_done">Сделанный</string>
+    <string name="media_gallery_allow_permission">Вам необходимо разрешить доступ к разрешениям на хранение.</string>
+    <string name="media_gallery_setting_text">Обновить сейчас</string>
+    <string name="media_gallery_camera_action_title">Захват изображения или видео</string>
+    <string name="media_gallery_duration_error">Упс! Выберите видео продолжительностью 30 секунд или короче.</string>
+    <string name="media_gallery_file_size_error">Выберите видео размером менее 100 МБ для более быстрой обработки!</string>
+    <string name="media_gallery_size_error">В настоящее время мы поддерживаем только видео высокой четкости. Хотите конвертировать ваше видео в HD?</string>
+    <string name="media_gallery_okay">Хорошо</string>
+    <string name="media_gallery_no">Нет</string>
+    <string name="media_gallery_convert">Конвертировать</string>
+    <string name="media_gallery_capture_image_video">Захват изображения или видео</string>
+    <string name="media_gallery_corrupted_media">Коррумпированные СМИ.</string>
+    <string name="crop_label_crop">Обрезать</string>
+    <string name="crop_label_skip">Пропускать</string>
+</resources>

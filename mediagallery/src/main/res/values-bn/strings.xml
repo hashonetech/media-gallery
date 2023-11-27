@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">পেছনে</string>
+    <string name="media_gallery_google_photos_not_installed">Google Photos ইনস্টল করা নেই</string>
+    <string name="media_gallery_google_photos_disable">গুগল ফটো অক্ষম করা হয়েছে</string>
+    <string name="media_gallery_label_enable">সক্ষম করুন</string>
+    <string name="media_gallery_label_photos">ফটো</string>
+    <string name="media_gallery_google_photos">গুগল ফটো</string>
+    <string name="media_gallery_photos_taking_long_time">একটু সময় নিচ্ছে।</string>
+    <string name="media_gallery_photos_taking_more_time">মনে হচ্ছে আপনার অনেকগুলি ফটো আছে!</string>
+    <string name="media_gallery_loading_photos">ফটো লোড হচ্ছে</string>
+    <string name="media_gallery_allow_camera_permission">আপনাকে ক্যামেরার অনুমতিতে অ্যাক্সেসের অনুমতি দিতে হবে।</string>
+    <string name="media_gallery_label_grant">প্রদান</string>
+    <string name="media_gallery_label_cancel">বাতিল করুন</string>
+    <string name="media_gallery_label_camera">ক্যামেরা</string>
+    <string name="media_gallery_label_all">সব</string>
+    <string name="media_gallery_label_gallery">গ্যালারি</string>
+    <string name="media_gallery_label_done">সম্পন্ন</string>
+    <string name="media_gallery_allow_permission">আপনাকে স্টোরেজ অনুমতিগুলিতে অ্যাক্সেসের অনুমতি দিতে হবে।</string>
+    <string name="media_gallery_setting_text">এখন হালনাগাদ করুন</string>
+    <string name="media_gallery_camera_action_title">ছবি বা ভিডিও ক্যাপচার করুন</string>
+    <string name="media_gallery_duration_error">উফ! অনুগ্রহ করে 30 সেকেন্ড বা তার চেয়ে ছোট ভিডিও নির্বাচন করুন৷</string>
+    <string name="media_gallery_file_size_error">দ্রুত প্রক্রিয়াকরণের জন্য 100 MB এর নিচে ভিডিও নির্বাচন করুন!</string>
+    <string name="media_gallery_size_error">বর্তমানে আমরা শুধুমাত্র HD ভিডিও সমর্থন করি। আপনার ভিডিওকে HD তে রূপান্তর করতে চান?</string>
+    <string name="media_gallery_okay">ঠিক আছে</string>
+    <string name="media_gallery_no">না</string>
+    <string name="media_gallery_convert">রূপান্তর করুন</string>
+    <string name="media_gallery_capture_image_video">ছবি বা ভিডিও ক্যাপচার করুন</string>
+    <string name="media_gallery_corrupted_media">কলুষিত মিডিয়া।</string>
+    <string name="crop_label_crop">ফসল</string>
+    <string name="crop_label_skip">এড়িয়ে যান</string>
+</resources>

@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Geri</string>
+    <string name="media_gallery_google_photos_not_installed">Google Fotoğraflar yüklü değil</string>
+    <string name="media_gallery_google_photos_disable">Google Fotoğraflar Devre Dışı Bırakıldı</string>
+    <string name="media_gallery_label_enable">Olanak vermek</string>
+    <string name="media_gallery_label_photos">Fotoğraflar</string>
+    <string name="media_gallery_google_photos">Google Foto</string>
+    <string name="media_gallery_photos_taking_long_time">Biraz uzun sürüyor.</string>
+    <string name="media_gallery_photos_taking_more_time">Çok fazla fotoğrafınız var gibi görünüyor!</string>
+    <string name="media_gallery_loading_photos">Fotoğraflar yükleniyor.</string>
+    <string name="media_gallery_allow_camera_permission">Kamera iznine erişime izin vermeniz gerekir.</string>
+    <string name="media_gallery_label_grant">Hibe etmek</string>
+    <string name="media_gallery_label_cancel">İptal etmek</string>
+    <string name="media_gallery_label_camera">Kamera</string>
+    <string name="media_gallery_label_all">Tüm</string>
+    <string name="media_gallery_label_gallery">Galeri</string>
+    <string name="media_gallery_label_done">Tamamlamak</string>
+    <string name="media_gallery_allow_permission">Depolama izinlerine erişime izin vermeniz gerekir.</string>
+    <string name="media_gallery_setting_text">Şimdi güncelle</string>
+    <string name="media_gallery_camera_action_title">Resim veya Video Yakala</string>
+    <string name="media_gallery_duration_error">Hata! Lütfen 30 saniye veya daha kısa bir video seçin.</string>
+    <string name="media_gallery_file_size_error">Daha hızlı işlemek için videoyu 100 MB\'ın altında seçin!</string>
+    <string name="media_gallery_size_error">Şu anda yalnızca HD videoları destekliyoruz. Videonuzu HD\'ye dönüştürmek mi istiyorsunuz?</string>
+    <string name="media_gallery_okay">Tamam</string>
+    <string name="media_gallery_no">HAYIR</string>
+    <string name="media_gallery_convert">Dönüştürmek</string>
+    <string name="media_gallery_capture_image_video">Resim veya Video Yakala</string>
+    <string name="media_gallery_corrupted_media">Bozuk medya.</string>
+    <string name="crop_label_crop">Mahsul</string>
+    <string name="crop_label_skip">Atlamak</string>
+</resources>

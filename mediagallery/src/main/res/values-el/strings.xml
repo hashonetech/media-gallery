@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">Πίσω</string>
+    <string name="media_gallery_google_photos_not_installed">Το Google Photos δεν είναι εγκατεστημένο</string>
+    <string name="media_gallery_google_photos_disable">Το Google Photos είναι απενεργοποιημένο</string>
+    <string name="media_gallery_label_enable">επιτρέπω</string>
+    <string name="media_gallery_label_photos">Φωτογραφίες</string>
+    <string name="media_gallery_google_photos">Φωτογραφίες Google</string>
+    <string name="media_gallery_photos_taking_long_time">Παίρνει λίγο καιρό.</string>
+    <string name="media_gallery_photos_taking_more_time">Φαίνεται ότι έχετε πάρα πολλές φωτογραφίες!</string>
+    <string name="media_gallery_loading_photos">Φόρτωση φωτογραφιών.</string>
+    <string name="media_gallery_allow_camera_permission">Πρέπει να επιτρέψετε την πρόσβαση στην άδεια της κάμερας.</string>
+    <string name="media_gallery_label_grant">Χορήγηση</string>
+    <string name="media_gallery_label_cancel">Ματαίωση</string>
+    <string name="media_gallery_label_camera">ΦΩΤΟΓΡΑΦΙΚΗ ΜΗΧΑΝΗ</string>
+    <string name="media_gallery_label_all">Ολα</string>
+    <string name="media_gallery_label_gallery">Εκθεσιακός χώρος</string>
+    <string name="media_gallery_label_done">Εγινε</string>
+    <string name="media_gallery_allow_permission">Πρέπει να επιτρέψετε την πρόσβαση στα δικαιώματα αποθήκευσης.</string>
+    <string name="media_gallery_setting_text">Ενημέρωση τώρα</string>
+    <string name="media_gallery_camera_action_title">Λήψη εικόνας ή βίντεο</string>
+    <string name="media_gallery_duration_error">Ωχ! Επιλέξτε ένα βίντεο 30 δευτερολέπτων ή μικρότερο.</string>
+    <string name="media_gallery_file_size_error">Επιλέξτε το βίντεο κάτω από 100 MB για ταχύτερη επεξεργασία!</string>
+    <string name="media_gallery_size_error">Προς το παρόν υποστηρίζουμε μόνο βίντεο HD. Θέλετε να μετατρέψετε το βίντεό σας σε HD;.</string>
+    <string name="media_gallery_okay">εντάξει</string>
+    <string name="media_gallery_no">Οχι</string>
+    <string name="media_gallery_convert">Μετατρέπω</string>
+    <string name="media_gallery_capture_image_video">Λήψη εικόνας ή βίντεο</string>
+    <string name="media_gallery_corrupted_media">Κατεστραμμένα μέσα ενημέρωσης.</string>
+    <string name="crop_label_crop">Καλλιέργεια</string>
+    <string name="crop_label_skip">Παραλείπω</string>
+</resources>

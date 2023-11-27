@@ -1,0 +1,31 @@
+<resources>
+    <string name="media_gallery_label_back">กลับ</string>
+    <string name="media_gallery_google_photos_not_installed">ไม่ได้ติดตั้ง Google Photos</string>
+    <string name="media_gallery_google_photos_disable">Google Photos ถูกปิดใช้งาน</string>
+    <string name="media_gallery_label_enable">เปิดใช้งาน</string>
+    <string name="media_gallery_label_photos">ภาพถ่าย</string>
+    <string name="media_gallery_google_photos">Google รูปภาพ</string>
+    <string name="media_gallery_photos_taking_long_time">มันใช้เวลานานสักหน่อย</string>
+    <string name="media_gallery_photos_taking_more_time">ดูเหมือนว่าคุณมีรูปถ่ายมากเกินไป!</string>
+    <string name="media_gallery_loading_photos">กำลังโหลดรูปภาพ</string>
+    <string name="media_gallery_allow_camera_permission">คุณต้องอนุญาตการเข้าถึงการอนุญาตกล้อง</string>
+    <string name="media_gallery_label_grant">ยินยอม</string>
+    <string name="media_gallery_label_cancel">ยกเลิก</string>
+    <string name="media_gallery_label_camera">กล้อง</string>
+    <string name="media_gallery_label_all">ทั้งหมด</string>
+    <string name="media_gallery_label_gallery">แกลเลอรี่</string>
+    <string name="media_gallery_label_done">เสร็จแล้ว</string>
+    <string name="media_gallery_allow_permission">คุณต้องอนุญาตการเข้าถึงสิทธิ์การจัดเก็บข้อมูล</string>
+    <string name="media_gallery_setting_text">อัปเดตทันที</string>
+    <string name="media_gallery_camera_action_title">จับภาพหรือวิดีโอ</string>
+    <string name="media_gallery_duration_error">อ๊ะ! โปรดเลือกวิดีโอที่มีความยาว 30 วินาทีหรือสั้นกว่า</string>
+    <string name="media_gallery_file_size_error">เลือกวิดีโอที่มีขนาดต่ำกว่า 100 MB เพื่อการประมวลผลที่เร็วขึ้น!</string>
+    <string name="media_gallery_size_error">ขณะนี้เรารองรับวิดีโอ HD เท่านั้น ต้องการแปลงวิดีโอของคุณเป็น HD หรือไม่?.</string>
+    <string name="media_gallery_okay">ตกลง</string>
+    <string name="media_gallery_no">เลขที่</string>
+    <string name="media_gallery_convert">แปลง</string>
+    <string name="media_gallery_capture_image_video">จับภาพหรือวิดีโอ</string>
+    <string name="media_gallery_corrupted_media">สื่อเสียหาย.</string>
+    <string name="crop_label_crop">ครอบตัด</string>
+    <string name="crop_label_skip">ข้าม</string>
+</resources>
