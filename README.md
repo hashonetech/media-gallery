@@ -12,7 +12,7 @@ Media Gallery module, used to select Photo, Video, Capture Photo or Video from C
 	}
   
 	dependencies {
-	        implementation 'com.github.hashonetech:media-gallery:v1.0.31'
+	        implementation 'com.github.hashonetech:media-gallery:v1.0.32'
 	}
  ```
 
@@ -75,6 +75,7 @@ Table of contents
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     //TODO: Allow only when use Camera feature
     <uses-permission android:name="android.permission.CAMERA" />
+<uses-feature android:name="android.hardware.camera.any" />
 
 	<application
 		...
