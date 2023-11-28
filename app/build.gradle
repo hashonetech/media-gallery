@@ -12,7 +12,7 @@ android {
         minSdk 26
         targetSdk 33
         versionCode 1
-        versionName "1.0.31.0"
+        versionName "1.0.32.0"
 
         resourceConfigurations += ["af", "ar", "bg", "bn", "cs", "da", "de", "el", "en", "es", "fa", "fi", "fil", "fr", "hi", "hr", "hu", "id", "in", "it", "ja", "km", "ko", "ms", "nb", "nl", "pl", "pt", "ro", "ru", "sk", "sv", "th", "tr", "uk", "vi", "zh-rCN", "zh-rTW", "b+zh+Hant+MO"]
     }
