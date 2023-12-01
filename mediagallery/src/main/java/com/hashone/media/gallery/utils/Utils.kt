@@ -1,5 +1,7 @@
 package com.hashone.media.gallery.utils
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import java.io.File
@@ -68,4 +70,14 @@ fun isVideoFile(path: String?): Boolean {
 fun byteToMB(fileSizeInBytes: Long): Long {
     val fileSizeInKB = fileSizeInBytes / 1024
     return fileSizeInKB / 1024
+}
+
+fun getCacheDirectoryName(context: Context): File {
+    val contextWrapper = ContextWrapper(context)
+    val rootDir = contextWrapper.getDir(context.cacheDir.name, Context.MODE_PRIVATE)
+    if (!rootDir.exists()) {
+        rootDir.mkdirs()
+        rootDir.mkdir()
+    }
+    return context.cacheDir
 }

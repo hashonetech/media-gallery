@@ -17,6 +17,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
@@ -35,6 +36,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -96,6 +98,7 @@ import com.hashone.media.gallery.utils.file.FileExtension
 import com.hashone.media.gallery.utils.file.FileOperationRequest
 import com.hashone.media.gallery.utils.file.StorageType
 import com.hashone.media.gallery.utils.getApplicationInfoCompat
+import com.hashone.media.gallery.utils.getCacheDirectoryName
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -1135,6 +1138,18 @@ class MediaActivity : BaseActivity() {
         if (checkCameraPermission(REQUEST_CODE_CAMERA)) {
             if (checkCameraHardware()) {
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                val imageFile =
+                    File(
+                        getCacheDirectoryName(mActivity).absolutePath + File.separator + "CameraImage_${System.currentTimeMillis()}" + ".jpg"
+                    )
+                if (imageFile.exists())
+                    imageFile.delete()
+                val cameraFileUri = FileProvider.getUriForFile(
+                    this, "$packageName.provider",
+                    imageFile
+                )
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraFileUri)
+
                 val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
                 takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0) //Low Quality
                 takeVideoIntent.putExtra(
@@ -1163,40 +1178,74 @@ class MediaActivity : BaseActivity() {
                         BetterActivityResult.OnActivityResult<ActivityResult> {
                         override fun onActivityResult(result: ActivityResult) {
                             if (result.resultCode == Activity.RESULT_OK) {
-                                if (result.data?.data != null) {
-                                    val videoUri = result.data?.data
-                                    videoUri?.let {
-                                        val videoFilePath = it.toFilePath(mActivity)
-                                        val imageItem = MediaItem().apply {
-                                            path = videoFilePath
-                                        }
-                                        val arrayList = ArrayList<MediaItem>().apply {
-                                            add(imageItem)
-                                        }
+                                if (result.data != null) {
+                                    if (result.data?.data != null) {
+                                        val videoUri = result.data?.data
+                                        videoUri?.let {
+                                            val videoFilePath = it.toFilePath(mActivity)
+                                            val imageItem = MediaItem().apply {
+                                                path = videoFilePath
+                                            }
+                                            val arrayList = ArrayList<MediaItem>().apply {
+                                                add(imageItem)
+                                            }
 
-                                        MediaScannerConnection.scanFile(
-                                            mActivity, arrayOf(videoFilePath), null
-                                        ) { _, _ ->
-                                            setResultData(arrayList)
-                                            finish()
+                                            MediaScannerConnection.scanFile(
+                                                mActivity, arrayOf(videoFilePath), null
+                                            ) { _, _ ->
+                                                setResultData(arrayList)
+                                                finish()
+                                            }
+                                        }
+                                    } else {
+                                        if (result.data!!.extras == null) {
+                                            if (imageFile.exists()) {
+                                                val imageItem = MediaItem().apply {
+                                                    path = imageFile.absolutePath
+                                                }
+                                                val arrayList = ArrayList<MediaItem>().apply {
+                                                    add(imageItem)
+                                                }
+                                                MediaScannerConnection.scanFile(
+                                                    mActivity, arrayOf(imageFile.absolutePath), null
+                                                ) { _, _ ->
+                                                    setResultData(arrayList)
+                                                    finish()
+                                                }
+                                            }
+                                        } else {
+                                            val bitmap = result.data?.extras?.parcelable<Bitmap>("data")
+                                            bitmap?.let {
+                                                val savedFile = bitmap.saveToFile(
+                                                    fileName = "Camera_${System.currentTimeMillis()}.$EXTENSION_PNG",
+                                                    saveDir = getInternalCameraDir(mActivity),
+                                                    compressFormat = EXTENSION_PNG
+                                                )
+                                                val imageItem = MediaItem().apply {
+                                                    path = savedFile.absolutePath
+                                                }
+                                                val arrayList = ArrayList<MediaItem>().apply {
+                                                    add(imageItem)
+                                                }
+                                                MediaScannerConnection.scanFile(
+                                                    mActivity, arrayOf(savedFile.absolutePath), null
+                                                ) { _, _ ->
+                                                    setResultData(arrayList)
+                                                    finish()
+                                                }
+                                            }
                                         }
                                     }
                                 } else {
-                                    val bitmap = result.data?.extras?.parcelable<Bitmap>("data")
-                                    bitmap?.let {
-                                        val savedFile = bitmap.saveToFile(
-                                            fileName = "Camera_${System.currentTimeMillis()}.$EXTENSION_PNG",
-                                            saveDir = getInternalCameraDir(mActivity),
-                                            compressFormat = EXTENSION_PNG
-                                        )
+                                    if (imageFile.exists()) {
                                         val imageItem = MediaItem().apply {
-                                            path = savedFile.absolutePath
+                                            path = imageFile.absolutePath
                                         }
                                         val arrayList = ArrayList<MediaItem>().apply {
                                             add(imageItem)
                                         }
                                         MediaScannerConnection.scanFile(
-                                            mActivity, arrayOf(savedFile.absolutePath), null
+                                            mActivity, arrayOf(imageFile.absolutePath), null
                                         ) { _, _ ->
                                             setResultData(arrayList)
                                             finish()
