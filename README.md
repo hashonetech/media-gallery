@@ -1,5 +1,20 @@
 # media-gallery
-Media Gallery module, used to select Photo, Video, Capture Photo or Video from Camera.
+Media gallery module used to Select Single or Multiple Photo, Video or Both, Capture Photo or Video and also allow to select photo or video from Google Photos application.
+
+### Features
+<!--ts-->
+* Select Single Photo, Video or Both
+* Capture Photo or Video
+* Allow to select Photo or Video from Google Photos
+* Integration of Photo Crop with various ratio and shape selection
+* Support to navigate from module to other screen
+* Video Selection validation limits
+    * Bytes size
+    * Duration
+    * Resolution
+* Supported Multiple languages
+* Dynamic UI theme, resources and Color changes
+<!--ts-->
 
 [![](https://jitpack.io/v/hashonetech/media-gallery.svg)](https://jitpack.io/#hashonetech/media-gallery)
 
