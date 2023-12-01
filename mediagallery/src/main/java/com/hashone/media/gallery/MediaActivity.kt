@@ -1,9 +1,11 @@
 package com.hashone.media.gallery
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.BroadcastReceiver
+import android.content.ContentValues
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -11,17 +13,19 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.Matrix
 import android.media.MediaMetadataRetriever
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
@@ -36,7 +40,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -62,7 +65,7 @@ import com.hashone.commons.extensions.serializable
 import com.hashone.commons.extensions.setStatusBarColor
 import com.hashone.commons.extensions.toFilePath
 import com.hashone.commons.languages.LocaleManager
-import com.hashone.commons.utils.EXTENSION_PNG
+import com.hashone.commons.utils.EXTENSION_JPG
 import com.hashone.commons.utils.PACKAGE_NAME_GOOGLE_PHOTOS
 import com.hashone.commons.utils.dpToPx
 import com.hashone.commons.utils.getInternalCameraDir
@@ -98,7 +101,6 @@ import com.hashone.media.gallery.utils.file.FileExtension
 import com.hashone.media.gallery.utils.file.FileOperationRequest
 import com.hashone.media.gallery.utils.file.StorageType
 import com.hashone.media.gallery.utils.getApplicationInfoCompat
-import com.hashone.media.gallery.utils.getCacheDirectoryName
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -1138,16 +1140,12 @@ class MediaActivity : BaseActivity() {
         if (checkCameraPermission(REQUEST_CODE_CAMERA)) {
             if (checkCameraHardware()) {
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                val imageFile =
-                    File(
-                        getCacheDirectoryName(mActivity).absolutePath + File.separator + "CameraImage_${System.currentTimeMillis()}" + ".jpg"
-                    )
-                if (imageFile.exists())
-                    imageFile.delete()
-                val cameraFileUri = FileProvider.getUriForFile(
-                    this, "$packageName.provider",
-                    imageFile
-                )
+
+                val values = ContentValues()
+                values.put(MediaStore.Images.Media.TITLE, "New Picture")
+                values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
+                val cameraFileUri =
+                    contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraFileUri)
 
                 val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
@@ -1197,55 +1195,29 @@ class MediaActivity : BaseActivity() {
                                                 finish()
                                             }
                                         }
-                                    } else {
-                                        if (result.data!!.extras == null) {
-                                            if (imageFile.exists()) {
-                                                val imageItem = MediaItem().apply {
-                                                    path = imageFile.absolutePath
-                                                }
-                                                val arrayList = ArrayList<MediaItem>().apply {
-                                                    add(imageItem)
-                                                }
-                                                MediaScannerConnection.scanFile(
-                                                    mActivity, arrayOf(imageFile.absolutePath), null
-                                                ) { _, _ ->
-                                                    setResultData(arrayList)
-                                                    finish()
-                                                }
-                                            }
-                                        } else {
-                                            val bitmap = result.data?.extras?.parcelable<Bitmap>("data")
-                                            bitmap?.let {
-                                                val savedFile = bitmap.saveToFile(
-                                                    fileName = "Camera_${System.currentTimeMillis()}.$EXTENSION_PNG",
-                                                    saveDir = getInternalCameraDir(mActivity),
-                                                    compressFormat = EXTENSION_PNG
-                                                )
-                                                val imageItem = MediaItem().apply {
-                                                    path = savedFile.absolutePath
-                                                }
-                                                val arrayList = ArrayList<MediaItem>().apply {
-                                                    add(imageItem)
-                                                }
-                                                MediaScannerConnection.scanFile(
-                                                    mActivity, arrayOf(savedFile.absolutePath), null
-                                                ) { _, _ ->
-                                                    setResultData(arrayList)
-                                                    finish()
-                                                }
-                                            }
-                                        }
                                     }
                                 } else {
-                                    if (imageFile.exists()) {
+                                    val inputImage: Bitmap? = cameraFileUri?.let {
+                                        uriToBitmap(
+                                            it
+                                        )
+                                    }
+                                    val rotated: Bitmap? = inputImage?.let { rotateBitmap(it, cameraFileUri) }
+
+                                    if (rotated != null) {
+                                        val savedFile = rotated.saveToFile(
+                                            fileName = "Camera_${System.currentTimeMillis()}.$EXTENSION_JPG",
+                                            saveDir = getInternalCameraDir(mActivity),
+                                            compressFormat = EXTENSION_JPG
+                                        )
                                         val imageItem = MediaItem().apply {
-                                            path = imageFile.absolutePath
+                                            path = savedFile.absolutePath
                                         }
                                         val arrayList = ArrayList<MediaItem>().apply {
                                             add(imageItem)
                                         }
                                         MediaScannerConnection.scanFile(
-                                            mActivity, arrayOf(imageFile.absolutePath), null
+                                            mActivity, arrayOf(savedFile.absolutePath), null
                                         ) { _, _ ->
                                             setResultData(arrayList)
                                             finish()
@@ -1259,6 +1231,38 @@ class MediaActivity : BaseActivity() {
         }
     }
     //TODO: Camera - End
+
+    //TODO takes URI of the image and returns bitmap
+    private fun uriToBitmap(selectedFileUri: Uri): Bitmap? {
+        try {
+            val parcelFileDescriptor = contentResolver.openFileDescriptor(selectedFileUri, "r")
+            val fileDescriptor = parcelFileDescriptor!!.fileDescriptor
+            val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+            parcelFileDescriptor.close()
+            return image
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    //TODO rotate image if image captured on samsung devices
+    //TODO Most phone cameras are landscape, meaning if you take the photo in portrait, the resulting photos will be rotated 90 degrees.
+    @SuppressLint("Range")
+    fun rotateBitmap(input: Bitmap, imageUri: Uri): Bitmap? {
+        val orientationColumn =
+            arrayOf(MediaStore.Images.Media.ORIENTATION)
+        val cur =
+            contentResolver.query(imageUri, orientationColumn, null, null, null)
+        var orientation = -1
+        if (cur != null && cur.moveToFirst()) {
+            orientation = cur.getInt(cur.getColumnIndex(orientationColumn[0]))
+        }
+        Log.d("tryOrientation", orientation.toString() + "")
+        val rotationMatrix = Matrix()
+        rotationMatrix.setRotate(orientation.toFloat())
+        return Bitmap.createBitmap(input, 0, 0, input.width, input.height, rotationMatrix, true)
+    }
 
     private fun getExtensionOfFile(file: File): FileExtension {
         return when (file.extension.lowercase()) {
