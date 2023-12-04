@@ -1194,6 +1194,32 @@ class MediaActivity : BaseActivity() {
                                                 finishPickImages(arrayList)
                                             }
                                         }
+                                    } else {
+                                        val inputImage: Bitmap? = cameraFileUri?.let {
+                                            uriToBitmap(
+                                                it
+                                            )
+                                        }
+                                        val rotated: Bitmap? = inputImage?.let { rotateBitmap(it, cameraFileUri) }
+
+                                        if (rotated != null) {
+                                            val savedFile = rotated.saveToFile(
+                                                fileName = "Camera_${System.currentTimeMillis()}.$EXTENSION_JPG",
+                                                saveDir = getInternalCameraDir(mActivity),
+                                                compressFormat = EXTENSION_JPG
+                                            )
+                                            val imageItem = MediaItem().apply {
+                                                path = savedFile.absolutePath
+                                            }
+                                            val arrayList = ArrayList<MediaItem>().apply {
+                                                add(imageItem)
+                                            }
+                                            MediaScannerConnection.scanFile(
+                                                mActivity, arrayOf(savedFile.absolutePath), null
+                                            ) { _, _ ->
+                                                finishPickImages(arrayList)
+                                            }
+                                        }
                                     }
                                 } else {
                                     val inputImage: Bitmap? = cameraFileUri?.let {
