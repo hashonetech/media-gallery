@@ -27,7 +27,7 @@ Media gallery module used to Select Single or Multiple Photo, Video or Both, Cap
 	}
   
 	dependencies {
-	        implementation 'com.github.hashonetech:media-gallery:v1.0.35'
+	        implementation 'com.github.hashonetech:media-gallery:v1.0.36'
 	}
  ```
 
