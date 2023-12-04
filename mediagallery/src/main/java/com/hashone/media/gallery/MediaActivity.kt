@@ -1191,8 +1191,7 @@ class MediaActivity : BaseActivity() {
                                             MediaScannerConnection.scanFile(
                                                 mActivity, arrayOf(videoFilePath), null
                                             ) { _, _ ->
-                                                setResultData(arrayList)
-                                                finish()
+                                                finishPickImages(arrayList)
                                             }
                                         }
                                     }
@@ -1219,8 +1218,7 @@ class MediaActivity : BaseActivity() {
                                         MediaScannerConnection.scanFile(
                                             mActivity, arrayOf(savedFile.absolutePath), null
                                         ) { _, _ ->
-                                            setResultData(arrayList)
-                                            finish()
+                                            finishPickImages(arrayList)
                                         }
                                     }
                                 }
