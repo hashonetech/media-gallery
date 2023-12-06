@@ -1,18 +1,19 @@
 # media-gallery
-Media gallery module used to Select Single or Multiple Photo, Video or Both, Capture Photo or Video and also allow to select photo or video from Google Photos application.
+Media gallery module used to Select Single or Multiple Photo, Video or Both, Capture Photo and Video and also allow to select photo and video from Google Photos application.
+With gallery module integrated [Photo Crop](https://github.com/hashonetech/crop-module) feature, to allow crop photo in various ratio and shape size.
 
 ### Features
 <!--ts-->
 * Select Single Photo, Video or Both
-* Capture Photo or Video
-* Allow to select Photo or Video from Google Photos
-* Integration of Photo Crop with various ratio and shape selection
+* Capture Photo and Video
+* Allow to select Photo and Video from Google Photos
+* Integration of [Photo Crop](https://github.com/hashonetech/crop-module) with various ratio and shape size
 * Support to navigate from module to other screen
 * Video Selection validation limits
     * Bytes size
     * Duration
     * Resolution
-* Supported Multiple languages
+* Supported Multiple languages including RTL languages
 * Dynamic UI theme, resources and Color changes
 <!--ts-->
 
@@ -38,11 +39,6 @@ Media gallery module used to Select Single or Multiple Photo, Video or Both, Cap
  <img alt="App image" src="https://github.com/hashonetech/media-gallery/blob/master/screenshots/Screenshot_2.png" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
  <img alt="App image" src="https://github.com/hashonetech/media-gallery/blob/master/screenshots/Screenshot_3.png" width="30%">
 </div>
-<div style="display:flex;">
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/blob/master/screenshots/Screenshot_rtl_1.png" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/blob/master/screenshots/Screenshot_rtl_2.png" width="30%"> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
- <img alt="App image" src="https://github.com/hashonetech/media-gallery/blob/master/screenshots/Screenshot_rtl_3.png" width="30%">
-</div>
 
 
 Table of contents
@@ -59,52 +55,52 @@ Table of contents
 ## AndroidManifest
 
 ```xml
-    //TODO: When allow to use camera feature
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.GET_CONTENT" />
-		//TODO: For Image Only
-		<data android:mimeType="image/*" />
-     
-	   	//TODO: For Video Only
-	    	<data android:mimeType="video/*" />
-     
-	   	//TODO: For Image and Video both
-	    	<data android:mimeType="*/*" />
-        </intent>
-        <intent>
-            <action android:name="android.intent.action.MAIN" />
-        </intent>
-    </queries>
+//TODO: When allow to use camera feature
+<uses-feature
+    android:name="android.hardware.camera"
+    android:required="false" />
+<queries>
+    <intent>
+        <action android:name="android.intent.action.GET_CONTENT" />
+        //TODO: For Image Only
+        <data android:mimeType="image/*" />
 
-    //TODO: Below 33 SDK version
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-    //TODO: 33 and above SDK version
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    //TODO: 33 and above SDK version
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    //TODO: Allow only when use Camera feature
-    <uses-permission android:name="android.permission.CAMERA" />
+        //TODO: For Video Only
+        <data android:mimeType="video/*" />
+
+        //TODO: For Image and Video both
+        <data android:mimeType="*/*" />
+    </intent>
+    <intent>
+        <action android:name="android.intent.action.MAIN" />
+    </intent>
+</queries>
+
+//TODO: Below 33 SDK version
+<uses-permission
+    android:name="android.permission.READ_EXTERNAL_STORAGE"
+    android:maxSdkVersion="32" />
+//TODO: 33 and above SDK version
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+//TODO: 33 and above SDK version
+<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+//TODO: Allow only when use Camera feature
+<uses-permission android:name="android.permission.CAMERA" />
 <uses-feature android:name="android.hardware.camera.any" />
 
-	<application
-		...
-		tools:replace="android:theme,android:name">
-		...
-
-		<provider
-		    android:name="androidx.core.content.FileProvider"
-		    android:authorities="${applicationId}.provider"
-		    ...
-		    tools:replace="android:resource"
-		    ...>
-		</provider>
-	 </application>
+<application
+    ...
+    tools:replace="android:theme,android:name">
+    ...
+    
+    <provider
+        android:name="androidx.core.content.FileProvider"
+        android:authorities="${applicationId}.provider"
+    ...
+    tools:replace="android:resource"
+    ...>
+    </provider>
+</application>
 ```
 
 ## Open Gallery
@@ -334,7 +330,7 @@ Table of contents
 
    ```
 	
-## New Crop
+## New Crop - ([crop-module](https://github.com/hashonetech/crop-module))
 
    ```kotlin
 	enableCropMode = true
