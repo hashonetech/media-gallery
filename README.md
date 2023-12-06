@@ -1,5 +1,6 @@
 # media-gallery
 Media gallery module used to Select Single or Multiple Photo, Video or Both, Capture Photo and Video and also allow to select photo and video from Google Photos application.
+
 With gallery module integrated [Photo Crop](https://github.com/hashonetech/crop-module) feature, to allow crop photo in various ratio and shape size.
 
 ### Features
@@ -330,8 +331,8 @@ Table of contents
 
    ```
 	
-## New Crop - ([crop-module](https://github.com/hashonetech/crop-module))
-
+## New Crop
+Github - [crop-module](https://github.com/hashonetech/crop-module)
    ```kotlin
 	enableCropMode = true
 	isForceClose = true
