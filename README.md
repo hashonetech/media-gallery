@@ -130,18 +130,18 @@ Table of contents
 
       		//TODO video Duration Limit in second
                     videoValidationBuilder = MediaGallery.VideoValidationBuilder(
-                        checkValidation = true,
+                        checkValidation = true/false,
                         //TODO video Duration Limit in second
-                        checkDuration = true,
-                        durationLimit = 30,
+                        checkDuration = true/false,
+                        durationLimit = 30, //TODO: In Seconds
                         durationLimitMessage = getString(R.string.duration_error),
                         //TODO video Size Limit in MB
-                        checkFileSize = true,
-                        sizeLimit = 100,
+                        checkFileSize = true/false,
+                        sizeLimit = 100, //TODO: In MB
                         sizeLimitMessage = getString(R.string.file_size_error),
                         //TODO video Resolution Size Limit px
-                        checkResolution = true,
-                        maxResolution = 1920,
+                        checkResolution = true/false,
+                        maxResolution = 1920, //TODO: In Pixel
                         maxResolutionMessage = getString(R.string.size_error),
                         //TODO video Validation Dialog UI
                         durationDialogBuilder = MediaGallery.VideoValidationDialogBuilder(
@@ -228,12 +228,12 @@ Table of contents
                         positiveColor = com.hashone.commons.R.color.black,
                         positiveFont = com.hashone.commons.R.font.roboto_bold,
                         positiveSize = 16F,
-                        positiveIsCap = true,
+                        positiveIsCap = true/false,
                         negativeText = getString(R.string.label_cancel),
                         negativeColor = com.hashone.commons.R.color.black,
                         negativeFont = com.hashone.commons.R.font.roboto_regular,
                         negativeSize = 16F,
-                        negativeIsCap = true,
+                        negativeIsCap = true/false,
                     )
 	
 	            //TODO: Bucket Contents
