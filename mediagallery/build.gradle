@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.hashone'
-version = '1.0.39'
+version = '1.0.40'
 
 android {
     namespace 'com.hashone.media.gallery'
@@ -57,7 +57,7 @@ dependencies {
     api 'com.google.android.material:material:1.9.0'
     api 'com.github.hashonetech:commons:v1.2.11'
 
-    api 'com.github.hashonetech:crop-module:v1.2.5'
+    api 'com.github.hashonetech:crop-module:v1.2.6'
 }
 
 afterEvaluate {
@@ -68,7 +68,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.hashone'
                 artifactId = 'media-gallery'
-                version = '1.0.39'
+                version = '1.0.40'
             }
         }
     }
