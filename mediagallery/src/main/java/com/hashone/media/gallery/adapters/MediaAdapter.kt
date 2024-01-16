@@ -47,6 +47,9 @@ class MediaAdapter(
     var mOnItemClickListener: AdapterView.OnItemClickListener?,
     var mOnSelectionChangeListener: OnSelectionChangeListener?
 ) : RecyclerView.Adapter<MediaAdapter.ItemViewHolder>() {
+
+    private val corruptedMediaList = ArrayList<String>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder =
         ItemViewHolder(
             GalleryItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -108,43 +111,48 @@ class MediaAdapter(
                     var isSelected = mIsMultipleMode && selectedIndex != -1
                     var isLoadingFail = true
                     mBinding.root.isEnabled = false
-                    Glide.with(mContext)
-                        .load(Uri.fromFile(File(this.path)))
-                        .apply(
-                            RequestOptions().centerCrop().dontAnimate()
-                                .format(DecodeFormat.PREFER_RGB_565)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .dontAnimate()
-                                .dontTransform()
-                                .downsample(DownsampleStrategy.CENTER_INSIDE)
-                        )
-                        .error(R.drawable.ic_broken)
-                        .listener(object : RequestListener<Drawable?> {
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Drawable?>?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                isLoadingFail = true
-                                mBinding.root.isEnabled = true
-                                return false
-                            }
+                    if (!corruptedMediaList.contains(this.path)) {
+                        Glide.with(mContext)
+                            .load(Uri.fromFile(File(this.path)))
+                            .apply(
+                                RequestOptions().centerCrop().dontAnimate()
+                                    .format(DecodeFormat.PREFER_RGB_565)
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .dontAnimate()
+                                    .dontTransform()
+                                    .downsample(DownsampleStrategy.CENTER_INSIDE)
+                            )
+                            .error(R.drawable.ic_broken)
+                            .listener(object : RequestListener<Drawable?> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable?>?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    isLoadingFail = true
+                                    mBinding.root.isEnabled = true
+                                    corruptedMediaList.add(this@with.path)
+                                    return false
+                                }
 
-                            override fun onResourceReady(
-                                resource: Drawable?,
-                                model: Any?,
-                                target: Target<Drawable?>?,
-                                dataSource: DataSource?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                isLoadingFail = false
-                                mBinding.root.isEnabled = true
-                                return false
-                            }
+                                override fun onResourceReady(
+                                    resource: Drawable?,
+                                    model: Any?,
+                                    target: Target<Drawable?>?,
+                                    dataSource: DataSource?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    isLoadingFail = false
+                                    mBinding.root.isEnabled = true
+                                    return false
+                                }
 
-                        })
-                        .into(mBinding.imageViewImageItem)
+                            })
+                            .into(mBinding.imageViewImageItem)
+                    } else {
+                        mBinding.imageViewImageItem.setImageResource(R.drawable.ic_broken)
+                    }
 
                     setupItemForeground(
                         mBinding.imageViewImageItem,
@@ -197,7 +205,15 @@ class MediaAdapter(
                                     mContext.getString(R.string.media_gallery_corrupted_media)
                                 })
                             }
-                        } else selectOrRemoveImage(this, position)
+                        } else {
+                            if (corruptedMediaList.contains(this.path)) {
+                                showSnackBar(mContext, mBinding.root, builder.corruptedMediaMessage.ifEmpty {
+                                    mContext.getString(R.string.media_gallery_corrupted_media)
+                                })
+                            } else {
+                                selectOrRemoveImage(this, position)
+                            }
+                        }
                     }
                 }
             }

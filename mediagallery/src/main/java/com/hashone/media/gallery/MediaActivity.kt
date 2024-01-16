@@ -1282,7 +1282,6 @@ class MediaActivity : BaseActivity() {
         if (cur != null && cur.moveToFirst()) {
             orientation = cur.getInt(cur.getColumnIndex(orientationColumn[0]))
         }
-        Log.d("tryOrientation", orientation.toString() + "")
         val rotationMatrix = Matrix()
         rotationMatrix.setRotate(orientation.toFloat())
         return Bitmap.createBitmap(input, 0, 0, input.width, input.height, rotationMatrix, true)
