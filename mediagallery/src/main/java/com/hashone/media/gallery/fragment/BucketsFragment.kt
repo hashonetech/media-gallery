@@ -160,8 +160,7 @@ class BucketsFragment : Fragment() {
                 mBucketsList.addAll(
                     fetchMediaBucketsAsync(
                         mActivity,
-                        builder.mediaType,
-                        builder.allowAllMedia
+                        builder
                     )
                 )
             } catch (e: Exception) {
@@ -191,7 +190,6 @@ class BucketsFragment : Fragment() {
                 layoutManager =
                     LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
                 setHasFixedSize(true)
-                mBinding.layoutContentLoading.isVisible = (mBucketsList.size == 0)
 
                 mFolderAdapter = BucketAdapter(
                     mActivity, builder, mBucketsList

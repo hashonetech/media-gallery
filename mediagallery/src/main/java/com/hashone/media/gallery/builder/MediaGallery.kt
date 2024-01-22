@@ -10,6 +10,7 @@ import androidx.annotation.IntRange
 import com.hashone.commons.R
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.enums.MediaType
+import com.hashone.media.gallery.enums.SupportedMediaType
 import java.io.Serializable
 
 open class MediaGallery(val builder: Builder) : Serializable {
@@ -31,6 +32,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
             cameraActionTitle: String = "",
             allMediaTitle: String = "",
             corruptedMediaMessage: String = "",
+            supportedMediaTypes: ArrayList<SupportedMediaType> = arrayListOf<SupportedMediaType>(),
             block: Builder.() -> Unit
         ) = Builder(
             mediaType,
@@ -44,7 +46,8 @@ open class MediaGallery(val builder: Builder) : Serializable {
             cameraActionTitle,
             videoValidationBuilder,
             allMediaTitle,
-            corruptedMediaMessage
+            corruptedMediaMessage,
+            supportedMediaTypes
         ).apply(block).build()
 
         fun open(activity: Activity, mediaGallery: MediaGallery): Intent =
@@ -71,7 +74,26 @@ open class MediaGallery(val builder: Builder) : Serializable {
             checkResolution = false
         ),
         val allMediaTitle: String = "",
-        val corruptedMediaMessage: String = ""
+        val corruptedMediaMessage: String = "",
+
+        val supportedMediaTypes: ArrayList<SupportedMediaType> = arrayListOf<SupportedMediaType>().apply {
+            //TODO: Photo MediaTypes
+            add(SupportedMediaType.TYPE_PNG)
+            add(SupportedMediaType.TYPE_JPG)
+            add(SupportedMediaType.TYPE_JPEG)
+            add(SupportedMediaType.TYPE_WEBP)
+            add(SupportedMediaType.TYPE_GIF)
+            //TODO: Video MediaTypes
+            add(SupportedMediaType.TYPE_3G2)
+            add(SupportedMediaType.TYPE_MP4)
+            add(SupportedMediaType.TYPE_AVI)
+            add(SupportedMediaType.TYPE_FLV)
+            add(SupportedMediaType.TYPE_MKV)
+            add(SupportedMediaType.TYPE_MOV)
+            add(SupportedMediaType.TYPE_MPG)
+            add(SupportedMediaType.TYPE_WEBM)
+            add(SupportedMediaType.TYPE_WMV)
+        },
 
         ) : Serializable {
         //TODO: Screen
@@ -122,7 +144,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
         @FloatRange
         var messageSize: Float = 16F,
 
-    ) : Serializable
+        ) : Serializable
 
     class BucketBuilder(
         @ColorRes

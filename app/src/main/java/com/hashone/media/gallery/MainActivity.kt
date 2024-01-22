@@ -25,6 +25,7 @@ import com.hashone.cropper.CropActivity
 import com.hashone.cropper.model.CropDataSaved
 import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.enums.MediaType
+import com.hashone.media.gallery.enums.SupportedMediaType
 import com.hashone.media.gallery.model.MediaItem
 import com.hashone.media.gallery.test.databinding.ActivityMainBinding
 import com.hashone.media.gallery.utils.KEY_IMAGE_ORIGINAL_PATH
@@ -226,6 +227,24 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
 
                     ),
                     cameraActionTitle = getString(com.hashone.media.gallery.R.string.media_gallery_camera_action_title),
+                    supportedMediaTypes = arrayListOf<SupportedMediaType>().apply {
+                        //TODO: Photo MediaTypes
+                        add(SupportedMediaType.TYPE_PNG)
+                        add(SupportedMediaType.TYPE_JPG)
+                        add(SupportedMediaType.TYPE_JPEG)
+                        add(SupportedMediaType.TYPE_WEBP)
+                        add(SupportedMediaType.TYPE_GIF)
+                        //TODO: Video MediaTypes
+                        add(SupportedMediaType.TYPE_3G2)
+                        add(SupportedMediaType.TYPE_MP4)
+                        add(SupportedMediaType.TYPE_AVI)
+                        add(SupportedMediaType.TYPE_FLV)
+                        add(SupportedMediaType.TYPE_MKV)
+                        add(SupportedMediaType.TYPE_MOV)
+                        add(SupportedMediaType.TYPE_MPG)
+                        add(SupportedMediaType.TYPE_WEBM)
+                        add(SupportedMediaType.TYPE_WMV)
+                    }
                 ) {
                     //TODO: Screen
                     screenBuilder = MediaGallery.ScreenBuilder(

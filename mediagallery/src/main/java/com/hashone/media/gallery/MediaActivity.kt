@@ -58,7 +58,6 @@ import com.hashone.commons.extensions.hideSystemUI
 import com.hashone.commons.extensions.isPermissionGranted
 import com.hashone.commons.extensions.navigationUI
 import com.hashone.commons.extensions.onClick
-import com.hashone.commons.extensions.parcelable
 import com.hashone.commons.extensions.registerBroadCastReceiver
 import com.hashone.commons.extensions.saveToFile
 import com.hashone.commons.extensions.serializable
@@ -78,6 +77,7 @@ import com.hashone.media.gallery.databinding.ActivityMediaBinding
 import com.hashone.media.gallery.databinding.DialogMediaGalleryPhotosLoadingBinding
 import com.hashone.media.gallery.databinding.DialogWarningBinding
 import com.hashone.media.gallery.enums.MediaType
+import com.hashone.media.gallery.enums.SupportedMediaType
 import com.hashone.media.gallery.fragment.BucketsFragment
 import com.hashone.media.gallery.model.MediaItem
 import com.hashone.media.gallery.utils.ACTION_FINISH_GALLERY
@@ -162,6 +162,28 @@ class MediaActivity : BaseActivity() {
 
         mMediaPref = MediaPref(mActivity)
         mMediaPref.clearMediaPref()
+
+        if (builder.supportedMediaTypes.isEmpty()) {
+            builder.supportedMediaTypes.clear()
+            builder.supportedMediaTypes.addAll(arrayListOf<SupportedMediaType>().apply {
+                //TODO: Photo MediaTypes
+                add(SupportedMediaType.TYPE_PNG)
+                add(SupportedMediaType.TYPE_JPG)
+                add(SupportedMediaType.TYPE_JPEG)
+                add(SupportedMediaType.TYPE_WEBP)
+                add(SupportedMediaType.TYPE_GIF)
+                //TODO: Video MediaTypes
+                add(SupportedMediaType.TYPE_3G2)
+                add(SupportedMediaType.TYPE_MP4)
+                add(SupportedMediaType.TYPE_AVI)
+                add(SupportedMediaType.TYPE_FLV)
+                add(SupportedMediaType.TYPE_MKV)
+                add(SupportedMediaType.TYPE_MOV)
+                add(SupportedMediaType.TYPE_MPG)
+                add(SupportedMediaType.TYPE_WEBM)
+                add(SupportedMediaType.TYPE_WMV)
+            })
+        }
 
         WarningScreenUi()
         setScreenUI()
@@ -460,7 +482,7 @@ class MediaActivity : BaseActivity() {
 
         override fun onPreExecute() {
             super.onPreExecute()
-            val uriSplits = URLDecoder.decode(uri.path,"UTF-8").split("/NONE/")
+            val uriSplits = URLDecoder.decode(uri.path, "UTF-8").split("/NONE/")
 
             val isVideo = uriSplits[1].startsWith("video", ignoreCase = true)
             if (isVideo) {
@@ -584,7 +606,7 @@ class MediaActivity : BaseActivity() {
         fun createCopyAndReturnRealPath(context: Context, uri: Uri?): String? {
             val contentResolver = context.contentResolver ?: return null
 
-            val uriSplits = URLDecoder.decode(uri!!.path,"UTF-8").split("/NONE/")
+            val uriSplits = URLDecoder.decode(uri!!.path, "UTF-8").split("/NONE/")
 
             var isVideo = uriSplits[1].startsWith("video", ignoreCase = true)
 
@@ -1200,7 +1222,8 @@ class MediaActivity : BaseActivity() {
                                                 it
                                             )
                                         }
-                                        val rotated: Bitmap? = inputImage?.let { rotateBitmap(it, cameraFileUri) }
+                                        val rotated: Bitmap? =
+                                            inputImage?.let { rotateBitmap(it, cameraFileUri) }
 
                                         if (rotated != null) {
                                             val savedFile = rotated.saveToFile(
@@ -1227,7 +1250,8 @@ class MediaActivity : BaseActivity() {
                                             it
                                         )
                                     }
-                                    val rotated: Bitmap? = inputImage?.let { rotateBitmap(it, cameraFileUri) }
+                                    val rotated: Bitmap? =
+                                        inputImage?.let { rotateBitmap(it, cameraFileUri) }
 
                                     if (rotated != null) {
                                         val savedFile = rotated.saveToFile(
@@ -1506,7 +1530,13 @@ class MediaActivity : BaseActivity() {
     fun prepareGooglePhotosLoadingDialog() {
         googlePhotosLoadingDialog = Dialog(mActivity, R.style.MediaGalleryTransparentDialog).apply {
             window!!.requestFeature(Window.FEATURE_NO_TITLE)
-            setContentView(DialogMediaGalleryPhotosLoadingBinding.inflate(LayoutInflater.from(mActivity)).root)
+            setContentView(
+                DialogMediaGalleryPhotosLoadingBinding.inflate(
+                    LayoutInflater.from(
+                        mActivity
+                    )
+                ).root
+            )
             setCancelable(false)
             setCanceledOnTouchOutside(false)
         }

@@ -143,7 +143,7 @@ class MediaFragment : Fragment() {
                     mediaPref.ifEmpty {
                         fetchMediaAsync(
                             mActivity,
-                            mediaType = builder.mediaType,
+                            mediaBuilder = builder,
                             mBucketId
                         )
                     }

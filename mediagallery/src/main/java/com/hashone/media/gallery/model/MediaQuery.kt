@@ -7,12 +7,13 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import com.hashone.media.gallery.MediaActivity
+import com.hashone.media.gallery.builder.MediaGallery
 import com.hashone.media.gallery.enums.MediaType
+import java.util.Locale
 
 fun fetchMediaBucketsAsync(
     context: Context,
-    mediaType: MediaType,
-    allowAllMedia: Boolean
+    mediaBuilder: MediaGallery.Builder
 ): ArrayList<MediaBucketData> {
     val bucketIdList = ArrayList<Long>()
     val bucketList = ArrayList<MediaBucketData>()
@@ -31,7 +32,7 @@ fun fetchMediaBucketsAsync(
         Bundle().apply {
             putString(
                 ContentResolver.QUERY_ARG_SQL_SELECTION,
-                when (mediaType) {
+                when (mediaBuilder.mediaType) {
                     MediaType.IMAGE, MediaType.VIDEO -> "${MediaStore.Files.FileColumns.MEDIA_TYPE} = ?"
                     else -> "${MediaStore.Files.FileColumns.MEDIA_TYPE} = ? OR ${MediaStore.Files.FileColumns.MEDIA_TYPE} = ?"
                 } + " AND ${MediaStore.Files.FileColumns.SIZE} > 0"
@@ -39,7 +40,7 @@ fun fetchMediaBucketsAsync(
 
             putStringArray(
                 ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
-                when (mediaType) {
+                when (mediaBuilder.mediaType) {
                     MediaType.IMAGE -> {
                         arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString())
                     }
@@ -86,31 +87,35 @@ fun fetchMediaBucketsAsync(
                         bucketIdList.add(bucketId)
                         val mediaList = fetchMediaAsync(
                             context,
-                            mediaType,//if (bucketMediaTypeName == 1) MediaType.IMAGE else MediaType.VIDEO, // image video checking
+                            mediaBuilder,//if (bucketMediaTypeName == 1) MediaType.IMAGE else MediaType.VIDEO, // image video checking
                             bucketId
                         )
 
-                        (context as MediaActivity).mMediaPref.storeMediaToPref(bucketId, mediaList)
-                        if (mediaList.size > 0)
+                        if (mediaList.isNotEmpty()) {
+                            (context as MediaActivity).mMediaPref.storeMediaToPref(
+                                bucketId,
+                                mediaList
+                            )
                             bucketList.add(
                                 MediaBucketData(
                                     bucketId,
                                     if (bucketDisplayName.isNullOrEmpty()) "0" else bucketDisplayName,
                                     mediaList[0].path,
                                     mediaList.size,
-                                    mediaType = mediaType //if (bucketMediaTypeName == 1) MediaType.IMAGE else MediaType.VIDEO
+                                    mediaType = mediaBuilder.mediaType //if (bucketMediaTypeName == 1) MediaType.IMAGE else MediaType.VIDEO
                                 )
                             )
+                        }
                     }
                 } while (it.moveToNext())
             }
         }
         it?.close()
     }
-    if (allowAllMedia) {
+    if (mediaBuilder.allowAllMedia) {
         val mediaList = fetchMediaAsync(
             context,
-            mediaType,
+            mediaBuilder,
             -1L
         )
         (context as MediaActivity).mMediaPref.storeMediaToPref(-1L, mediaList)
@@ -121,7 +126,7 @@ fun fetchMediaBucketsAsync(
                     "",
                     mediaList[0].path,
                     mediaList.size,
-                    mediaType = mediaType
+                    mediaType = mediaBuilder.mediaType
                 )
             )
     }
@@ -130,7 +135,7 @@ fun fetchMediaBucketsAsync(
 
 fun fetchMediaAsync(
     context: Context,
-    mediaType: MediaType,
+    mediaBuilder: MediaGallery.Builder,
     bucketId: Long
 ): ArrayList<MediaItem> {
     val mediaList = ArrayList<MediaItem>()
@@ -154,7 +159,7 @@ fun fetchMediaAsync(
                 (if (bucketId != -1L) {
                     "${MediaStore.Files.FileColumns.BUCKET_ID}='$bucketId' AND "
                 } else "") +
-                        when (mediaType) {
+                        when (mediaBuilder.mediaType) {
                             MediaType.IMAGE -> {
                                 "${MediaStore.Files.FileColumns.MEDIA_TYPE}='${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}'"
                             }
@@ -177,6 +182,12 @@ fun fetchMediaAsync(
         null
     )
 
+    val localTypes = arrayListOf<String>().apply {
+        mediaBuilder.supportedMediaTypes.forEach {
+            add(it.value.lowercase(Locale.ENGLISH))
+        }
+    }
+
     if (cursor != null) {
         if (cursor.moveToFirst()) {
             val mediaIdIndex = cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)
@@ -187,21 +198,28 @@ fun fetchMediaAsync(
             val mediaTypeIndex = cursor.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE)
             val mediaResolution = cursor.getColumnIndex(MediaStore.Files.FileColumns.RESOLUTION)
             do {
-                if (cursor.getType(mediaIdIndex) != FIELD_TYPE_NULL && cursor.getType(mediaNameIndex) != FIELD_TYPE_NULL && cursor.getType(mediaDataIndex) != FIELD_TYPE_NULL && cursor.getType(mediaSizeIndex) != FIELD_TYPE_NULL) {
-                    mediaList.add(
-                        MediaItem(
-                            mediaId = cursor.getLong(mediaIdIndex),
-                            bucketId = bucketId,
-                            name = cursor.getString(mediaNameIndex),
-                            path = cursor.getString(mediaDataIndex),
-                            mediaSize = cursor.getLong(mediaSizeIndex),
-                            mediaDuration = cursor.getLong(mediaDurationIndex),
-                            mediaType = if (cursor.getInt(mediaTypeIndex) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) MediaType.VIDEO else MediaType.IMAGE,
-                            mediaResolution = if (mediaResolution != -1) cursor.getString(
-                                mediaResolution
-                            ) else ""
+                if (cursor.getType(mediaIdIndex) != FIELD_TYPE_NULL && cursor.getType(mediaNameIndex) != FIELD_TYPE_NULL && cursor.getType(
+                        mediaDataIndex
+                    ) != FIELD_TYPE_NULL && cursor.getType(mediaSizeIndex) != FIELD_TYPE_NULL
+                ) {
+                    val path = cursor.getString(mediaDataIndex)
+                    val extension = path.replaceBeforeLast(".", "").replace(".", "")
+                    if (localTypes.contains(extension)) {
+                        mediaList.add(
+                            MediaItem(
+                                mediaId = cursor.getLong(mediaIdIndex),
+                                bucketId = bucketId,
+                                name = cursor.getString(mediaNameIndex),
+                                path = cursor.getString(mediaDataIndex),
+                                mediaSize = cursor.getLong(mediaSizeIndex),
+                                mediaDuration = cursor.getLong(mediaDurationIndex),
+                                mediaType = if (cursor.getInt(mediaTypeIndex) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) MediaType.VIDEO else MediaType.IMAGE,
+                                mediaResolution = if (mediaResolution != -1) cursor.getString(
+                                    mediaResolution
+                                ) else ""
+                            )
                         )
-                    )
+                    }
                 }
             } while (cursor.moveToNext())
         }
