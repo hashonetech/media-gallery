@@ -29,7 +29,7 @@ With gallery module integrated [Photo Crop](https://github.com/hashonetech/crop-
 	}
   
 	dependencies {
-	        implementation 'com.github.hashonetech:media-gallery:v1.0.42'
+	        implementation 'com.github.hashonetech:media-gallery:v1.0.43'
 	}
  ```
 
@@ -190,6 +190,7 @@ Table of contents
                         add(SupportedMediaType.TYPE_GIF)
                         //TODO: Video MediaTypes
                         add(SupportedMediaType.TYPE_3G2)
+                        add(SupportedMediaType.TYPE_3GP)
                         add(SupportedMediaType.TYPE_MP4)
                         add(SupportedMediaType.TYPE_AVI)
                         add(SupportedMediaType.TYPE_FLV)
