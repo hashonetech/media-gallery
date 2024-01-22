@@ -85,6 +85,7 @@ open class MediaGallery(val builder: Builder) : Serializable {
             add(SupportedMediaType.TYPE_GIF)
             //TODO: Video MediaTypes
             add(SupportedMediaType.TYPE_3G2)
+            add(SupportedMediaType.TYPE_3GP)
             add(SupportedMediaType.TYPE_MP4)
             add(SupportedMediaType.TYPE_AVI)
             add(SupportedMediaType.TYPE_FLV)

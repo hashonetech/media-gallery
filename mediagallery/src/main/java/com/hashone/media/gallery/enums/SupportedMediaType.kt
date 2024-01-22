@@ -11,6 +11,7 @@ enum class SupportedMediaType( val value: String) {
     TYPE_MOV("mov"),
     TYPE_WMV("wmv"),
     TYPE_3G2("3g2"),
+    TYPE_3GP("3gp"),
     TYPE_AVI("avi"),
     TYPE_FLV("flv"),
     TYPE_MKV("mkv"),
