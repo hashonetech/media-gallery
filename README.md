@@ -181,7 +181,7 @@ Table of contents
 
                     ),
                     cameraActionTitle = getString(com.hashone.media.gallery.R.string.camera_action_title),
-                    supportedMediaTypes = arrayListOf<SupportedMediaType>().apply {
+                    supportedMediaTypes = arrayListOf<SupportedMediaType>().apply { //TODO: **If this list isEmpty - It will assign Default List of MediaTypes Listed Below**
                         //TODO: Photo MediaTypes
                         add(SupportedMediaType.TYPE_PNG)
                         add(SupportedMediaType.TYPE_JPG)
