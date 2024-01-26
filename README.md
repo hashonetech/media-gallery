@@ -29,7 +29,7 @@ With gallery module integrated [Photo Crop](https://github.com/hashonetech/crop-
 	}
   
 	dependencies {
-	        implementation 'com.github.hashonetech:media-gallery:v1.0.43'
+	        implementation 'com.github.hashonetech:media-gallery:v1.0.44'
 	}
  ```
 
