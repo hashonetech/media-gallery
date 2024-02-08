@@ -30,7 +30,6 @@ import com.hashone.media.gallery.utils.KEY_BUCKET_ID
 import com.hashone.media.gallery.utils.KEY_BUCKET_NAME
 import com.hashone.media.gallery.utils.KEY_BUCKET_PATH
 import com.hashone.media.gallery.utils.byteToMB
-import com.hashone.media.gallery.utils.getVideoWidthHeight
 
 class MediaFragment : Fragment() {
 
@@ -210,10 +209,9 @@ class MediaFragment : Fragment() {
 
                             override fun onNotValidVideo(
                                 imageItem: MediaItem,
-                                position: Int
+                                position: Int,
+                                videoWidthHeight: Pair<Int, Int>
                             ) {
-                                val videoWidthHeight =
-                                    getVideoWidthHeight(imageItem.path, imageItem.mediaResolution)
                                 val width = videoWidthHeight.first
                                 val height = videoWidthHeight.second
                                 var message = ""
@@ -248,13 +246,19 @@ class MediaFragment : Fragment() {
                                             getString(R.string.media_gallery_size_error)
                                         }
                                 } else {
-                                    "${builder.videoValidationBuilder.durationLimitMessage.ifEmpty { 
-                                        getString(R.string.media_gallery_duration_error)
-                                    }}\n${builder.videoValidationBuilder.sizeLimitMessage.ifEmpty { 
-                                        getString(R.string.media_gallery_file_size_error)
-                                    }}\n${builder.videoValidationBuilder.maxResolutionMessage.ifEmpty { 
-                                        getString(R.string.media_gallery_size_error)
-                                    }}"
+                                    "${
+                                        builder.videoValidationBuilder.durationLimitMessage.ifEmpty {
+                                            getString(R.string.media_gallery_duration_error)
+                                        }
+                                    }\n${
+                                        builder.videoValidationBuilder.sizeLimitMessage.ifEmpty {
+                                            getString(R.string.media_gallery_file_size_error)
+                                        }
+                                    }\n${
+                                        builder.videoValidationBuilder.maxResolutionMessage.ifEmpty {
+                                            getString(R.string.media_gallery_size_error)
+                                        }
+                                    }"
                                 }
 
                                 if (message.isNotEmpty()) {
@@ -318,72 +322,74 @@ class MediaFragment : Fragment() {
         onCancelListener: DialogInterface.OnCancelListener? = null,
     ) {
         try {
-            val dialogBuilder =
-                AlertDialog.Builder(mActivity, com.hashone.commons.R.style.CustomAlertDialog)
-            val dialogBinding =
-                DialogWarningBinding.inflate(LayoutInflater.from(mActivity), null, false)
-            dialogBinding.textViewTitle.text = title
-            dialogBinding.textViewYes.text = positionButtonText
-            dialogBinding.textViewConfirm.text = negativeButtonText
-            dialogBinding.textViewTitle.isVisible = title.isNotEmpty()
-            dialogBinding.textViewYes.isVisible = positionButtonText.isNotEmpty()
-            dialogBinding.textViewConfirm.isVisible = negativeButtonText.isNotEmpty()
-            dialogBinding.view3.isVisible = negativeButtonText.isNotEmpty()
+            if (!mActivity.isDestroyed) if (alertDialog == null || alertDialog?.isShowing == false) {
+                val dialogBuilder =
+                    AlertDialog.Builder(mActivity, com.hashone.commons.R.style.CustomAlertDialog)
+                val dialogBinding =
+                    DialogWarningBinding.inflate(LayoutInflater.from(mActivity), null, false)
+                dialogBinding.textViewTitle.text = title
+                dialogBinding.textViewYes.text = positionButtonText
+                dialogBinding.textViewConfirm.text = negativeButtonText
+                dialogBinding.textViewTitle.isVisible = title.isNotEmpty()
+                dialogBinding.textViewYes.isVisible = positionButtonText.isNotEmpty()
+                dialogBinding.textViewConfirm.isVisible = negativeButtonText.isNotEmpty()
+                dialogBinding.view3.isVisible = negativeButtonText.isNotEmpty()
 
-            dialogBinding.textViewTitle.setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                mDialogBuilder.titleSize
-            )
-            dialogBinding.textViewTitle.setTextColor(
-                ContextCompat.getColor(
-                    mActivity,
-                    mDialogBuilder.titleColor
+                dialogBinding.textViewTitle.setTextSize(
+                    TypedValue.COMPLEX_UNIT_SP,
+                    mDialogBuilder.titleSize
                 )
-            )
-            dialogBinding.textViewTitle.typeface = ResourcesCompat.getFont(
-                mActivity,
-                mDialogBuilder.titleFont
-            )
-
-            dialogBinding.textViewYes.setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                mDialogBuilder.positiveSize
-            )
-            dialogBinding.textViewYes.setTextColor(
-                ContextCompat.getColor(
-                    mActivity,
-                    mDialogBuilder.positiveColor
+                dialogBinding.textViewTitle.setTextColor(
+                    ContextCompat.getColor(
+                        mActivity,
+                        mDialogBuilder.titleColor
+                    )
                 )
-            )
-            dialogBinding.textViewYes.typeface = ResourcesCompat.getFont(
-                mActivity,
-                mDialogBuilder.positiveFont
-            )
-
-            dialogBinding.textViewConfirm.setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                mDialogBuilder.negativeSize
-            )
-            dialogBinding.textViewConfirm.setTextColor(
-                ContextCompat.getColor(
+                dialogBinding.textViewTitle.typeface = ResourcesCompat.getFont(
                     mActivity,
-                    mDialogBuilder.negativeColor
+                    mDialogBuilder.titleFont
                 )
-            )
-            dialogBinding.textViewConfirm.typeface = ResourcesCompat.getFont(
-                mActivity,
-                mDialogBuilder.negativeFont
-            )
 
-            dialogBuilder.setView(dialogBinding.root)
-            alertDialog = dialogBuilder.create()
-            if (!mActivity.isDestroyed) if (alertDialog != null && !alertDialog!!.isShowing) alertDialog!!.show()
-            alertDialog!!.setCancelable(isCancelable)
-            dialogBinding.textViewYes.setOnClickListener(positiveCallback)
-            dialogBinding.textViewConfirm.setOnClickListener(negativeCallback)
-            alertDialog!!.setOnDismissListener(onDismissListener)
-            alertDialog!!.setOnCancelListener(onCancelListener)
-            alertDialog!!.setOnKeyListener(keyEventCallback)
+                dialogBinding.textViewYes.setTextSize(
+                    TypedValue.COMPLEX_UNIT_SP,
+                    mDialogBuilder.positiveSize
+                )
+                dialogBinding.textViewYes.setTextColor(
+                    ContextCompat.getColor(
+                        mActivity,
+                        mDialogBuilder.positiveColor
+                    )
+                )
+                dialogBinding.textViewYes.typeface = ResourcesCompat.getFont(
+                    mActivity,
+                    mDialogBuilder.positiveFont
+                )
+
+                dialogBinding.textViewConfirm.setTextSize(
+                    TypedValue.COMPLEX_UNIT_SP,
+                    mDialogBuilder.negativeSize
+                )
+                dialogBinding.textViewConfirm.setTextColor(
+                    ContextCompat.getColor(
+                        mActivity,
+                        mDialogBuilder.negativeColor
+                    )
+                )
+                dialogBinding.textViewConfirm.typeface = ResourcesCompat.getFont(
+                    mActivity,
+                    mDialogBuilder.negativeFont
+                )
+
+                dialogBuilder.setView(dialogBinding.root)
+                alertDialog = dialogBuilder.create()
+                alertDialog!!.show()
+                alertDialog!!.setCancelable(isCancelable)
+                dialogBinding.textViewYes.setOnClickListener(positiveCallback)
+                dialogBinding.textViewConfirm.setOnClickListener(negativeCallback)
+                alertDialog!!.setOnDismissListener(onDismissListener)
+                alertDialog!!.setOnCancelListener(onCancelListener)
+                alertDialog!!.setOnKeyListener(keyEventCallback)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

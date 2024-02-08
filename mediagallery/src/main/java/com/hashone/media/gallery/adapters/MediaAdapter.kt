@@ -21,7 +21,9 @@ import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.hashone.commons.base.CoroutineAsyncTask
 import com.hashone.commons.extensions.getColorCode
+import com.hashone.commons.utils.checkClickTime
 import com.hashone.commons.utils.showSnackBar
 import com.hashone.media.gallery.MediaActivity
 import com.hashone.media.gallery.R
@@ -49,6 +51,8 @@ class MediaAdapter(
 ) : RecyclerView.Adapter<MediaAdapter.ItemViewHolder>() {
 
     private val corruptedMediaList = ArrayList<String>()
+
+    private var isContentIsInProgress: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder =
         ItemViewHolder(
@@ -186,30 +190,24 @@ class MediaAdapter(
                         false
                     }
                     mBinding.root.setOnClickListener {
-                        selectedIndex = (mContext as MediaActivity).selectedIndex(this)
-                        isSelected = mIsMultipleMode && selectedIndex != -1
-                        if (builder.videoValidationBuilder.checkValidation && this.mediaType != MediaType.IMAGE && (mContext as MediaActivity).mSelectedImagesList.size < mMaxSize && !isSelected) {
-                            val videoWidthHeight =
-                                getVideoWidthHeight(this.path, this.mediaResolution)
-                            val width = videoWidthHeight.first
-                            val height = videoWidthHeight.second
-                            if (width > 0 && height > 0 && !isLoadingFail) {
-                                if (TimeUnit.MILLISECONDS.toSeconds(this.mediaDuration) > builder.videoValidationBuilder.durationLimit || byteToMB(
-                                        mediaSize
-                                    ) > builder.videoValidationBuilder.sizeLimit || width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution
-                                ) {
-                                    mOnSelectionChangeListener!!.onNotValidVideo(this, position)
-                                } else selectOrRemoveImage(this, position)
-                            } else {
-                                showSnackBar(mContext, mBinding.root, builder.corruptedMediaMessage.ifEmpty {
+                        if (corruptedMediaList.contains(this.path)) {
+                            showSnackBar(
+                                mContext,
+                                mBinding.root,
+                                builder.corruptedMediaMessage.ifEmpty {
                                     mContext.getString(R.string.media_gallery_corrupted_media)
                                 })
-                            }
                         } else {
-                            if (corruptedMediaList.contains(this.path)) {
-                                showSnackBar(mContext, mBinding.root, builder.corruptedMediaMessage.ifEmpty {
-                                    mContext.getString(R.string.media_gallery_corrupted_media)
-                                })
+                            selectedIndex = (mContext as MediaActivity).selectedIndex(this)
+                            isSelected = mIsMultipleMode && selectedIndex != -1
+                            if (builder.videoValidationBuilder.checkValidation && this.mediaType != MediaType.IMAGE && (mContext as MediaActivity).mSelectedImagesList.size < mMaxSize && !isSelected) {
+                                if (checkClickTime()) {
+                                    ProcessSelectedContentForValidation(
+                                        mBinding.root,
+                                        position,
+                                        this
+                                    ).execute()
+                                }
                             } else {
                                 selectOrRemoveImage(this, position)
                             }
@@ -220,6 +218,63 @@ class MediaAdapter(
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private inner class ProcessSelectedContentForValidation(
+        private val rootView: View,
+        private val position: Int,
+        private val imageItem: MediaItem
+    ) : CoroutineAsyncTask<Void, Void, Int>() {
+
+        var videoWidthHeight = Pair<Int, Int>(0, 0)
+
+        override fun doInBackground(vararg params: Void?): Int {
+            try {
+                videoWidthHeight =
+                    getVideoWidthHeight(imageItem.path, imageItem.mediaResolution)
+                val width = videoWidthHeight.first
+                val height = videoWidthHeight.second
+                return if (width > 0 && height > 0) {
+                    if (TimeUnit.MILLISECONDS.toSeconds(imageItem.mediaDuration) > builder.videoValidationBuilder.durationLimit || byteToMB(
+                            imageItem.mediaSize
+                        ) > builder.videoValidationBuilder.sizeLimit || width > builder.videoValidationBuilder.maxResolution || height > builder.videoValidationBuilder.maxResolution
+                    ) {
+                        0 //TODO: Invalid Video File
+                    } else -1 //TODO: Valid Video File
+                } else {
+                    1 //TODO: Corrupted Video File
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return 1 //TODO: Corrupted Video File
+        }
+
+        override fun onPostExecute(result: Int?) {
+            super.onPostExecute(result)
+            if (result != null) {
+                when (result) {
+                    0 -> {
+                        mOnSelectionChangeListener?.onNotValidVideo(
+                            imageItem,
+                            position,
+                            videoWidthHeight
+                        )
+                    }
+
+                    1 -> {
+                        showSnackBar(mContext, rootView, builder.corruptedMediaMessage.ifEmpty {
+                            mContext.getString(R.string.media_gallery_corrupted_media)
+                        })
+                    }
+
+                    else -> {
+                        selectOrRemoveImage(imageItem, position)
+                    }
+                }
+            }
+        }
+
     }
 
     private fun setupItemForeground(view: View, isSelected: Boolean) {
